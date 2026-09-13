@@ -1,0 +1,6 @@
+{
+  "name": "CoachOS",
+  "description": "CoachOS - Operating system for independent coaches.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --color-brand-50: #f1f8f4;
+  --color-brand-100: #ddefdf;
+  --color-brand-200: #bde0c6;
+  --color-brand-300: #93cba3;
+  --color-brand-400: #64b07c;
+  --color-brand-500: #3f945c;
+  --color-brand-600: #2b7746;
+  --color-brand-700: #245f39;
+  --color-brand-800: #1f4c30;
+  --color-brand-900: #134e2a;
+  --color-brand-950: #0a2b16;
+
+  --animate-blob: blob 7s infinite;
+  --animate-spin-slow: spin 8s linear infinite;
+}
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+  }
+  .glass-dark {
+    @apply bg-neutral-900/80 backdrop-blur-xl border border-neutral-700/50 shadow-2xl;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-900 to-brand-600;
+  }
+  .text-gradient-dark {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-300 to-brand-100;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
+
+
