@@ -1,0 +1,256 @@
+540-  { name: 'Jul', value: 6200 },
+541-  { name: 'Aug', value: 7500 },
+542-  { name: 'Sep', value: 8450 },
+543-];
+544-
+545:function HeroDashboard() {
+546-  return (
+547-    <div className="h-[600px] md:h-auto md:aspect-[16/9] bg-neutral-50 rounded-2xl shadow-[0_20px_50px_rgba(19,78,42,0.15)] border border-neutral-200/60 overflow-hidden flex relative backdrop-blur-sm">
+548-      {/* Sidebar */}
+549-      <div className="w-14 sm:w-16 md:w-64 bg-brand-950 text-brand-200 flex flex-col p-2 sm:p-4 shadow-xl z-10 relative">
+550-        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-50"></div>
+551-        <div className="hidden md:flex items-center mb-8 mt-2 px-2 relative z-10">
+552-          <Logo className="h-8 text-white" inverted />
+553-        </div>
+554-        <div className="flex md:hidden items-center justify-center mb-8 mt-2 text-white relative z-10">
+555-          <Logo className="h-8 text-white" inverted />
+556-        </div>
+557-
+558-        <nav className="space-y-1.5 flex-1 relative z-10">
+559-          {[
+560-            { icon: LayoutDashboard, label: "Dashboard", active: true },
+561-            { icon: Users, label: "Clients" },
+562-            { icon: Calendar, label: "Schedule" },
+563-            { icon: Target, label: "Programs" },
+564-            { icon: MessageCircle, label: "Messages", badge: "3" },
+565-          ].map((item, i) => (
+566-            <div key={i} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${item.active ? 'bg-brand-600 text-white shadow-lg shadow-brand-900/50' : 'hover:bg-brand-900 hover:text-white'}`}>
+567-              <item.icon className={`w-5 h-5 flex-shrink-0 ${item.active ? 'text-white' : 'text-brand-400'}`} />
+568-              <span className="hidden md:block font-medium text-sm">{item.label}</span>
+569-              {item.badge && <span className="hidden md:flex ml-auto bg-brand-400 text-brand-950 text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">{item.badge}</span>}
+570-            </div>
+571-          ))}
+572-        </nav>
+573-      </div>
+574-
+575-      {/* Main Area */}
+576-      <div className="flex-1 flex flex-col bg-white overflow-hidden text-left relative z-0">
+577-        {/* Topbar */}
+578-        <div className="h-16 border-b border-neutral-200/60 bg-white/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-20">
+579-          <div className="hidden md:flex items-center gap-2 text-neutral-400 bg-neutral-100/80 px-3 py-1.5 rounded-md w-64 border border-neutral-200/50 transition-colors hover:bg-neutral-100">
+580-            <Search className="w-4 h-4" />
+581-            <span className="text-sm">Search clients...</span>
+582-          </div>
+583-          <div className="flex items-center gap-4 ml-auto">
+584-            <div className="relative cursor-pointer group">
+585-              <Bell className="w-5 h-5 text-neutral-400 group-hover:text-brand-600 transition-colors" />
+586-              <div className="absolute top-0 right-0 w-2 h-2 bg-brand-500 rounded-full border-2 border-white"></div>
+587-            </div>
+588-            <div className="w-8 h-8 bg-gradient-to-tr from-brand-600 to-brand-400 rounded-full border-2 border-white shadow-sm overflow-hidden flex items-center justify-center cursor-pointer transform transition-transform hover:scale-105">
+589-               <span className="text-xs font-bold text-white">ME</span>
+590-            </div>
+591-          </div>
+592-        </div>
+593-
+594-        {/* Content */}
+595-        <div className="p-6 overflow-y-auto bg-neutral-50/50 h-full">
+596-          <div className="mb-6 flex justify-between items-end">
+597-            <div>
+598-              <h2 className="text-2xl font-bold text-brand-950 tracking-tight">Good morning, Coach</h2>
+599-              <p className="text-neutral-500 text-sm mt-1">Here's what's happening with your business today.</p>
+600-            </div>
+601-            <button className="hidden md:flex items-center gap-2 bg-white border border-neutral-200 text-brand-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm">
+602-              <Calendar className="w-4 h-4" />
+603-              <span>Today</span>
+604-              <ChevronDown className="w-4 h-4 text-neutral-400" />
+605-            </button>
+606-          </div>
+607-
+608-          {/* Stats Grid */}
+609-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+610-            <div className="bg-white p-5 rounded-xl shadow-sm border border-neutral-200/60 flex flex-col group hover:border-brand-200 transition-colors cursor-default relative overflow-hidden">
+611-              <div className="flex justify-between items-start z-10 relative">
+612-                <div>
+613-                  <p className="text-neutral-500 text-[11px] font-bold uppercase tracking-wider mb-1">Monthly Revenue</p>
+614-                  <div className="flex items-baseline gap-2">
+615-                    <p className="text-2xl font-bold text-brand-950">$8,450</p>
+616-                    <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">+12%</span>
+617-                  </div>
+618-                </div>
+619-                <div className="w-8 h-8 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600 z-10">
+620-                  <TrendingUp className="w-4 h-4" />
+621-                </div>
+622-              </div>
+623-              <div className="h-12 w-full mt-2 -ml-2 -mb-2 relative z-0">
+624-                <ResponsiveContainer width="100%" height="100%">
+625-                  <LineChart data={revenueData}>
+626-                    <Line 
+627-                      type="monotone" 
+628-                      dataKey="value" 
+629-                      stroke="#10b981" 
+630-                      strokeWidth={2.5} 
+631-                      dot={false}
+632-                      isAnimationActive={true}
+633-                    />
+634-                  </LineChart>
+635-                </ResponsiveContainer>
+636-              </div>
+637-            </div>
+638-            <div className="bg-white p-5 rounded-xl shadow-sm border border-neutral-200/60 flex items-center justify-between group hover:border-brand-200 transition-colors cursor-default">
+639-              <div>
+640-                <p className="text-neutral-500 text-[11px] font-bold uppercase tracking-wider mb-1">Active Clients</p>
+641-                <div className="flex items-baseline gap-2">
+642-                  <p className="text-2xl font-bold text-brand-950">32</p>
+643-                  <span className="text-xs font-medium text-brand-600 bg-brand-50 px-1.5 py-0.5 rounded-md">+3</span>
+644-                </div>
+645-              </div>
+646-              <div className="w-12 h-12 bg-brand-50 rounded-full flex items-center justify-center text-brand-600 group-hover:scale-110 transition-transform">
+647-                <Users className="w-6 h-6" />
+648-              </div>
+649-            </div>
+650-            <div className="bg-white p-5 rounded-xl shadow-sm border border-neutral-200/60 flex items-center justify-between group hover:border-brand-200 transition-colors cursor-default">
+651-              <div>
+652-                <p className="text-neutral-500 text-[11px] font-bold uppercase tracking-wider mb-1">Pending Leads</p>
+653-                <p className="text-2xl font-bold text-brand-950">4</p>
+654-              </div>
+655-              <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+656-                <Target className="w-6 h-6" />
+657-              </div>
+658-            </div>
+659-          </div>
+660-
+661-          
+662-          {/* Connected Tools */}
+663-          <div className="mb-6 bg-white rounded-xl shadow-sm border border-neutral-200/60 p-5">
+664-            <div className="flex justify-between items-center mb-4">
+665-              <h3 className="font-bold text-brand-950 flex items-center gap-2">
+666-                <Link2 className="w-4 h-4 text-brand-600" />
+667-                Your Connected Tools
+668-              </h3>
+669-              <button className="text-xs font-medium text-brand-600 hover:text-brand-800 transition-colors">Manage Integrations</button>
+670-            </div>
+671-            <div className="flex flex-wrap items-center gap-3">
+672-              {/* Stripe */}
+673-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 transition-colors cursor-default">
+674-                <div className="w-6 h-6 rounded-md bg-[#635BFF] flex items-center justify-center text-white shrink-0">
+675-                  <CreditCard className="w-3.5 h-3.5" />
+676-                </div>
+677-                <span className="text-xs font-bold text-neutral-700">Stripe</span>
+678-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-1 shadow-[0_0_4px_rgba(16,185,129,0.8)]" title="Connected"></div>
+679-              </div>
+680-
+681-              {/* Calendly */}
+682-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 transition-colors cursor-default">
+683-                <div className="w-6 h-6 rounded-md bg-[#006BFF] flex items-center justify-center text-white shrink-0">
+684-                  <Calendar className="w-3.5 h-3.5" />
+685-                </div>
+686-                <span className="text-xs font-bold text-neutral-700">Calendly</span>
+687-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-1 shadow-[0_0_4px_rgba(16,185,129,0.8)]" title="Connected"></div>
+688-              </div>
+689-
+690-              {/* Zoom */}
+691-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 transition-colors cursor-default">
+692-                <div className="w-6 h-6 rounded-md bg-[#2D8CFF] flex items-center justify-center text-white shrink-0">
+693-                  <Video className="w-3.5 h-3.5" />
+694-                </div>
+695-                <span className="text-xs font-bold text-neutral-700">Zoom</span>
+696-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-1 shadow-[0_0_4px_rgba(16,185,129,0.8)]" title="Connected"></div>
+697-              </div>
+698-              
+699-              {/* MyFitnessPal / Data */}
+700-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 transition-colors cursor-default">
+701-                <div className="w-6 h-6 rounded-md bg-[#0066EE] flex items-center justify-center text-white shrink-0">
+702-                  <Database className="w-3.5 h-3.5" />
+703-                </div>
+704-                <span className="text-xs font-bold text-neutral-700">MyFitnessPal</span>
+705-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-1 shadow-[0_0_4px_rgba(16,185,129,0.8)]" title="Connected"></div>
+706-              </div>
+707-            </div>
+708-          </div>
+709-
+710-          {/* Bottom Split */}
+711-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+712-            {/* Priorities */}
+713-            <div className="bg-white rounded-xl shadow-sm border border-neutral-200/60 p-5">
+714-              <div className="flex justify-between items-center mb-4">
+715-                <h3 className="font-bold text-brand-950 flex items-center gap-2">
+716-                  <CheckSquare className="w-4 h-4 text-brand-600" />
+717-                  Today's Priorities
+718-                </h3>
+719-                <span className="text-xs font-medium text-brand-600 bg-brand-50 px-2 py-1 rounded-md">2 remaining</span>
+720-              </div>
+721-              <div className="space-y-2">
+722-                {[
+723-                  { title: "Check-in: Sarah's Week 4 Form Video", time: "10:00 AM", done: false, type: "review" },
+724-                  { title: "Send onboarding packet to Marcus", time: "1:00 PM", done: false, type: "admin" },
+725-                  { title: "Discovery Call with Emma T.", time: "3:30 PM", done: true, type: "call" },
+726-                ].map((task, i) => (
+727-                  <div key={i} className="flex items-center gap-3 p-3 hover:bg-neutral-50 rounded-lg transition-colors cursor-pointer group border border-transparent hover:border-neutral-100">
+728-                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors flex-shrink-0 ${task.done ? 'bg-brand-500 border-brand-500' : 'border-neutral-300 group-hover:border-brand-500'}`}>
+729-                      {task.done && <Check className="w-3 h-3 text-white" />}
+730-                    </div>
+731-                    <div className="flex-1">
+732-                      <p className={`text-sm font-medium ${task.done ? 'text-neutral-400 line-through' : 'text-brand-900'}`}>{task.title}</p>
+733-                      <p className="text-xs text-neutral-500 flex items-center gap-1 mt-0.5">
+734-                        <Clock className="w-3 h-3" />
+735-                        {task.time}
+736-                      </p>
+737-                    </div>
+738-                  </div>
+739-                ))}
+740-              </div>
+741-            </div>
+742-
+743-            {/* Pipeline preview */}
+744-            <div className="bg-white rounded-xl shadow-sm border border-neutral-200/60 p-5">
+745-              <h3 className="font-bold text-brand-950 mb-4 flex items-center gap-2">
+746-                <Activity className="w-4 h-4 text-blue-500" />
+747-                Recent Activity
+748-              </h3>
+749-              <div className="space-y-5 relative before:absolute before:inset-0 before:ml-4 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-neutral-200 before:to-transparent">
+750-                <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+751-                  <div className="flex items-center justify-center w-8 h-8 rounded-full border border-white bg-blue-100 text-blue-600 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+752-                    <MessageCircle className="w-4 h-4" />
+753-                  </div>
+754-                  <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-3 rounded-lg border border-neutral-100 bg-white shadow-sm">
+755-                    <div className="flex items-center justify-between mb-1">
+756-                      <p className="text-sm font-bold text-brand-900">Alex M.</p>
+757-                      <span className="text-[10px] text-neutral-400 font-medium">Just now</span>
+758-                    </div>
+759-                    <p className="text-xs text-neutral-600">"Hey coach, do you have spots open for 1:1?"</p>
+760-                  </div>
+761-                </div>
+762-                
+763-                <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+764-                  <div className="flex items-center justify-center w-8 h-8 rounded-full border border-white bg-emerald-100 text-emerald-600 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+765-                    <Video className="w-4 h-4" />
+766-                  </div>
+767-                  <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-3 rounded-lg border border-neutral-100 bg-white shadow-sm">
+768-                    <div className="flex items-center justify-between mb-1">
+769-                      <p className="text-sm font-bold text-brand-900">Jessica L.</p>
+770-                      <span className="text-[10px] text-neutral-400 font-medium">2h ago</span>
+771-                    </div>
+772-                    <p className="text-xs text-neutral-600">Uploaded 3 new form check videos.</p>
+773-                  </div>
+774-                </div>
+775-              </div>
+776-            </div>
+777-          </div>
+778-        </div>
+779-      </div>
+780-    </div>
+781-  );
+782-}
+783-
+784-function FAQItem({ question, answer }: { question: string, answer: string }) {
+785-  const [isOpen, setIsOpen] = useState(false);
+786-
+787-  return (
+788-    <div className="border border-neutral-200 rounded-2xl bg-white overflow-hidden transition-all duration-200 hover:border-neutral-300 shadow-sm">
+789-      <button 
+790-        onClick={() => setIsOpen(!isOpen)}
+791-        className="w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none"
+792-      >
+793-        <span className="font-semibold text-brand-900">{question}</span>
+794-        {isOpen ? (
+795-          <ChevronUp className="w-5 h-5 text-brand-500 flex-shrink-0 ml-4 transition-transform" />
