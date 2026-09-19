@@ -40,6 +40,7 @@ import {
   Lock,
   Trophy,
   Play,
+  Pause,
   Smile,
   Compass,
   Briefcase,
@@ -48,17 +49,23 @@ import {
   SlidersHorizontal,
   Eye,
   FileCheck,
-  BarChart3
+  BarChart3,
+  Command,
+  CornerDownLeft,
+  RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { loadWhop } from "@whop/elements";
 import { Checkout, CheckoutElement, WhopElements } from "@whop/elements-react";
+import { LoadingIntro } from './components/LoadingIntro';
+import { GlowingBorderButton } from './components/GlowingBorderButton';
 
 const whopElements = loadWhop();
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
 
   const scrollToWaitlist = () => {
     document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
@@ -66,6 +73,23 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-neutral-50 text-brand-900 font-sans selection:bg-brand-900 selection:text-white">
+      {/* Initial Combining Tools Loading Animation */}
+      <AnimatePresence mode="wait">
+        {showIntro && (
+          <LoadingIntro onComplete={() => setShowIntro(false)} />
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        initial={false}
+        animate={{
+          opacity: showIntro ? 0 : 1,
+          scale: showIntro ? 0.985 : 1,
+          filter: showIntro ? 'blur(6px)' : 'blur(0px)',
+        }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        className="min-h-screen flex flex-col"
+      >
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-neutral-50/80 backdrop-blur-md border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,13 +99,14 @@ export default function App() {
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <button 
+              <GlowingBorderButton 
                 onClick={scrollToWaitlist}
-                className="bg-brand-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-brand-800 transition-all duration-200 flex items-center gap-2 hover:scale-105 active:scale-95"
+                className="px-5 py-2.5 font-medium flex items-center gap-2 hover:scale-105 active:scale-95"
+                glowSpeed={2.8}
               >
                 Join the waitlist
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-emerald-300" />
+              </GlowingBorderButton>
             </div>
 
             <div className="flex items-center md:hidden">
@@ -104,15 +129,18 @@ export default function App() {
               className="md:hidden bg-white border-b border-neutral-200 overflow-hidden"
             >
               <div className="px-4 pt-2 pb-6 space-y-1">
-                <button 
+                <GlowingBorderButton 
                   onClick={() => {
                     setIsMenuOpen(false);
                     scrollToWaitlist();
                   }}
-                  className="w-full bg-brand-900 text-white px-5 py-3 rounded-xl font-medium hover:bg-brand-800 transition-colors mt-4 flex justify-center items-center gap-2"
+                  rounded="xl"
+                  className="w-full px-5 py-3 font-medium flex justify-center items-center gap-2"
+                  glowSpeed={2.8}
                 >
                   Join the waitlist
-                </button>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-emerald-300" />
+                </GlowingBorderButton>
               </div>
             </motion.div>
           )}
@@ -146,25 +174,25 @@ export default function App() {
                 Founding waitlist open — early access & pricing
               </div>
               
-              <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tighter text-brand-900 leading-[1.1] mb-6">
-                One system to run your coaching business.
+              <h1 id="hero-heading" className="text-5xl lg:text-7xl font-extrabold tracking-tighter text-brand-900 leading-[1.1] mb-6">
+                The All-In-One Operating System for Independent Coaches.
               </h1>
               
               <p className="text-lg lg:text-xl text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                For independent fitness and business coaches. Leads, clients, sessions, payments, and follow-up all in one beautiful dashboard.
+                For independent fitness, business, executive, and sports coaches. Streamline lead pipelines, active client management, payments, and follow-ups in one custom dashboard.
               </p>
               
               <div className="flex flex-col items-center gap-4">
-                <button 
+                <GlowingBorderButton 
                   onClick={scrollToWaitlist}
-                  className="group relative bg-brand-900 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-brand-800 transition-all duration-300 flex items-center gap-2 shadow-xl hover:shadow-2xl hover:shadow-brand-900/20 hover:-translate-y-1 active:scale-95 overflow-hidden"
+                  className="px-8 py-4 text-lg font-semibold flex items-center gap-2 hover:-translate-y-1 active:scale-95"
+                  glowSpeed={3.2}
                 >
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                  <span className="relative flex items-center gap-2">
+                  <span className="relative flex items-center gap-2.5">
                     Apply for founding access
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
                   </span>
-                </button>
+                </GlowingBorderButton>
                 
                 <p className="text-xs sm:text-sm text-neutral-500 font-medium mt-2">
                   Limited first cohort • Built for independent coaches
@@ -185,12 +213,24 @@ export default function App() {
         </section>
 
         {/* 2. Problem Section */}
-        <section className="py-24 bg-white border-y border-neutral-200 overflow-hidden">
+        <motion.section 
+          id="problem"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-white border-y border-neutral-200 overflow-hidden scroll-mt-16"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-6">
-                  Sound familiar?
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <h2 id="problem-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-6">
+                  The Hidden Admin Chaos of Running an Independent Coaching Business
                 </h2>
                 <p className="text-lg text-neutral-600 mb-8">
                   You're a great coach, but managing the business side feels chaotic. Leads are falling through the cracks and admin is eating your day.
@@ -210,48 +250,93 @@ export default function App() {
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className="relative">
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="relative"
+              >
                 <ProblemVisuals />
-              </div>
+              </motion.div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 3. Solution Section (Interactive) */}
-        <section className="py-24 bg-brand-900 text-white">
+        <motion.section 
+          id="solution"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-brand-900 text-white scroll-mt-16"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl lg:text-5xl font-bold tracking-tight mb-6">
-                Your private operating system.
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+              className="text-center max-w-3xl mx-auto mb-16"
+            >
+              <h2 id="solution-heading" className="text-3xl lg:text-5xl font-bold tracking-tight mb-6">
+                A Private Coaching Operating System Engineered to Scale
               </h2>
               <p className="text-lg lg:text-xl text-neutral-400">
                 CoachOS feels custom to your business. Everything you need to scale, without needing five different apps holding it together with duct tape.
               </p>
-            </div>
+            </motion.div>
             
-            <InteractiveSolution />
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65, delay: 0.15 }}
+            >
+              <InteractiveSolution />
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
         
         {/* 3.5 Custom Integration Section */}
-        <section className="py-24 bg-white border-b border-neutral-200 overflow-hidden relative">
+        <motion.section 
+          id="integrations"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-white border-b border-neutral-200 overflow-hidden relative scroll-mt-16"
+        >
           {/* Subtle grid */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]"></div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="order-2 lg:order-1">
+              <motion.div 
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="order-2 lg:order-1"
+              >
                 <CustomBuiltVisual />
-              </div>
-              <div className="order-1 lg:order-2">
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="order-1 lg:order-2"
+              >
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-800 text-xs font-bold mb-6 uppercase tracking-wider">
                   <Link2 className="w-3.5 h-3.5" />
                   Bespoke Integrations
                 </div>
-                <h2 className="text-3xl lg:text-5xl font-bold tracking-tight text-brand-950 mb-6">
-                  We don't just give you a login. We build <span className="text-brand-600 font-extrabold italic">your</span> dashboard.
+                <h2 id="integrations-heading" className="text-3xl lg:text-5xl font-bold tracking-tight text-brand-950 mb-6">
+                  Custom Software Architecture Built Around <span className="text-brand-600 font-extrabold italic">Your Exact</span> Coaching Workflow
                 </h2>
                 <p className="text-lg text-neutral-600 mb-8 leading-relaxed">
                   Most software forces you to change how you work to fit their templates. CoachOS is different. When you join, we architect a private operating system around <strong>your exact tools, your pricing models, and your coaching style</strong>.
@@ -285,20 +370,33 @@ export default function App() {
                     </div>
                   </li>
                 </ul>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 4. How it works */}
-        <section className="py-24 bg-neutral-50">
+        <motion.section 
+          id="workflow"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-neutral-50 scroll-mt-16"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4">
-                How CoachOS works
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+              className="text-center mb-16"
+            >
+              <h2 id="workflow-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4">
+                How CoachOS Automates Your Entire Client & Revenue Lifecycle
               </h2>
               <p className="text-lg text-neutral-600">A simple flow to run your entire coaching business.</p>
-            </div>
+            </motion.div>
 
             <div className="grid md:grid-cols-3 gap-8 relative">
               {/* Connecting line for desktop */}
@@ -345,17 +443,29 @@ export default function App() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <ComparisonTable />
 
         {/* 5. For who / use cases */}
-        <section className="py-24 bg-white border-t border-neutral-200">
+        <motion.section 
+          id="use-cases"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-white border-t border-neutral-200 scroll-mt-16"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-6">
-                  Built for independent fitness and business coaches.
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 id="use-cases-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-6">
+                  Tailored Operating Systems for Fitness, Business, Life, & Sports Coaches
                 </h2>
                 <p className="text-lg text-neutral-600 mb-8">
                   Whether you coach 1:1, in small groups, or scale online programs, CoachOS adapts to your specific workflow.
@@ -372,8 +482,14 @@ export default function App() {
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className="bg-brand-900 rounded-3xl p-8 lg:p-12 text-white shadow-2xl transform md:rotate-1 md:hover:rotate-0 transition-transform duration-500">
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="bg-brand-900 rounded-3xl p-8 lg:p-12 text-white shadow-2xl transform md:rotate-1 md:hover:rotate-0 transition-transform duration-500"
+              >
                 <blockquote className="text-2xl lg:text-3xl font-medium leading-relaxed mb-8">
                   "CoachOS is NOT a marketplace. It is your private operating system. You bring the clients; we make sure none get lost and you close more of them."
                 </blockquote>
@@ -386,40 +502,72 @@ export default function App() {
                     <div className="text-neutral-400 text-sm">Founders</div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 6. Founding Cohort & Waitlist Section */}
-        <section id="waitlist" className="py-24 bg-brand-950 text-white scroll-mt-16 relative overflow-hidden border-t border-brand-900">
+        <motion.section 
+          id="waitlist" 
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-brand-950 text-white scroll-mt-16 relative overflow-hidden border-t border-brand-900"
+        >
           {/* Ambient Lighting */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-brand-700/20 blur-[120px] rounded-full pointer-events-none"></div>
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-emerald-600/10 blur-[100px] rounded-full pointer-events-none"></div>
 
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             {/* Urgency Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-bold mb-6 tracking-widest uppercase shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-bold mb-6 tracking-widest uppercase shadow-sm"
+            >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
               </span>
               FOUNDING COHORT OPEN
-            </div>
+            </motion.div>
 
             {/* Clear Primary Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight">
-              Join before CoachOS opens publicly.
-            </h2>
+            <motion.h2 
+              id="waitlist-heading"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+              className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight"
+            >
+              Apply for the Founding Cohort of Independent Coaches
+            </motion.h2>
             
-            <p className="text-base sm:text-xl text-neutral-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.1 }}
+              className="text-base sm:text-xl text-neutral-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal"
+            >
               The first group of coaches will get early access and 40% off for life. Once founding access closes, that rate is gone.
-            </p>
+            </motion.p>
 
             {/* Waitlist Multi-step Form */}
-            <div className="relative">
+            <motion.div 
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="relative"
+            >
               <WaitlistForm />
-            </div>
+            </motion.div>
 
             {/* Sub-text note */}
             <div className="mt-8 text-center">
@@ -428,15 +576,35 @@ export default function App() {
               </p>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 8. FAQ */}
-        <section className="py-24 bg-neutral-50 border-t border-neutral-200">
+        <motion.section 
+          id="faq"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-neutral-50 border-t border-neutral-200 scroll-mt-16"
+        >
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold tracking-tight text-brand-900 mb-12 text-center">
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-4">
+            <motion.h2 
+              id="faq-heading"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+              className="text-3xl font-bold tracking-tight text-brand-900 mb-12 text-center"
+            >
+              Frequently Asked Questions About CoachOS Coaching Software
+            </motion.h2>
+            <motion.div 
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="space-y-4"
+            >
               <FAQItem 
                 question="Is CoachOS a marketplace?" 
                 answer="No. CoachOS is your private operating system. You bring your clients; we give you the system to manage them. We don't take a cut of your clients or list you on a directory."
@@ -461,28 +629,51 @@ export default function App() {
                 question="When does it launch?" 
                 answer="We're onboarding founding coaches first in batches to ensure a great experience. Join the waitlist to secure your spot in line and get early access updates."
               />
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 9. Final CTA */}
-        <section className="py-24 bg-white border-t border-neutral-200 text-center relative overflow-hidden">
+        <motion.section 
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="py-24 bg-white border-t border-neutral-200 text-center relative overflow-hidden"
+        >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neutral-200 via-brand-900 to-neutral-200"></div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl lg:text-5xl font-bold tracking-tight text-brand-900 mb-6">
-              Stop juggling tools. Start running your coaching business from one system.
-            </h2>
-            <div className="mt-10 flex flex-col items-center gap-4">
-              <button 
+            <motion.h2 
+              id="final-cta-heading"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+              className="text-3xl lg:text-5xl font-bold tracking-tight text-brand-900 mb-6"
+            >
+              Stop Juggling Disconnected Apps. Run Your Entire Coaching Business from One Private OS.
+            </motion.h2>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.15 }}
+              className="mt-10 flex flex-col items-center gap-4"
+            >
+              <GlowingBorderButton 
                 onClick={scrollToWaitlist}
-                className="bg-brand-900 text-white px-8 py-4 rounded-full text-xl font-medium hover:bg-brand-800 transition-all duration-200 shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95"
+                className="px-9 py-4 text-xl font-semibold flex items-center gap-2.5 hover:-translate-y-1 active:scale-95"
+                glowSpeed={3}
               >
-                Apply for founding access
-              </button>
+                <span className="relative flex items-center gap-2.5">
+                  Apply for founding access
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
+                </span>
+              </GlowingBorderButton>
               <p className="text-sm text-neutral-500 font-medium">Limited first cohort • Built for independent coaches</p>
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       {/* Footer */}
@@ -494,8 +685,19 @@ export default function App() {
           <p className="text-neutral-500 text-sm">
             © {new Date().getFullYear()} CoachOS. All rights reserved.
           </p>
+          <button
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setShowIntro(true);
+            }}
+            className="mt-3 text-xs text-neutral-400 hover:text-brand-900 transition-colors inline-flex items-center gap-1.5 underline decoration-neutral-300 underline-offset-4"
+          >
+            <Sparkles className="w-3 h-3 text-brand-600" />
+            Replay intro animation
+          </button>
         </div>
       </footer>
+      </motion.div>
     </div>
   );
 }
@@ -543,6 +745,13 @@ const DASHBOARD_VARIANTS = [
     shortName: 'Fitness & Health',
     tabIcon: Dumbbell,
     tagline: 'Athlete Periodization, Macro Compliance & Form Check Video Queue',
+    provesTitle: 'Replaces WhatsApp, TrueCoach, and Spreadsheets',
+    provesOutcome: 'Automates athlete form check video reviews, macro compliance tracking, and 0% fee Stripe billing in one branded athlete portal.',
+    provesProofBadges: [
+      '0% Platform Payment Fees',
+      '4 Pending Video Form Checks',
+      '88% Daily Athlete Check-In Rate'
+    ],
     theme: {
       sidebar: 'bg-[#042116] border-r border-emerald-900/40 text-emerald-100',
       activeMenu: 'bg-emerald-600 text-white shadow-md shadow-emerald-950/40',
@@ -646,6 +855,13 @@ const DASHBOARD_VARIANTS = [
     shortName: 'Business & Exec',
     tabIcon: Briefcase,
     tagline: 'High-Ticket Retainers, Advisory Milestones & ARR Pipeline',
+    provesTitle: 'Replaces Scattered DMs, Calendly, and Invoicing Tools',
+    provesOutcome: 'Consolidates high-ticket retainer contracts, advisory deliverables, and $18,500/mo ARR tracking with zero manual spreadsheet copying.',
+    provesProofBadges: [
+      '100% Retainer Retention',
+      '$18,500/mo Predictable ARR',
+      'DocuSign Contracts Auto-Executed'
+    ],
     theme: {
       sidebar: 'bg-[#0b1120] border-r border-slate-800 text-slate-200',
       activeMenu: 'bg-blue-600 text-white shadow-md shadow-blue-950/40',
@@ -749,6 +965,13 @@ const DASHBOARD_VARIANTS = [
     shortName: 'Life & Mindset',
     tabIcon: Heart,
     tagline: 'Daily Reflection Journals, Habit Streaks & Breakthrough Sessions',
+    provesTitle: 'Replaces Voice Memos, Notion, and Email Threads',
+    provesOutcome: 'Delivers a private client sanctuary with weekly guided reflection audio prompts, 14-day habit streaks, and confidential session logs.',
+    provesProofBadges: [
+      '90% Prompt Compliance',
+      '14 Active Habit Streaks',
+      'Confidential Voice Vault'
+    ],
     theme: {
       sidebar: 'bg-[#180a29] border-r border-purple-950 text-purple-100',
       activeMenu: 'bg-purple-600 text-white shadow-md shadow-purple-950/40',
@@ -853,6 +1076,13 @@ const DASHBOARD_VARIANTS = [
     shortName: 'Sports Performance',
     tabIcon: Trophy,
     tagline: 'Biomechanical Film Room, PR Telemetry & Load Readiness',
+    provesTitle: 'Replaces Loose Spreadsheets, Clipboards, and Hudl Emails',
+    provesOutcome: 'Unifies biomechanical game film review, combine velocity PR telemetry, and roster readiness for 45 collegiate & pro athletes.',
+    provesProofBadges: [
+      '7 Academy PRs Broken',
+      '34.2" Vertical Telemetry',
+      '94% Squad Load Readiness'
+    ],
     theme: {
       sidebar: 'bg-[#12100e] border-r border-orange-950 text-orange-100',
       activeMenu: 'bg-orange-600 text-white shadow-md shadow-orange-950/40',
@@ -952,306 +1182,458 @@ const DASHBOARD_VARIANTS = [
   }
 ];
 
+function Sparkline({ data, color }: { data: { value: number }[]; color: string }) {
+  if (!data || data.length < 2) return null;
+  const values = data.map((d) => d.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const w = 220;
+  const h = 40;
+  const pad = 4;
+  
+  const points = values.map((v, i) => {
+    const x = (i / (values.length - 1)) * (w - pad * 2) + pad;
+    const y = h - ((v - min) / range) * (h - pad * 2) - pad;
+    return { x, y, v };
+  });
+
+  const polylineStr = points.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const areaStr = `${points[0].x},${h} ${polylineStr} ${points[points.length - 1].x},${h}`;
+  const lastPoint = points[points.length - 1];
+  const gradId = `spark-grad-${color.replace(/[^a-zA-Z0-9]/g, '')}`;
+
+  return (
+    <div className="relative w-full h-10 overflow-hidden">
+      <svg 
+        viewBox={`0 0 ${w} ${h}`} 
+        className="w-full h-full overflow-visible" 
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.28" />
+            <stop offset="100%" stopColor={color} stopOpacity="0.0" />
+          </linearGradient>
+        </defs>
+        <polygon 
+          fill={`url(#${gradId})`} 
+          points={areaStr} 
+        />
+        <polyline
+          fill="none"
+          stroke={color}
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          points={polylineStr}
+        />
+        <circle 
+          cx={lastPoint.x} 
+          cy={lastPoint.y} 
+          r="3.5" 
+          fill="#ffffff" 
+          stroke={color} 
+          strokeWidth="2.5" 
+        />
+      </svg>
+    </div>
+  );
+}
+
 function HeroDashboard() {
   const [variantIndex, setVariantIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  
+  const [isAutoCycling, setIsAutoCycling] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-cycle between dashboard variants every 5.5 seconds unless paused or hovered
   useEffect(() => {
-    if (!isAutoPlaying) return;
-    const interval = setInterval(() => {
+    if (!isAutoCycling || isHovered) return;
+    const timer = setInterval(() => {
       setVariantIndex((prev) => (prev + 1) % DASHBOARD_VARIANTS.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, [isAutoCycling, isHovered]);
 
   const handleSelectVariant = (index: number) => {
     setVariantIndex(index);
-    setIsAutoPlaying(false);
-    // Resume auto-play after 15 seconds of user inactivity
-    setTimeout(() => {
-      setIsAutoPlaying(true);
-    }, 15000);
   };
 
   const variant = DASHBOARD_VARIANTS[variantIndex];
-  const TabIcon = variant.tabIcon;
 
   return (
-    <div className="flex flex-col gap-4 relative">
-      {/* Interactive OS Selector Tabs */}
-      <div className="flex flex-col items-center gap-2 z-20">
-        <div className="flex items-center gap-1.5 p-1.5 bg-white/90 backdrop-blur-md rounded-2xl border border-neutral-200/90 shadow-sm max-w-full overflow-x-auto">
+    <div 
+      className="flex flex-col gap-4 relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Category Tabs & Auto-Cycle Controller */}
+      <div className="flex flex-col items-center gap-3 z-20">
+        <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white rounded-2xl border border-neutral-200 shadow-xs max-w-full">
           {DASHBOARD_VARIANTS.map((v, idx) => {
             const Icon = v.tabIcon;
             const isActive = idx === variantIndex;
             return (
               <button
                 key={v.id}
+                type="button"
                 onClick={() => handleSelectVariant(idx)}
-                className={`relative px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-                  isActive ? 'text-brand-950 shadow-sm' : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100/60'
+                className={`relative px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer overflow-hidden ${
+                  isActive ? 'text-brand-950 font-bold bg-neutral-100/90 shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50'
                 }`}
               >
-                {isActive && (
+                <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${isActive ? v.theme.primary : 'text-neutral-400'}`} />
+                <span>{v.shortName}</span>
+
+                {/* Smooth Animated Auto-Cycle Progress Indicator on Active Tab */}
+                {isActive && isAutoCycling && !isHovered && (
                   <motion.div
-                    layoutId="activeHeroTabPill"
-                    className="absolute inset-0 bg-neutral-100 border border-neutral-200/80 rounded-xl"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    key={`progress-${variantIndex}`}
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 5.5, ease: "linear" }}
+                    className="absolute bottom-0 left-0 h-0.5 bg-brand-600 rounded-full"
                   />
                 )}
-                <span className="relative z-10 flex items-center gap-1.5">
-                  <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isActive ? v.theme.primary : 'text-neutral-400'}`} />
-                  <span>{v.shortName}</span>
-                </span>
               </button>
             );
           })}
+
+          {/* Auto-Cycle Pause / Play Toggle Control */}
+          <div className="h-6 w-px bg-neutral-200 mx-1 hidden sm:block"></div>
+          <button
+            type="button"
+            onClick={() => setIsAutoCycling(prev => !prev)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+              isAutoCycling 
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80 hover:bg-emerald-100/70' 
+                : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200/70'
+            }`}
+            title={isAutoCycling ? "Auto-cycle is active. Click to pause." : "Auto-cycle is paused. Click to resume."}
+          >
+            {isAutoCycling ? (
+              <>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-[11px] font-bold">Auto-Cycle: On</span>
+                <Pause className="w-3 h-3 text-emerald-700 ml-0.5" />
+              </>
+            ) : (
+              <>
+                <span className="w-2 h-2 rounded-full bg-neutral-400"></span>
+                <span className="text-[11px] font-bold">Paused</span>
+                <Play className="w-3 h-3 text-neutral-700 ml-0.5 fill-neutral-700" />
+              </>
+            )}
+          </button>
         </div>
 
-        {/* Dynamic Tagline */}
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={variant.id + '-tagline'}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.25 }}
-            className="text-xs sm:text-sm text-neutral-500 font-medium text-center"
-          >
-            Custom Architecture: <strong className="text-brand-950 font-bold">{variant.tagline}</strong>
-          </motion.p>
-        </AnimatePresence>
-      </div>
-
-      {/* Main OS Mockup Container */}
-      <div className="h-[640px] md:h-auto md:min-h-[560px] md:aspect-[16/9.4] bg-neutral-900 rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.15)] border border-neutral-300/80 overflow-hidden flex relative backdrop-blur-sm">
-        
-        {/* Animated Sidebar */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={variant.id + '-sidebar'}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className={`w-14 sm:w-16 md:w-60 flex flex-col p-2 sm:p-4 shadow-2xl z-10 relative shrink-0 ${variant.theme.sidebar}`}
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-40 pointer-events-none"></div>
-            
-            <div className="hidden md:flex items-center mb-7 mt-1 px-2 relative z-10">
-              <Logo className="h-7 text-white" inverted />
-            </div>
-            <div className="flex md:hidden items-center justify-center mb-6 mt-1 text-white relative z-10">
-              <Logo className="h-7 text-white" inverted />
+        {/* Prominent "What This Proves & Solves" Clarity Banner */}
+        <div className="w-full bg-white rounded-2xl border border-neutral-200/90 p-4 sm:p-5 shadow-xs text-left transition-all duration-300">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
+            <div className="space-y-1.5 flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-brand-950 text-amber-300">
+                  <Sparkles className="w-3 h-3 text-amber-400" />
+                  What CoachOS Proves
+                </span>
+                <span className="text-xs font-bold text-neutral-400">
+                  • {variant.name}
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-brand-950 tracking-tight">
+                {variant.provesTitle}
+              </h3>
+              <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+                {variant.provesOutcome}
+              </p>
             </div>
 
-            <nav className="space-y-1.5 flex-1 relative z-10">
-              {variant.menu.map((item, i) => (
-                <div 
-                  key={i} 
-                  className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 cursor-default ${
-                    item.active 
-                      ? `${variant.theme.activeMenu}` 
-                      : 'hover:bg-white/10 text-neutral-300 hover:text-white'
-                  }`}
-                >
-                  <item.icon className={`w-4 h-4 flex-shrink-0 ${item.active ? 'text-white' : 'opacity-70'}`} />
-                  <span className="hidden md:block font-medium text-xs tracking-tight">{item.label}</span>
-                  {item.badge && (
-                    <span className="hidden md:flex ml-auto bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
-                      {item.badge}
-                    </span>
-                  )}
+            {/* 3 Concrete Proof Badges */}
+            <div className="flex flex-wrap lg:flex-col gap-1.5 shrink-0 border-t lg:border-t-0 lg:border-l border-neutral-100 pt-3 lg:pt-0 lg:pl-5">
+              {variant.provesProofBadges.map((badge, bIdx) => (
+                <div key={bIdx} className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-800 bg-neutral-50 px-2.5 py-1 rounded-lg border border-neutral-200/60">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>{badge}</span>
                 </div>
               ))}
-            </nav>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <div className="relative z-10 pt-4 border-t border-white/10 hidden md:flex items-center gap-2.5 px-2">
-              <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-bold text-white">
-                ME
+      {/* Main OS Mockup Window */}
+      <div className="relative">
+        <div className="bg-neutral-900 rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-neutral-300/80 overflow-hidden flex flex-col relative text-left">
+          
+          {/* macOS Top Window Bar */}
+          <div className="h-10 bg-neutral-950 border-b border-white/10 px-3 sm:px-4 flex items-center justify-between text-neutral-400 select-none z-30 shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] inline-block opacity-90" />
+                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] inline-block opacity-90" />
+                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] inline-block opacity-90" />
               </div>
-              <div className="text-left">
-                <p className="text-xs font-bold text-white leading-none">Your OS</p>
-                <p className="text-[10px] text-neutral-400 mt-0.5">Whitelabeled</p>
+              <span className="inline-flex items-center gap-1.5 ml-2 sm:ml-3 text-[10px] sm:text-[11px] font-mono text-neutral-300 bg-white/5 px-2 sm:px-2.5 py-0.5 rounded-full border border-white/10 truncate max-w-[170px] sm:max-w-none">
+                <Lock className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
+                app.coachos.io/{variant.id}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
+                <RefreshCw className={`w-3 h-3 ${isAutoCycling && !isHovered ? 'animate-spin text-emerald-400' : 'text-neutral-500'}`} style={{ animationDuration: '6s' }} />
+                <span>Auto-Cycling OS</span>
+              </span>
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>0% Fees • Live Sync</span>
               </div>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
 
-        {/* Main OS View Area */}
-        <div className="flex-1 flex flex-col bg-white overflow-hidden text-left relative z-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={variant.id + '-view'}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-0 flex flex-col overflow-hidden"
-            >
-              {/* Topbar */}
-              <div className={`h-14 border-b flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20 shrink-0 ${variant.theme.topbarBg}`}>
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200/60">
+          {/* Inner Workspace: Sidebar (Desktop) / Subnav (Mobile) + Viewport */}
+          <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative min-h-[520px]">
+            
+            {/* Desktop Left Sidebar (Non-interactive display) */}
+            <div className={`hidden md:flex w-56 flex-col p-4 shadow-xl z-10 relative shrink-0 ${variant.theme.sidebar}`}>
+              <div className="flex items-center mb-6 mt-1 px-2 relative z-10">
+                <Logo className="h-6 text-white" inverted />
+              </div>
+
+              <div className="space-y-1 flex-1 relative z-10">
+                {variant.menu.map((item, i) => {
+                  const isSelected = i === 0;
+                  return (
+                    <div 
+                      key={i}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left ${
+                        isSelected 
+                          ? `${variant.theme.activeMenu} ring-1 ring-white/25 shadow-xs font-semibold` 
+                          : 'text-neutral-300 opacity-80'
+                      }`}
+                    >
+                      <item.icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'opacity-80'}`} />
+                      <span className="text-xs tracking-tight truncate">{item.label}</span>
+                      {item.badge && (
+                        <span className="ml-auto bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.2 rounded">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="pt-3 border-t border-white/10 flex items-center gap-2.5 px-2">
+                <div className="w-6 h-6 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-white">
+                  ME
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-bold text-white leading-none">Your Coaching OS</p>
+                  <p className="text-[10px] text-neutral-400 mt-0.5">100% Whitelabeled</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Sub-Navigation Bar */}
+            <div className={`flex md:hidden items-center gap-1 p-2 border-b overflow-x-auto scrollbar-none z-10 ${variant.theme.sidebar}`}>
+              {variant.menu.map((item, i) => {
+                const isSelected = i === 0;
+                return (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs whitespace-nowrap shrink-0 ${
+                      isSelected 
+                        ? `${variant.theme.activeMenu} font-bold text-white shadow-xs` 
+                        : 'text-neutral-300 opacity-80'
+                    }`}
+                  >
+                    <item.icon className="w-3.5 h-3.5" />
+                    <span>{item.label.split(' ')[0]}</span>
+                    {item.badge && (
+                      <span className="bg-white/25 text-white text-[9px] px-1 py-0.2 rounded font-bold">
+                        {item.badge}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Main OS View Area with Butter-Smooth Variant Transition */}
+            <div className="flex-1 flex flex-col bg-white overflow-hidden text-left relative z-0">
+              
+              {/* Topbar inside OS View */}
+              <div className={`h-12 sm:h-13 border-b flex items-center justify-between px-3.5 sm:px-5 sticky top-0 z-20 shrink-0 ${variant.theme.topbarBg}`}>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-neutral-700 bg-neutral-100 px-2.5 py-0.8 rounded-full border border-neutral-200/60 truncate">
                     {variant.headerStatus}
                   </span>
                 </div>
                 
-                <div className="flex items-center gap-3 ml-auto">
-                  <div className="hidden sm:flex items-center gap-2 text-neutral-400 bg-neutral-100/90 px-3 py-1 rounded-lg w-48 border border-neutral-200/60 text-xs">
-                    <Search className="w-3.5 h-3.5 text-neutral-400" />
-                    <span>Search data...</span>
+                <div className="flex items-center gap-2 ml-auto shrink-0">
+                  <div className="hidden sm:flex items-center gap-2 text-neutral-400 bg-neutral-100/90 px-2.5 py-1.5 rounded-lg w-52 border border-neutral-200/60 text-xs">
+                    <Search className="w-3 h-3 text-neutral-400 shrink-0" />
+                    <span className="truncate">Search client telemetry...</span>
+                    <kbd className="ml-auto text-[9px] font-mono bg-white px-1.5 py-0.2 rounded border border-neutral-300 text-neutral-500">⌘K</kbd>
                   </div>
-                  <div className="relative cursor-pointer">
-                    <Bell className="w-4 h-4 text-neutral-500 hover:text-brand-900 transition-colors" />
-                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 border border-white"></span>
+                  <div className="relative p-1.5 text-neutral-500">
+                    <Bell className="w-4 h-4" />
+                    <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 border border-white"></span>
                   </div>
                 </div>
               </div>
 
-              {/* Scrollable Dashboard Body */}
-              <div className="p-4 sm:p-6 overflow-y-auto bg-neutral-50/70 h-full flex-1 space-y-5">
-                {/* Stats Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {variant.topCards.map((card, i) => (
-                    <div 
-                      key={i} 
-                      className={`p-4 rounded-2xl shadow-sm border transition-all duration-200 flex flex-col justify-between relative overflow-hidden bg-white ${variant.theme.cardBg}`}
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <p className="text-neutral-500 text-[11px] font-bold uppercase tracking-wider">{card.title}</p>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${variant.theme.badgeBg}`}>
-                          {card.badge}
-                        </span>
-                      </div>
-
-                      <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-2xl font-extrabold text-brand-950 tracking-tight">{card.value}</span>
-                      </div>
-                      <p className="text-xs text-neutral-500 font-medium">{card.sub}</p>
-
-                      {/* Progress bar type */}
-                      {card.type === 'progress' && card.progress && (
-                        <div className="w-full bg-neutral-100 rounded-full h-2 mt-3 p-0.5 border border-neutral-200/50">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${card.progress}%` }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="h-full rounded-full bg-emerald-500"
-                          />
+              {/* Dashboard Content Body with Silky Fade Animation on Auto-Cycle */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={variant.id}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="p-3.5 sm:p-5 overflow-y-auto bg-neutral-50/60 h-full flex-1 space-y-4"
+                >
+                  
+                  {/* 3 Metric Cards with Pure CSS Hover */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5">
+                    {variant.topCards.map((card, i) => (
+                      <div 
+                        key={i}
+                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all duration-150 flex flex-col justify-between bg-white hover:border-neutral-300 hover:shadow-xs ${variant.theme.cardBg}`}
+                      >
+                        <div className="flex items-start justify-between mb-1.5">
+                          <p className="text-neutral-500 text-[11px] font-bold uppercase tracking-wider">{card.title}</p>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${variant.theme.badgeBg}`}>
+                            {card.badge}
+                          </span>
                         </div>
-                      )}
 
-                      {/* Chart preview type */}
-                      {card.type === 'chart' && card.chartData && (
-                        <div className="h-10 w-full mt-2 -ml-2 -mb-2">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={card.chartData}>
-                              <Line 
-                                type="monotone" 
-                                dataKey="value" 
-                                stroke={variant.theme.chartColor} 
-                                strokeWidth={2.5} 
-                                dot={false} 
-                                isAnimationActive={false}
-                              />
-                            </LineChart>
-                          </ResponsiveContainer>
+                        <div className="flex items-baseline gap-2 mb-0.5">
+                          <span className="text-xl sm:text-2xl font-extrabold text-brand-950 tracking-tight">{card.value}</span>
                         </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                        <p className="text-xs text-neutral-500 font-medium">{card.sub}</p>
 
-                {/* Connected Tools Bar */}
-                <div className="bg-white rounded-2xl shadow-sm border border-neutral-200/70 p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-xs font-bold text-brand-950 uppercase tracking-wider flex items-center gap-1.5">
-                      <Link2 className={`w-3.5 h-3.5 ${variant.theme.primary}`} />
-                      Bespoke Tool Stack (Zero Data Loss)
-                    </h4>
-                    <span className="text-[10px] text-neutral-400 font-medium">100% Whitelabeled</span>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                    {variant.tools.map((tool, i) => (
-                      <div key={i} className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-neutral-200/80 bg-neutral-50/80 hover:bg-neutral-100 transition-colors">
-                        <div className="w-5 h-5 rounded-md flex items-center justify-center text-white shrink-0 shadow-sm" style={{ backgroundColor: tool.color }}>
-                          <tool.icon className="w-3 h-3" />
-                        </div>
-                        <span className="text-xs font-bold text-neutral-700">{tool.name}</span>
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-0.5 shadow-[0_0_4px_rgba(16,185,129,0.8)]"></div>
+                        {/* Progress bar type */}
+                        {card.type === 'progress' && card.progress && (
+                          <div className="w-full bg-neutral-100 rounded-full h-1.5 mt-2.5 p-0.2 border border-neutral-200/50">
+                            <div 
+                              style={{ width: `${card.progress}%` }}
+                              className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                            />
+                          </div>
+                        )}
+
+                        {/* Chart preview type with vector Sparkline */}
+                        {card.type === 'chart' && card.chartData && (
+                          <div className="h-9 w-full mt-1.5 -ml-1">
+                            <Sparkline data={card.chartData} color={variant.theme.chartColor} />
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
-                </div>
 
-                {/* Split Main Content Area */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                  {/* Left Section: OS-Specific Core Feature */}
-                  <div className="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-neutral-200/70 p-4 sm:p-5 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
+                  {/* Connected Tools Bar */}
+                  <div className="bg-white rounded-xl sm:rounded-2xl border border-neutral-200/80 p-3 sm:p-3.5 shadow-2xs">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-xs font-bold text-brand-950 uppercase tracking-wider flex items-center gap-1.5">
+                        <Link2 className={`w-3.5 h-3.5 ${variant.theme.primary}`} />
+                        Integrated Client Ecosystem
+                      </h4>
+                      <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live Webhooks
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {variant.tools.map((tool, i) => (
+                        <div 
+                          key={i} 
+                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200/70 bg-neutral-50 text-xs"
+                        >
+                          <div className="w-4 h-4 rounded flex items-center justify-center text-white shrink-0" style={{ backgroundColor: tool.color }}>
+                            <tool.icon className="w-2.5 h-2.5" />
+                          </div>
+                          <span className="font-semibold text-neutral-700">{tool.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Split Main Content Area */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+                    
+                    {/* Left Section: Core Deliverables */}
+                    <div className="lg:col-span-7 bg-white rounded-xl sm:rounded-2xl border border-neutral-200/80 p-3.5 sm:p-4 shadow-2xs">
+                      <div className="flex items-center justify-between mb-2.5">
                         <h4 className="text-xs font-bold text-brand-950 uppercase tracking-wider flex items-center gap-1.5">
                           <variant.leftSectionIcon className={`w-3.5 h-3.5 ${variant.theme.primary}`} />
                           {variant.leftSectionTitle}
                         </h4>
-                        <span className="text-[10px] bg-neutral-100 text-neutral-600 font-bold px-2 py-0.5 rounded-full">
-                          Live System
+                        <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200/60">
+                          Active Sync
                         </span>
                       </div>
 
-                      <div className="space-y-2.5">
+                      <div className="space-y-2">
                         {variant.leftItems.map((item, i) => (
-                          <div key={i} className="p-3 rounded-xl bg-neutral-50/80 border border-neutral-100 hover:border-neutral-200 transition-colors text-left">
-                            <div className="flex items-start justify-between gap-2 mb-1">
-                              <p className="text-xs font-bold text-brand-950">{item.title}</p>
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0 ${item.statusColor}`}>
-                                {item.status}
-                              </span>
+                          <div key={i} className="p-2.5 sm:p-3 rounded-xl bg-neutral-50/80 border border-neutral-100 hover:border-neutral-200 transition-colors text-left flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <p className="text-xs font-bold text-brand-950">
+                                {item.title}
+                              </p>
+                              <p className="text-[11px] text-neutral-500 mt-0.5 truncate">{item.meta}</p>
                             </div>
-                            <p className="text-[11px] text-neutral-500">{item.meta}</p>
+                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md shrink-0 ${item.statusColor}`}>
+                              {item.status}
+                            </span>
                           </div>
                         ))}
                       </div>
                     </div>
-                  </div>
 
-                  {/* Right Section: Real-time Activity / Queue */}
-                  <div className="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-neutral-200/70 p-4 sm:p-5 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
+                    {/* Right Section: Real-time Activity Feed */}
+                    <div className="lg:col-span-5 bg-white rounded-xl sm:rounded-2xl border border-neutral-200/80 p-3.5 sm:p-4 shadow-2xs">
+                      <div className="flex items-center justify-between mb-2.5">
                         <h4 className="text-xs font-bold text-brand-950 uppercase tracking-wider flex items-center gap-1.5">
                           <variant.rightSectionIcon className={`w-3.5 h-3.5 ${variant.theme.primary}`} />
                           {variant.rightSectionTitle}
                         </h4>
                         <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live Telemetry
                         </span>
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {variant.rightItems.map((act, i) => (
-                          <div key={i} className="p-3 rounded-xl border border-neutral-100 bg-neutral-50/60 flex items-start gap-2.5">
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${act.iconBg}`}>
-                              <act.icon className="w-3.5 h-3.5" />
+                          <div key={i} className="p-2.5 sm:p-3 rounded-xl border border-neutral-100 bg-neutral-50/70 flex items-start gap-2.5">
+                            <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${act.iconBg}`}>
+                              <act.icon className="w-3 h-3" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between gap-1 mb-0.5">
+                              <div className="flex items-center justify-between gap-1">
                                 <p className="text-xs font-bold text-brand-950 truncate">{act.author}</p>
-                                <span className="text-[10px] text-neutral-400 font-medium">{act.time}</span>
+                                <span className="text-[10px] text-neutral-400 font-medium shrink-0">{act.time}</span>
                               </div>
-                              <p className="text-[11px] font-semibold text-neutral-700">{act.action}</p>
+                              <p className="text-[11px] font-semibold text-neutral-700 truncate">{act.action}</p>
                               <p className="text-[10px] text-neutral-500 truncate mt-0.5">{act.detail}</p>
                             </div>
+                            <span className="text-[10px] font-bold px-2 py-1 rounded-md bg-neutral-100 text-neutral-600 shrink-0 border border-neutral-200/60">
+                              Synced
+                            </span>
                           </div>
                         ))}
                       </div>
                     </div>
+
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1557,6 +1939,7 @@ export function WaitlistForm() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [analyzingStatus, setAnalyzingStatus] = useState('');
+  const [showSummaryInCheckout, setShowSummaryInCheckout] = useState(false);
 
   useEffect(() => {
     if (step === 9) {
@@ -1628,16 +2011,16 @@ export function WaitlistForm() {
         throw new Error(text || 'Something went wrong. Please try again.');
       }
       
-      try {
-        localStorage.removeItem(WAITLIST_STORAGE_KEY);
-      } catch {
-        // Ignore
-      }
-
       if (isReservation) {
         setLoading(false);
         setStep(11);
         return;
+      }
+
+      try {
+        localStorage.removeItem(WAITLIST_STORAGE_KEY);
+      } catch {
+        // Ignore
       }
       
       setSubmitted(true);
@@ -1677,8 +2060,8 @@ export function WaitlistForm() {
   }
 
   const renderProgress = () => {
-    // Total steps = 10
-    const totalSteps = 10;
+    // Total steps = 11
+    const totalSteps = 11;
     const progress = Math.min(((step - 1) / (totalSteps - 1)) * 100, 100);
     
     return (
@@ -1689,6 +2072,8 @@ export function WaitlistForm() {
               <span className={step === 1 ? "text-brand-900 font-extrabold" : "text-neutral-500"}>1. Contact Info</span>
               <span className={step === 2 ? "text-brand-900 font-extrabold" : "text-neutral-400"}>2. Business Profile</span>
             </>
+          ) : step === 11 ? (
+            <span className="text-brand-900 font-extrabold mx-auto">Complete Reservation</span>
           ) : (
              <span className="text-brand-900 font-extrabold mx-auto">Founding Fit Review</span>
           )}
@@ -2107,13 +2492,17 @@ export function WaitlistForm() {
                 ))}
               </div>
 
-              <button 
+              <GlowingBorderButton 
                 onClick={() => setStep(9)}
-                className="w-full bg-brand-900 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] group"
+                rounded="xl"
+                className="w-full px-8 py-4 text-lg font-semibold flex items-center justify-center gap-2 active:scale-[0.98]"
+                glowSpeed={3.2}
               >
-                Submit for Founding Fit Review
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <span className="relative flex items-center justify-center gap-2">
+                  Submit Application for Founding Review
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
+                </span>
+              </GlowingBorderButton>
             </motion.div>
           )}
 
@@ -2221,35 +2610,28 @@ export function WaitlistForm() {
               </div>
 
               <div className="space-y-4">
-                <motion.button 
+                <GlowingBorderButton
                   onClick={(e) => handleSubmit(e, true)}
                   disabled={loading || !termsAccepted}
-                  animate={{
-                    boxShadow: (loading || !termsAccepted) ? "none" : [
-                      "0 0 0px 0px rgba(20, 83, 45, 0.2)",
-                      "0 0 30px 5px rgba(20, 83, 45, 0.5)",
-                      "0 0 0px 0px rgba(20, 83, 45, 0.2)",
-                    ]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative w-full bg-brand-900 text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-brand-800 transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 overflow-hidden group"
+                  rounded="xl"
+                  className="w-full px-8 py-4 text-lg font-bold flex items-center justify-center gap-2 active:scale-[0.98] overflow-hidden"
+                  glowSpeed={2.8}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
                   <span className="relative flex items-center justify-center gap-2">
                     {loading ? (
                       <Loader2 className="w-6 h-6 animate-spin text-white/80" />
                     ) : (
                       <>
                         Continue to Checkout
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
                       </>
                     )}
                   </span>
-                </motion.button>
+                </GlowingBorderButton>
                 <button 
                   onClick={(e) => handleSubmit(e, false)}
                   disabled={loading}
-                  className="w-full bg-white text-neutral-600 px-8 py-4 rounded-xl text-sm font-medium hover:bg-neutral-50 transition-all border border-neutral-200 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full bg-white text-neutral-600 px-8 py-4 rounded-xl text-sm font-medium hover:bg-neutral-50 transition-all border border-neutral-200 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {loading ? (
                     <Loader2 className="w-5 h-5 animate-spin text-neutral-400" />
@@ -2275,7 +2657,80 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10 w-full"
             >
-              <h3 className="text-2xl font-extrabold tracking-tight text-brand-950 mb-6 text-center">Complete your reservation</h3>
+              <div className="flex items-center justify-between mb-5">
+                <button 
+                  onClick={() => setStep(10)} 
+                  className="text-sm font-semibold text-neutral-400 hover:text-brand-900 flex items-center gap-1 transition-colors group"
+                >
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to reservation details
+                </button>
+                <button
+                  onClick={() => setStep(8)}
+                  className="text-xs font-semibold text-brand-700 hover:text-brand-900 transition-colors flex items-center gap-1"
+                >
+                  <Edit3 className="w-3.5 h-3.5" /> Edit application
+                </button>
+              </div>
+
+              <h3 className="text-2xl font-extrabold tracking-tight text-brand-950 mb-2 text-center">Complete your reservation</h3>
+              <p className="text-neutral-500 text-sm mb-5 text-center">Secure your founding cohort build slot (${FOUNDING_DEPOSIT_AMOUNT} deposit applied to your build).</p>
+
+              {/* Review what they did / application summary accordion */}
+              <div className="mb-6 rounded-2xl border border-neutral-200/80 bg-neutral-50/80 overflow-hidden shadow-xs">
+                <button
+                  type="button"
+                  onClick={() => setShowSummaryInCheckout(!showSummaryInCheckout)}
+                  className="w-full px-4 py-3.5 flex items-center justify-between text-left hover:bg-neutral-100/70 transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-brand-100/70 text-brand-800 flex items-center justify-center">
+                      <FileText className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-brand-950">Review your application details</div>
+                      <div className="text-xs text-neutral-500">{formData.name ? `${formData.name} • ` : ''}{formData.niche || 'Coaching Profile'}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-900 bg-white px-2.5 py-1 rounded-md border border-neutral-200">
+                    <span>{showSummaryInCheckout ? "Hide" : "View answers"}</span>
+                    {showSummaryInCheckout ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </div>
+                </button>
+
+                {showSummaryInCheckout && (
+                  <div className="p-4 sm:p-5 border-t border-neutral-200/70 bg-white">
+                    <div className="space-y-2.5 text-xs sm:text-sm">
+                      {[
+                        { label: 'Name', value: formData.name },
+                        { label: 'Email', value: formData.email },
+                        { label: 'Niche', value: formData.niche },
+                        { label: 'Active Clients', value: formData.clientCount },
+                        { label: 'Avg Price / Month', value: formData.price },
+                        { label: 'Coaching Experience', value: formData.experience },
+                        { label: 'Primary Admin Work', value: formData.adminWork.join(', ').replace(/-/g, ' ') || 'None selected' },
+                        { label: 'Tools Used', value: formData.tools.join(', ') || 'None selected' },
+                        { label: 'Start Timeline', value: formData.startTimeline },
+                      ].map((item, i) => (
+                        <div key={i} className="flex justify-between items-start gap-4 py-1.5 border-b border-neutral-100 last:border-0">
+                          <span className="font-bold text-neutral-400 uppercase text-[11px] tracking-wide shrink-0">{item.label}</span>
+                          <span className="font-medium text-brand-950 text-right">{item.value || '—'}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between">
+                      <span className="text-xs text-neutral-500">Need to update any answers?</span>
+                      <button
+                        type="button"
+                        onClick={() => setStep(8)}
+                        className="text-xs font-bold text-brand-900 hover:text-brand-700 flex items-center gap-1 underline"
+                      >
+                        Edit application
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-2 sm:p-6 mb-6">
                 <WhopElements elements={whopElements}>
                   <Checkout plan="plan_6zWK3keLNhOWg">
@@ -2530,57 +2985,96 @@ function ComparisonTable() {
   ];
 
   return (
-    <section className="py-24 bg-neutral-50 border-t border-neutral-200">
+    <motion.section 
+      id="comparison"
+      initial={{ opacity: 0, y: 35 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      className="py-24 bg-neutral-50 border-t border-neutral-200 scroll-mt-16"
+    >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4">
-            Why coaches are switching
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          className="text-center mb-16"
+        >
+          <h2 id="comparison-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4">
+            Why 6-Figure Coaches Are Replacing Disconnected SaaS with CoachOS
           </h2>
           <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
             Stop paying for disconnected tools that create friction for your clients and more admin work for you.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="relative rounded-3xl border border-neutral-200 bg-white shadow-[0_8px_40px_-12px_rgba(0,0,0,0.08)] overflow-hidden">
-          
-          <div className="grid grid-cols-3 border-b border-neutral-100 bg-neutral-50/50">
-            <div className="p-4 sm:p-8 flex items-end">
-              <span className="text-xs sm:text-sm font-bold text-neutral-500 uppercase tracking-wider">
-                Area of Focus
-              </span>
+        <motion.div 
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.65, delay: 0.15 }}
+          className="relative pt-4"
+        >
+          {/* Main Table Card */}
+          <div className="relative rounded-3xl border border-neutral-200 bg-white shadow-[0_8px_40px_-12px_rgba(0,0,0,0.08)] group/table">
+            
+            {/* The CoachOS Column Elevated Lift & Shadow Aura - Pure CSS Smooth Hover */}
+            <div 
+              className="pointer-events-none absolute -top-3 -bottom-3 right-0 w-1/3 rounded-2xl sm:rounded-3xl border-2 border-brand-200/70 shadow-sm bg-transparent transition-all duration-300 ease-out z-20 group-hover/table:border-brand-600 group-hover/table:bg-brand-50/20 group-hover/table:-translate-y-2 group-hover/table:shadow-[0_24px_50px_-10px_rgba(15,23,42,0.22)] group-hover/table:ring-4 group-hover/table:ring-brand-500/15"
+            >
+              {/* Premium Floating Badge on the Elevated Column */}
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap bg-brand-900 text-neutral-200 shadow-sm group-hover/table:bg-brand-950 group-hover/table:text-amber-300 group-hover/table:shadow-lg group-hover/table:scale-105 group-hover/table:ring-2 group-hover/table:ring-amber-400/40">
+                <span className="flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-brand-400 transition-colors group-hover/table:text-amber-400" />
+                  <span className="hidden sm:inline">Your Custom OS</span>
+                  <span className="sm:hidden">Custom OS</span>
+                </span>
+              </div>
             </div>
-            <div className="p-4 sm:p-8 text-center flex flex-col items-center justify-end border-l border-neutral-100">
-              <span className="text-sm sm:text-base font-bold text-neutral-700 mb-1">Standard Apps</span>
-              <span className="text-[10px] sm:text-xs font-medium text-neutral-500 uppercase tracking-widest">(The Old Way)</span>
-            </div>
-            <div className="p-4 sm:p-8 text-center flex flex-col items-center justify-end relative border-l border-brand-100 bg-brand-50/50">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-brand-500"></div>
-              <span className="text-lg sm:text-2xl font-black text-brand-950 tracking-tight flex items-center justify-center gap-1.5 sm:gap-2">
-                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-brand-500" /> CoachOS
-              </span>
-              <span className="text-[10px] sm:text-xs font-bold text-brand-700 uppercase tracking-widest mt-1">(Your Own System)</span>
-            </div>
-          </div>
-          
-          <div className="divide-y divide-neutral-100">
-            {comparisons.map((row, i) => (
-              <div key={i} className="grid grid-cols-3 group transition-colors duration-300 hover:bg-neutral-50/50">
-                <div className="p-4 sm:p-6 text-sm sm:text-base font-semibold text-neutral-800 flex items-center">
-                  {row.feature}
+
+            {/* Content rows with clipped corners matching rounded-3xl */}
+            <div className="rounded-3xl overflow-hidden">
+              <div className="grid grid-cols-3 border-b border-neutral-100 bg-neutral-50/50">
+                <div className="p-4 sm:p-8 flex items-end">
+                  <span className="text-xs sm:text-sm font-bold text-neutral-500 uppercase tracking-wider">
+                    Area of Focus
+                  </span>
                 </div>
-                <div className="p-4 sm:p-6 text-sm sm:text-base text-neutral-500 text-center flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 border-l border-neutral-100 group-hover:opacity-50 transition-opacity duration-300">
-                  <X className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-300 shrink-0" />
-                  <span className="leading-snug">{row.standard}</span>
+                <div className="p-4 sm:p-8 text-center flex flex-col items-center justify-end border-l border-neutral-100 transition-opacity duration-300 group-hover/table:opacity-50">
+                  <span className="text-sm sm:text-base font-bold text-neutral-700 mb-1">Standard Apps</span>
+                  <span className="text-[10px] sm:text-xs font-medium text-neutral-500 uppercase tracking-widest">(The Old Way)</span>
                 </div>
-                <div className="p-4 sm:p-6 text-sm sm:text-base font-bold text-brand-900 text-center flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 border-l border-brand-100 bg-brand-50/50 group-hover:bg-brand-100/50 transition-colors duration-300 relative">
-                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="leading-snug">{row.coachos}</span>
+                <div className="p-4 sm:p-8 text-center flex flex-col items-center justify-end relative border-l border-brand-100 bg-brand-50/50 transition-all duration-300">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-brand-500 transition-all duration-300 group-hover/table:h-1.5 group-hover/table:bg-brand-600"></div>
+                  <span className="text-lg sm:text-2xl font-black text-brand-950 tracking-tight flex items-center justify-center gap-1.5 sm:gap-2">
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-brand-500 transition-all duration-300 group-hover/table:scale-110 group-hover/table:text-amber-500" /> CoachOS
+                  </span>
+                  <span className="text-[10px] sm:text-xs font-bold text-brand-700 uppercase tracking-widest mt-1">(Your Own System)</span>
                 </div>
               </div>
-            ))}
+              
+              <div className="divide-y divide-neutral-100">
+                {comparisons.map((row, i) => (
+                  <div key={i} className="grid grid-cols-3 group transition-colors duration-200 hover:bg-neutral-50/60">
+                    <div className="p-4 sm:p-6 text-sm sm:text-base font-semibold text-neutral-800 flex items-center">
+                      {row.feature}
+                    </div>
+                    <div className="p-4 sm:p-6 text-sm sm:text-base text-neutral-500 text-center flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 border-l border-neutral-100 transition-opacity duration-300 group-hover/table:opacity-50">
+                      <X className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-300 shrink-0" />
+                      <span className="leading-snug">{row.standard}</span>
+                    </div>
+                    <div className="p-4 sm:p-6 text-sm sm:text-base font-bold text-brand-900 text-center flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 border-l border-brand-100 bg-brand-50/50 transition-all duration-200 relative group-hover:bg-brand-100/60">
+                      <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 shrink-0 transition-transform duration-200 group-hover:scale-110" />
+                      <span className="leading-snug">{row.coachos}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

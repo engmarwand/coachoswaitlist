@@ -17,6 +17,8 @@
 
   --animate-blob: blob 7s infinite;
   --animate-spin-slow: spin 8s linear infinite;
+  --animate-subtle-pulse: subtle-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-border-rotate: border-spin 3.2s linear infinite;
 }
 
 @keyframes blob {
@@ -24,6 +26,24 @@
   33% { transform: translate(30px, -50px) scale(1.1); }
   66% { transform: translate(-20px, 20px) scale(0.9); }
   100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes subtle-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.026);
+  }
+}
+
+@keyframes border-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @layer utilities {
@@ -45,6 +65,61 @@
   .animation-delay-4000 {
     animation-delay: 4s;
   }
+
+  /* Moving orbit beam wrapper around buttons */
+  .orbit-glow-container {
+    position: relative;
+    display: inline-flex;
+    padding: 2px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .orbit-beam {
+    position: absolute;
+    inset: -200%;
+    transform-origin: center center;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 70deg,
+      rgba(16, 185, 129, 0.4) 110deg,
+      #34d399 150deg,
+      #a7f3d0 180deg,
+      #10b981 200deg,
+      transparent 240deg,
+      transparent 360deg
+    );
+    animation: border-spin 3s linear infinite;
+    pointer-events: none;
+    z-index: -2;
+  }
+
+  .orbit-halo {
+    position: absolute;
+    inset: -200%;
+    transform-origin: center center;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 70deg,
+      rgba(16, 185, 129, 0.4) 110deg,
+      #34d399 150deg,
+      #6ee7b7 180deg,
+      #10b981 200deg,
+      transparent 240deg,
+      transparent 360deg
+    );
+    animation: border-spin 3s linear infinite;
+    filter: blur(10px);
+    opacity: 0.75;
+    pointer-events: none;
+    z-index: -2;
+    transition: opacity 0.3s ease;
+  }
+
+  .orbit-glow-container:hover .orbit-halo {
+    opacity: 1;
+    filter: blur(14px);
+  }
 }
-
-

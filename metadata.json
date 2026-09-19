@@ -1,6 +1,6 @@
 {
   "name": "CoachOS",
-  "description": "CoachOS - Operating system for independent coaches.",
+  "description": "The dedicated all-in-one operating system engineered for independent fitness, business, and executive coaches. Manage leads, active client portals, payments with 0% platform fees, and video review queues in one custom dashboard.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
