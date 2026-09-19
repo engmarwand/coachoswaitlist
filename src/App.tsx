@@ -66,13 +66,35 @@ const whopElements = loadWhop();
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [showMobileStickyCta, setShowMobileStickyCta] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show sticky CTA when scrolled past 500px and not at bottom
+      const scrolled = window.scrollY > 480;
+      const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 400;
+      setShowMobileStickyCta(scrolled && !nearBottom);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToWaitlist = () => {
+    setIsMenuOpen(false);
     document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const scrollToSection = (id: string) => {
+    setIsMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-neutral-50 text-brand-900 font-sans selection:bg-brand-900 selection:text-white">
+    <div className="min-h-screen bg-neutral-50 text-brand-900 font-sans selection:bg-brand-900 selection:text-white pb-16 md:pb-0">
       {/* Initial Combining Tools Loading Animation */}
       <AnimatePresence mode="wait">
         {showIntro && (
@@ -91,14 +113,21 @@ export default function App() {
         className="min-h-screen flex flex-col"
       >
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-neutral-50/80 backdrop-blur-md border-b border-neutral-200">
+      <nav className="sticky top-0 z-50 bg-neutral-50/90 backdrop-blur-md border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <Logo className="h-8 text-brand-900" />
+            <div className="flex items-center cursor-pointer py-1" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Logo className="h-7 sm:h-8 text-brand-900" />
             </div>
             
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
+              <button onClick={() => scrollToSection('problem')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Problem</button>
+              <button onClick={() => scrollToSection('solution')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Features</button>
+              <button onClick={() => scrollToSection('integrations')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Integrations</button>
+              <button onClick={() => scrollToSection('workflow')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">How It Works</button>
+              <button onClick={() => scrollToSection('comparison')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Comparison</button>
+              <button onClick={() => scrollToSection('faq')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">FAQ</button>
+
               <GlowingBorderButton 
                 onClick={scrollToWaitlist}
                 className="px-5 py-2.5 font-medium flex items-center gap-2 hover:scale-105 active:scale-95"
@@ -109,10 +138,19 @@ export default function App() {
               </GlowingBorderButton>
             </div>
 
-            <div className="flex items-center md:hidden">
+            <div className="flex items-center gap-2 md:hidden">
+              <button 
+                onClick={scrollToWaitlist}
+                className="px-3 py-1.5 rounded-full bg-brand-900 text-white text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95"
+              >
+                <span>Waitlist</span>
+                <ArrowRight className="w-3 h-3 text-emerald-400" />
+              </button>
+
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-neutral-600 hover:text-brand-900 focus:outline-none"
+                className="p-2 rounded-xl text-neutral-700 hover:text-brand-900 hover:bg-neutral-100 focus:outline-none transition-colors"
+                aria-label="Toggle Menu"
               >
                 {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -126,30 +164,109 @@ export default function App() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white border-b border-neutral-200 overflow-hidden"
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="md:hidden bg-white border-b border-neutral-200 shadow-xl overflow-hidden"
             >
-              <div className="px-4 pt-2 pb-6 space-y-1">
-                <GlowingBorderButton 
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    scrollToWaitlist();
-                  }}
-                  rounded="xl"
-                  className="w-full px-5 py-3 font-medium flex justify-center items-center gap-2"
-                  glowSpeed={2.8}
-                >
-                  Join the waitlist
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-emerald-300" />
-                </GlowingBorderButton>
+              <div className="px-4 py-4 space-y-1">
+                <div className="grid grid-cols-2 gap-1 pb-3 border-b border-neutral-100">
+                  <button 
+                    onClick={() => scrollToSection('problem')}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
+                  >
+                    The Problem
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('solution')}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
+                  >
+                    Custom OS
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('integrations')}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
+                  >
+                    Integrations
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('workflow')}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
+                  >
+                    How It Works
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('use-cases')}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
+                  >
+                    For Coaches
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('comparison')}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
+                  >
+                    Comparison
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('faq')}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors col-span-2"
+                  >
+                    Frequently Asked Questions
+                  </button>
+                </div>
+
+                <div className="pt-3">
+                  <GlowingBorderButton 
+                    onClick={scrollToWaitlist}
+                    rounded="xl"
+                    className="w-full px-5 py-3.5 font-bold flex justify-center items-center gap-2 shadow-md text-base"
+                    glowSpeed={2.8}
+                  >
+                    Apply for Founding Access
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-emerald-300" />
+                  </GlowingBorderButton>
+                  <p className="text-center text-[11px] text-neutral-400 font-medium mt-2">
+                    Early access & 40% lifetime founding discount
+                  </p>
+                </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </nav>
 
+      {/* Mobile Sticky Floating Quick-Action Bar */}
+      <AnimatePresence>
+        {showMobileStickyCta && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="fixed bottom-3 inset-x-3 z-40 md:hidden"
+          >
+            <div className="bg-brand-950/95 backdrop-blur-lg border border-brand-800 text-white p-2.5 rounded-2xl shadow-2xl flex items-center justify-between gap-3">
+              <div className="min-w-0 pl-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                  <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">Founding Cohort</span>
+                </div>
+                <p className="text-xs font-bold text-neutral-200 truncate">40% Off Lifetime Rate</p>
+              </div>
+
+              <button
+                onClick={scrollToWaitlist}
+                className="bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-brand-950 px-4 py-2 rounded-xl text-xs font-black shrink-0 flex items-center gap-1.5 shadow-md transition-transform"
+              >
+                <span>Apply Now</span>
+                <ArrowRight className="w-3.5 h-3.5 font-bold" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <main>
         {/* 1. Hero Section */}
-        <section className="relative pt-20 pb-24 lg:pt-32 lg:pb-32 overflow-hidden">
+        <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-32 lg:pb-32 overflow-hidden">
           {/* Subtle Grid Background */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
           <div className="absolute inset-0 bg-brand-50/20 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
@@ -166,35 +283,35 @@ export default function App() {
               transition={{ duration: 0.5 }}
               className="max-w-3xl mx-auto"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-brand-200/50 text-brand-800 text-sm font-medium mb-8 shadow-sm backdrop-blur-md hover:bg-white/90 transition-colors cursor-default">
-                <span className="relative flex h-2 w-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-brand-200/50 text-brand-800 text-xs sm:text-sm font-medium mb-6 sm:mb-8 shadow-sm backdrop-blur-md hover:bg-white/90 transition-colors cursor-default max-w-full">
+                <span className="relative flex h-2 w-2 shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
                 </span>
-                Founding waitlist open — early access & pricing
+                <span className="truncate">Founding waitlist open — early access & pricing</span>
               </div>
               
-              <h1 id="hero-heading" className="text-5xl lg:text-7xl font-extrabold tracking-tighter text-brand-900 leading-[1.1] mb-6">
+              <h1 id="hero-heading" className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-brand-900 leading-[1.15] mb-4 sm:mb-6">
                 The All-In-One Operating System for Independent Coaches.
               </h1>
               
-              <p className="text-lg lg:text-xl text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-neutral-600 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
                 For independent fitness, business, executive, and sports coaches. Streamline lead pipelines, active client management, payments, and follow-ups in one custom dashboard.
               </p>
               
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex flex-col items-center gap-3 sm:gap-4">
                 <GlowingBorderButton 
                   onClick={scrollToWaitlist}
-                  className="px-8 py-4 text-lg font-semibold flex items-center gap-2 hover:-translate-y-1 active:scale-95"
+                  className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95"
                   glowSpeed={3.2}
                 >
-                  <span className="relative flex items-center gap-2.5">
+                  <span className="relative flex items-center justify-center gap-2.5">
                     Apply for founding access
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
                   </span>
                 </GlowingBorderButton>
                 
-                <p className="text-xs sm:text-sm text-neutral-500 font-medium mt-2">
+                <p className="text-xs sm:text-sm text-neutral-500 font-medium">
                   Limited first cohort • Built for independent coaches
                 </p>
               </div>
@@ -205,7 +322,7 @@ export default function App() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="mt-16 lg:mt-24 max-w-5xl mx-auto"
+              className="mt-10 sm:mt-16 lg:mt-24 max-w-5xl mx-auto"
             >
               <HeroDashboard />
             </motion.div>
@@ -219,34 +336,39 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-white border-y border-neutral-200 overflow-hidden scroll-mt-16"
+          className="py-14 sm:py-20 lg:py-24 bg-white border-y border-neutral-200 overflow-hidden scroll-mt-16"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-left"
               >
-                <h2 id="problem-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200/70 text-red-800 text-xs font-bold mb-4 uppercase tracking-wider">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                  The Problem
+                </div>
+                <h2 id="problem-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4 sm:mb-6 leading-tight">
                   The Hidden Admin Chaos of Running an Independent Coaching Business
                 </h2>
-                <p className="text-lg text-neutral-600 mb-8">
+                <p className="text-sm sm:text-base lg:text-lg text-neutral-600 mb-6 sm:mb-8 leading-relaxed">
                   You're a great coach, but managing the business side feels chaotic. Leads are falling through the cracks and admin is eating your day.
                 </p>
-                <ul className="space-y-6">
+                <ul className="space-y-3.5 sm:space-y-4">
                   {[
                     "You're closing DMs manually and leads keep slipping through.",
                     "Your client info lives scattered across WhatsApp, Notes, Calendly, and payment links.",
                     "You don't know exactly who to follow up with today, so you message no one.",
                     "You're spending more time on admin tasks than actual coaching."
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <div className="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center">
-                        <X className="w-4 h-4 text-red-600" />
+                    <li key={i} className="flex items-start gap-3.5 p-3 sm:p-0 rounded-xl bg-red-50/40 sm:bg-transparent border border-red-100/60 sm:border-0">
+                      <div className="mt-0.5 flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center">
+                        <X className="w-3.5 h-3.5 text-red-600 font-bold" />
                       </div>
-                      <span className="text-lg text-neutral-700">{item}</span>
+                      <span className="text-sm sm:text-base lg:text-lg text-neutral-800 font-medium leading-snug">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -256,7 +378,7 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="relative"
+                className="relative w-full"
               >
                 <ProblemVisuals />
               </motion.div>
@@ -271,7 +393,7 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-brand-900 text-white scroll-mt-16"
+          className="py-14 sm:py-20 lg:py-24 bg-brand-900 text-white scroll-mt-16"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div 
@@ -279,12 +401,16 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55 }}
-              className="text-center max-w-3xl mx-auto mb-16"
+              className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
             >
-              <h2 id="solution-heading" className="text-3xl lg:text-5xl font-bold tracking-tight mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-800/80 border border-brand-700 text-brand-200 text-xs font-bold mb-4 uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-brand-300" />
+                Custom Architecture
+              </div>
+              <h2 id="solution-heading" className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight mb-4 sm:mb-6 leading-tight">
                 A Private Coaching Operating System Engineered to Scale
               </h2>
-              <p className="text-lg lg:text-xl text-neutral-400">
+              <p className="text-sm sm:text-base lg:text-xl text-neutral-300 leading-relaxed">
                 CoachOS feels custom to your business. Everything you need to scale, without needing five different apps holding it together with duct tape.
               </p>
             </motion.div>
@@ -308,19 +434,19 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-white border-b border-neutral-200 overflow-hidden relative scroll-mt-16"
+          className="py-14 sm:py-20 lg:py-24 bg-white border-b border-neutral-200 overflow-hidden relative scroll-mt-16"
         >
           {/* Subtle grid */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]"></div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <motion.div 
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="order-2 lg:order-1"
+                className="order-2 lg:order-1 w-full"
               >
                 <CustomBuiltVisual />
               </motion.div>
@@ -329,44 +455,44 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="order-1 lg:order-2"
+                className="order-1 lg:order-2 text-left"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-800 text-xs font-bold mb-6 uppercase tracking-wider">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-800 text-xs font-bold mb-4 sm:mb-6 uppercase tracking-wider">
                   <Link2 className="w-3.5 h-3.5" />
                   Bespoke Integrations
                 </div>
-                <h2 id="integrations-heading" className="text-3xl lg:text-5xl font-bold tracking-tight text-brand-950 mb-6">
+                <h2 id="integrations-heading" className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-brand-950 mb-4 sm:mb-6 leading-tight">
                   Custom Software Architecture Built Around <span className="text-brand-600 font-extrabold italic">Your Exact</span> Coaching Workflow
                 </h2>
-                <p className="text-lg text-neutral-600 mb-8 leading-relaxed">
+                <p className="text-sm sm:text-base lg:text-lg text-neutral-600 mb-6 sm:mb-8 leading-relaxed">
                   Most software forces you to change how you work to fit their templates. CoachOS is different. When you join, we architect a private operating system around <strong>your exact tools, your pricing models, and your coaching style</strong>.
                 </p>
-                <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <div className="mt-1 w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 flex-shrink-0">
+                <ul className="space-y-3.5 sm:space-y-4">
+                  <li className="flex items-start gap-3.5 p-3.5 sm:p-0 rounded-xl bg-neutral-50/70 sm:bg-transparent border border-neutral-100 sm:border-0">
+                    <div className="mt-0.5 w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 flex-shrink-0">
                       <Check className="w-3.5 h-3.5 font-bold" />
                     </div>
                     <div>
-                      <p className="font-bold text-brand-950">Bring your own tools</p>
-                      <p className="text-sm text-neutral-500">Stripe, Calendly, Zoom, MyFitnessPal—if you use it, we connect it directly into your hub.</p>
+                      <p className="font-bold text-sm sm:text-base text-brand-950">Bring your own tools</p>
+                      <p className="text-xs sm:text-sm text-neutral-500 mt-0.5 leading-normal">Stripe, Calendly, Zoom, MyFitnessPal—if you use it, we connect it directly into your hub.</p>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="mt-1 w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 flex-shrink-0">
+                  <li className="flex items-start gap-3.5 p-3.5 sm:p-0 rounded-xl bg-neutral-50/70 sm:bg-transparent border border-neutral-100 sm:border-0">
+                    <div className="mt-0.5 w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 flex-shrink-0">
                       <Check className="w-3.5 h-3.5 font-bold" />
                     </div>
                     <div>
-                      <p className="font-bold text-brand-950">100% Whitelabeled for you</p>
-                      <p className="text-sm text-neutral-500">Your clients see your logo, your brand colors, and your custom domain. Never our branding.</p>
+                      <p className="font-bold text-sm sm:text-base text-brand-950">100% Whitelabeled for you</p>
+                      <p className="text-xs sm:text-sm text-neutral-500 mt-0.5 leading-normal">Your clients see your logo, your brand colors, and your custom domain. Never our branding.</p>
                     </div>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <div className="mt-1 w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 flex-shrink-0">
+                  <li className="flex items-start gap-3.5 p-3.5 sm:p-0 rounded-xl bg-neutral-50/70 sm:bg-transparent border border-neutral-100 sm:border-0">
+                    <div className="mt-0.5 w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 flex-shrink-0">
                       <Check className="w-3.5 h-3.5 font-bold" />
                     </div>
                     <div>
-                      <p className="font-bold text-brand-950">Custom workflows</p>
-                      <p className="text-sm text-neutral-500">Need a unique check-in form? A specific milestone tracker? We build it into your OS.</p>
+                      <p className="font-bold text-sm sm:text-base text-brand-950">Custom workflows</p>
+                      <p className="text-xs sm:text-sm text-neutral-500 mt-0.5 leading-normal">Need a unique check-in form? A specific milestone tracker? We build it into your OS.</p>
                     </div>
                   </li>
                 </ul>
@@ -382,7 +508,7 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-neutral-50 scroll-mt-16"
+          className="py-14 sm:py-20 lg:py-24 bg-neutral-50 scroll-mt-16"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div 
@@ -390,15 +516,19 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55 }}
-              className="text-center mb-16"
+              className="text-center mb-10 sm:mb-16"
             >
-              <h2 id="workflow-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-neutral-200 text-brand-800 text-xs font-bold mb-4 uppercase tracking-wider shadow-2xs">
+                <Layers className="w-3.5 h-3.5" />
+                Streamlined Lifecycle
+              </div>
+              <h2 id="workflow-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-3 sm:mb-4 leading-tight">
                 How CoachOS Automates Your Entire Client & Revenue Lifecycle
               </h2>
-              <p className="text-lg text-neutral-600">A simple flow to run your entire coaching business.</p>
+              <p className="text-sm sm:text-base lg:text-lg text-neutral-600 max-w-2xl mx-auto">A simple, automated flow to run and scale your coaching operations.</p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8 relative">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 relative">
               {/* Connecting line for desktop */}
               <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-neutral-200 z-0"></div>
 
@@ -406,7 +536,7 @@ export default function App() {
                 {
                   step: "01",
                   title: "Leads auto-capture",
-                  desc: "Leads from your IG, site, or forms funnel directly into CoachOS.",
+                  desc: "Leads from your IG, site, or forms funnel directly into CoachOS without manual data entry.",
                   icon: <Users className="w-6 h-6 text-brand-900" />
                 },
                 {
@@ -428,17 +558,17 @@ export default function App() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.2 }}
                   key={i} 
-                  className="relative z-10 flex flex-col items-center text-center"
+                  className="relative z-10 flex flex-col items-center text-center p-5 sm:p-6 rounded-2xl bg-white md:bg-transparent border md:border-0 border-neutral-200/80 shadow-xs md:shadow-none"
                 >
-                  <div className="w-24 h-24 bg-white rounded-2xl shadow-md border border-neutral-200 flex items-center justify-center mb-6 relative group cursor-default">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-neutral-50 md:bg-white rounded-2xl shadow-md border border-neutral-200 flex items-center justify-center mb-4 sm:mb-6 relative group cursor-default">
                     <div className="absolute inset-0 bg-brand-900 rounded-2xl scale-0 group-hover:scale-100 transition-transform duration-300 z-0"></div>
                     <div className="relative z-10 text-brand-900 group-hover:text-white transition-colors duration-300 flex flex-col items-center gap-1">
                        {step.icon}
-                       <span className="text-sm font-bold opacity-50 group-hover:opacity-100">{step.step}</span>
+                       <span className="text-xs sm:text-sm font-bold opacity-60 group-hover:opacity-100">{step.step}</span>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-brand-900 mb-3">{step.title}</h3>
-                  <p className="text-neutral-600 max-w-sm">{step.desc}</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-brand-900 mb-2">{step.title}</h3>
+                  <p className="text-xs sm:text-sm text-neutral-600 max-w-sm leading-relaxed">{step.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -454,31 +584,36 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-white border-t border-neutral-200 scroll-mt-16"
+          className="py-14 sm:py-20 lg:py-24 bg-white border-t border-neutral-200 scroll-mt-16"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
+                className="text-left"
               >
-                <h2 id="use-cases-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-800 text-xs font-bold mb-4 sm:mb-6 uppercase tracking-wider">
+                  <Award className="w-3.5 h-3.5" />
+                  Tailored For You
+                </div>
+                <h2 id="use-cases-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4 sm:mb-6 leading-tight">
                   Tailored Operating Systems for Fitness, Business, Life, & Sports Coaches
                 </h2>
-                <p className="text-lg text-neutral-600 mb-8">
+                <p className="text-sm sm:text-base lg:text-lg text-neutral-600 mb-6 sm:mb-8 leading-relaxed">
                   Whether you coach 1:1, in small groups, or scale online programs, CoachOS adapts to your specific workflow.
                 </p>
-                <ul className="space-y-4">
+                <ul className="space-y-3 sm:space-y-4">
                   {[
                     "Fitness coaches managing online clients and form checks.",
                     "Business coaches juggling strategy calls and action items.",
                     "Coaches who want a professional system without 10 subscriptions."
                   ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 bg-neutral-50 p-4 rounded-xl border border-neutral-100 hover:border-neutral-300 transition-colors">
+                    <li key={i} className="flex items-center gap-3 bg-neutral-50 p-3.5 sm:p-4 rounded-xl border border-neutral-100 hover:border-neutral-300 transition-colors">
                       <CheckCircle2 className="w-5 h-5 text-brand-900 flex-shrink-0" />
-                      <span className="text-brand-800 font-medium">{item}</span>
+                      <span className="text-brand-800 font-medium text-xs sm:text-sm lg:text-base">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -488,18 +623,18 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="bg-brand-900 rounded-3xl p-8 lg:p-12 text-white shadow-2xl transform md:rotate-1 md:hover:rotate-0 transition-transform duration-500"
+                className="bg-brand-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-white shadow-2xl transform md:rotate-1 md:hover:rotate-0 transition-transform duration-500 text-left"
               >
-                <blockquote className="text-2xl lg:text-3xl font-medium leading-relaxed mb-8">
+                <blockquote className="text-lg sm:text-2xl lg:text-3xl font-medium leading-relaxed mb-6 sm:mb-8">
                   "CoachOS is NOT a marketplace. It is your private operating system. You bring the clients; we make sure none get lost and you close more of them."
                 </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-brand-800 rounded-full flex items-center justify-center border border-brand-700">
-                    <Logo className="h-5 text-brand-50" inverted />
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-800 rounded-full flex items-center justify-center border border-brand-700 shrink-0">
+                    <Logo className="h-4 sm:h-5 text-brand-50" inverted />
                   </div>
                   <div>
-                    <div className="font-bold">The CoachOS Team</div>
-                    <div className="text-neutral-400 text-sm">Founders</div>
+                    <div className="font-bold text-sm sm:text-base">The CoachOS Team</div>
+                    <div className="text-neutral-400 text-xs sm:text-sm">Founders</div>
                   </div>
                 </div>
               </motion.div>
@@ -514,7 +649,7 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-brand-950 text-white scroll-mt-16 relative overflow-hidden border-t border-brand-900"
+          className="py-14 sm:py-20 lg:py-24 bg-brand-950 text-white scroll-mt-16 relative overflow-hidden border-t border-brand-900"
         >
           {/* Ambient Lighting */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-brand-700/20 blur-[120px] rounded-full pointer-events-none"></div>
@@ -527,7 +662,7 @@ export default function App() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-bold mb-6 tracking-widest uppercase shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-[11px] sm:text-xs font-bold mb-4 sm:mb-6 tracking-widest uppercase shadow-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -543,7 +678,7 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55 }}
-              className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight"
+              className="text-2xl sm:text-4xl lg:text-6xl font-black tracking-tight text-white mb-4 sm:mb-6 leading-tight"
             >
               Apply for the Founding Cohort of Independent Coaches
             </motion.h2>
@@ -553,7 +688,7 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: 0.1 }}
-              className="text-base sm:text-xl text-neutral-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal"
+              className="text-sm sm:text-lg lg:text-xl text-neutral-300 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-normal"
             >
               The first group of coaches will get early access and 40% off for life. Once founding access closes, that rate is gone.
             </motion.p>
@@ -564,13 +699,13 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.15 }}
-              className="relative"
+              className="relative w-full"
             >
               <WaitlistForm />
             </motion.div>
 
             {/* Sub-text note */}
-            <div className="mt-8 text-center">
+            <div className="mt-6 sm:mt-8 text-center">
               <p className="text-xs sm:text-sm text-neutral-400 font-medium">
                 Limited first cohort — Built for independent coaches
               </p>
@@ -585,25 +720,33 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-neutral-50 border-t border-neutral-200 scroll-mt-16"
+          className="py-14 sm:py-20 lg:py-24 bg-neutral-50 border-t border-neutral-200 scroll-mt-16"
         >
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.h2 
-              id="faq-heading"
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55 }}
-              className="text-3xl font-bold tracking-tight text-brand-900 mb-12 text-center"
+              className="text-center mb-8 sm:mb-12"
             >
-              Frequently Asked Questions About CoachOS Coaching Software
-            </motion.h2>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-neutral-200 text-brand-800 text-xs font-bold mb-3 uppercase tracking-wider shadow-2xs">
+                Answers & Insights
+              </div>
+              <h2 
+                id="faq-heading"
+                className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-900 leading-tight"
+              >
+                Frequently Asked Questions About CoachOS Coaching Software
+              </h2>
+            </motion.div>
+
             <motion.div 
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <FAQItem 
                 question="Is CoachOS a marketplace?" 
@@ -639,7 +782,7 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="py-24 bg-white border-t border-neutral-200 text-center relative overflow-hidden"
+          className="py-14 sm:py-20 lg:py-24 bg-white border-t border-neutral-200 text-center relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neutral-200 via-brand-900 to-neutral-200"></div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -649,7 +792,7 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55 }}
-              className="text-3xl lg:text-5xl font-bold tracking-tight text-brand-900 mb-6"
+              className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-brand-900 mb-4 sm:mb-6 leading-tight"
             >
               Stop Juggling Disconnected Apps. Run Your Entire Coaching Business from One Private OS.
             </motion.h2>
@@ -658,19 +801,19 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: 0.15 }}
-              className="mt-10 flex flex-col items-center gap-4"
+              className="mt-6 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4"
             >
               <GlowingBorderButton 
                 onClick={scrollToWaitlist}
-                className="px-9 py-4 text-xl font-semibold flex items-center gap-2.5 hover:-translate-y-1 active:scale-95"
+                className="w-full sm:w-auto px-7 sm:px-9 py-3.5 sm:py-4 text-base sm:text-xl font-semibold flex items-center justify-center gap-2.5 hover:-translate-y-1 active:scale-95"
                 glowSpeed={3}
               >
-                <span className="relative flex items-center gap-2.5">
+                <span className="relative flex items-center justify-center gap-2.5">
                   Apply for founding access
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
                 </span>
               </GlowingBorderButton>
-              <p className="text-sm text-neutral-500 font-medium">Limited first cohort • Built for independent coaches</p>
+              <p className="text-xs sm:text-sm text-neutral-500 font-medium">Limited first cohort • Built for independent coaches</p>
             </motion.div>
           </div>
         </motion.section>
@@ -1268,8 +1411,8 @@ function HeroDashboard() {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Category Tabs & Auto-Cycle Controller */}
-      <div className="flex flex-col items-center gap-3 z-20">
-        <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white rounded-2xl border border-neutral-200 shadow-xs max-w-full">
+      <div className="flex flex-col items-center gap-3 z-20 w-full max-w-full">
+        <div className="w-full sm:w-auto flex items-center gap-1.5 p-1.5 bg-white rounded-2xl border border-neutral-200 shadow-xs overflow-x-auto scrollbar-none snap-x snap-mandatory">
           {DASHBOARD_VARIANTS.map((v, idx) => {
             const Icon = v.tabIcon;
             const isActive = idx === variantIndex;
@@ -1278,7 +1421,7 @@ function HeroDashboard() {
                 key={v.id}
                 type="button"
                 onClick={() => handleSelectVariant(idx)}
-                className={`relative px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer overflow-hidden ${
+                className={`relative px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap cursor-pointer shrink-0 snap-center overflow-hidden ${
                   isActive ? 'text-brand-950 font-bold bg-neutral-100/90 shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50'
                 }`}
               >
@@ -1300,11 +1443,11 @@ function HeroDashboard() {
           })}
 
           {/* Auto-Cycle Pause / Play Toggle Control */}
-          <div className="h-6 w-px bg-neutral-200 mx-1 hidden sm:block"></div>
+          <div className="h-6 w-px bg-neutral-200 mx-1 shrink-0"></div>
           <button
             type="button"
             onClick={() => setIsAutoCycling(prev => !prev)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer shrink-0 snap-center ${
               isAutoCycling 
                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80 hover:bg-emerald-100/70' 
                 : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200/70'
@@ -1317,13 +1460,15 @@ function HeroDashboard() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span className="text-[11px] font-bold">Auto-Cycle: On</span>
+                <span className="text-[11px] font-bold hidden sm:inline">Auto-Cycle: On</span>
+                <span className="text-[11px] font-bold sm:hidden">Auto</span>
                 <Pause className="w-3 h-3 text-emerald-700 ml-0.5" />
               </>
             ) : (
               <>
                 <span className="w-2 h-2 rounded-full bg-neutral-400"></span>
-                <span className="text-[11px] font-bold">Paused</span>
+                <span className="text-[11px] font-bold hidden sm:inline">Paused</span>
+                <span className="text-[11px] font-bold sm:hidden">Play</span>
                 <Play className="w-3 h-3 text-neutral-700 ml-0.5 fill-neutral-700" />
               </>
             )}
@@ -1331,8 +1476,8 @@ function HeroDashboard() {
         </div>
 
         {/* Prominent "What This Proves & Solves" Clarity Banner */}
-        <div className="w-full bg-white rounded-2xl border border-neutral-200/90 p-4 sm:p-5 shadow-xs text-left transition-all duration-300">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
+        <div className="w-full bg-white rounded-2xl border border-neutral-200/90 p-3.5 sm:p-5 shadow-xs text-left transition-all duration-300">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-3.5">
             <div className="space-y-1.5 flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-brand-950 text-amber-300">
@@ -1352,9 +1497,9 @@ function HeroDashboard() {
             </div>
 
             {/* 3 Concrete Proof Badges */}
-            <div className="flex flex-wrap lg:flex-col gap-1.5 shrink-0 border-t lg:border-t-0 lg:border-l border-neutral-100 pt-3 lg:pt-0 lg:pl-5">
+            <div className="flex flex-wrap lg:flex-col gap-1.5 shrink-0 border-t lg:border-t-0 lg:border-l border-neutral-100 pt-2.5 lg:pt-0 lg:pl-5">
               {variant.provesProofBadges.map((badge, bIdx) => (
-                <div key={bIdx} className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-800 bg-neutral-50 px-2.5 py-1 rounded-lg border border-neutral-200/60">
+                <div key={bIdx} className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-neutral-800 bg-neutral-50 px-2.5 py-1 rounded-lg border border-neutral-200/60">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span>{badge}</span>
                 </div>
@@ -1727,137 +1872,137 @@ function InteractiveSolution() {
   ];
 
   return (
-    <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(19,78,42,0.15)] border border-neutral-200/60 p-4 lg:p-8 flex flex-col lg:flex-row gap-8 lg:gap-12 backdrop-blur-sm">
+    <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(19,78,42,0.15)] border border-neutral-200/60 p-3.5 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-12 backdrop-blur-sm">
       <div className="lg:w-1/3 flex flex-col gap-2">
         {tabs.map((tab, idx) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(idx)}
-            className={`text-left p-4 rounded-xl transition-all duration-300 relative overflow-hidden group ${activeTab === idx ? 'bg-brand-900 shadow-xl' : 'hover:bg-brand-50'}`}
+            className={`text-left p-3.5 sm:p-4 rounded-xl transition-all duration-300 relative overflow-hidden group min-h-[48px] ${activeTab === idx ? 'bg-brand-900 shadow-xl text-white' : 'hover:bg-brand-50 text-brand-950'}`}
           >
             {activeTab === idx && <div className="absolute inset-0 bg-white/10"></div>}
-            <div className="relative z-10 flex items-start gap-4">
-              <div className={`mt-1 p-2 rounded-lg transition-colors ${activeTab === idx ? 'bg-brand-800 text-white' : 'bg-brand-100 text-brand-900 group-hover:bg-brand-200'}`}>
-                <tab.icon className="w-5 h-5" />
+            <div className="relative z-10 flex items-start gap-3.5 sm:gap-4">
+              <div className={`mt-0.5 p-2 rounded-lg transition-colors shrink-0 ${activeTab === idx ? 'bg-brand-800 text-white' : 'bg-brand-100 text-brand-900 group-hover:bg-brand-200'}`}>
+                <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <h4 className={`font-bold mb-1 ${activeTab === idx ? 'text-white' : 'text-brand-950'}`}>{tab.title}</h4>
-                <p className={`text-sm ${activeTab === idx ? 'text-brand-100' : 'text-neutral-500'}`}>{tab.desc}</p>
+                <h4 className={`font-bold text-sm sm:text-base mb-0.5 ${activeTab === idx ? 'text-white' : 'text-brand-950'}`}>{tab.title}</h4>
+                <p className={`text-xs sm:text-sm leading-snug ${activeTab === idx ? 'text-brand-100' : 'text-neutral-500'}`}>{tab.desc}</p>
               </div>
             </div>
           </button>
         ))}
       </div>
-      <div className="lg:w-2/3 bg-neutral-50 rounded-2xl border border-neutral-200/60 overflow-hidden flex items-center justify-center p-6 lg:p-12 relative min-h-[400px]">
+      <div className="lg:w-2/3 bg-neutral-50 rounded-xl sm:rounded-2xl border border-neutral-200/60 overflow-hidden flex items-center justify-center p-3.5 sm:p-6 lg:p-12 relative min-h-[340px] sm:min-h-[400px]">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:16px_16px]"></div>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 15, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, y: -15, scale: 0.97 }}
+            transition={{ duration: 0.25 }}
             className="w-full relative z-10"
           >
             {activeTab === 0 && (
-              <div className="bg-white rounded-xl shadow-lg border border-neutral-200/50 p-6 glass">
-                 <div className="flex justify-between items-center mb-6">
-                   <h3 className="font-bold text-brand-950">Active Leads</h3>
-                   <span className="bg-brand-100 text-brand-800 px-2 py-1 rounded text-xs font-bold">12 Total</span>
+              <div className="bg-white rounded-xl shadow-lg border border-neutral-200/50 p-4 sm:p-6 glass">
+                 <div className="flex justify-between items-center mb-4 sm:mb-6">
+                   <h3 className="font-bold text-brand-950 text-sm sm:text-base">Active Leads</h3>
+                   <span className="bg-brand-100 text-brand-800 px-2.5 py-1 rounded text-xs font-bold">12 Total</span>
                  </div>
-                 <div className="space-y-3">
+                 <div className="space-y-2.5 sm:space-y-3">
                    <div className="flex justify-between items-center p-3 border border-neutral-100 rounded-lg hover:border-brand-200 transition-colors bg-white">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xs">M</div>
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xs shrink-0">M</div>
                         <div>
-                          <p className="font-bold text-brand-900 text-sm">Marcus Johnson</p>
-                          <p className="text-xs text-neutral-500">Instagram DM</p>
+                          <p className="font-bold text-brand-900 text-xs sm:text-sm">Marcus Johnson</p>
+                          <p className="text-[11px] sm:text-xs text-neutral-500">Instagram DM</p>
                         </div>
                       </div>
-                      <span className="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs font-bold">Follow up</span>
+                      <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-[11px] sm:text-xs font-bold shrink-0">Follow up</span>
                    </div>
                    <div className="flex justify-between items-center p-3 border border-neutral-100 rounded-lg hover:border-brand-200 transition-colors bg-white">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center font-bold text-xs">S</div>
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <div className="w-8 h-8 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center font-bold text-xs shrink-0">S</div>
                         <div>
-                          <p className="font-bold text-brand-900 text-sm">Sarah Williams</p>
-                          <p className="text-xs text-neutral-500">Website Form</p>
+                          <p className="font-bold text-brand-900 text-xs sm:text-sm">Sarah Williams</p>
+                          <p className="text-[11px] sm:text-xs text-neutral-500">Website Form</p>
                         </div>
                       </div>
-                      <span className="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs font-bold">Call Booked</span>
+                      <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-[11px] sm:text-xs font-bold shrink-0">Call Booked</span>
                    </div>
                  </div>
               </div>
             )}
             {activeTab === 1 && (
-              <div className="bg-white rounded-xl shadow-lg border border-neutral-200/50 p-6 glass">
-                 <div className="flex justify-between items-center mb-6">
-                   <h3 className="font-bold text-brand-950">Today's Tasks</h3>
-                   <span className="text-neutral-500 text-sm">4 Remaining</span>
+              <div className="bg-white rounded-xl shadow-lg border border-neutral-200/50 p-4 sm:p-6 glass">
+                 <div className="flex justify-between items-center mb-4 sm:mb-6">
+                   <h3 className="font-bold text-brand-950 text-sm sm:text-base">Today's Tasks</h3>
+                   <span className="text-neutral-500 text-xs sm:text-sm">4 Remaining</span>
                  </div>
-                 <div className="space-y-3">
+                 <div className="space-y-2.5 sm:space-y-3">
                     {[
                       "Review Marcus's form video (Squat)",
                       "Update Sarah's macros for Week 4",
                       "Send onboarding form to David",
                       "Post weekly check-in reminder"
                     ].map((task, i) => (
-                      <div key={i} className="flex items-center gap-3 p-3 border border-neutral-100 rounded-lg bg-white">
-                        <div className="w-5 h-5 rounded border border-neutral-300"></div>
-                        <p className="text-sm text-brand-900 font-medium">{task}</p>
+                      <div key={i} className="flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 border border-neutral-100 rounded-lg bg-white">
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded border border-neutral-300 shrink-0"></div>
+                        <p className="text-xs sm:text-sm text-brand-900 font-medium leading-snug">{task}</p>
                       </div>
                     ))}
                  </div>
               </div>
             )}
             {activeTab === 2 && (
-              <div className="bg-white rounded-xl shadow-lg border border-neutral-200/50 p-6 glass">
-                 <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center font-bold text-lg">E</div>
+              <div className="bg-white rounded-xl shadow-lg border border-neutral-200/50 p-4 sm:p-6 glass">
+                 <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">E</div>
                     <div>
-                      <h3 className="font-bold text-brand-950">Emma Thompson</h3>
-                      <p className="text-sm text-emerald-600 font-medium">Active • Pro Plan</p>
+                      <h3 className="font-bold text-brand-950 text-sm sm:text-base">Emma Thompson</h3>
+                      <p className="text-xs sm:text-sm text-emerald-600 font-medium">Active • Pro Plan</p>
                     </div>
                  </div>
-                 <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-neutral-50 p-3 rounded-lg border border-neutral-100">
-                      <p className="text-xs text-neutral-500 mb-1">Current Phase</p>
-                      <p className="font-bold text-brand-900 text-sm">Hypertrophy (Wk 4/8)</p>
+                 <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
+                    <div className="bg-neutral-50 p-2.5 sm:p-3 rounded-lg border border-neutral-100">
+                      <p className="text-[11px] sm:text-xs text-neutral-500 mb-0.5">Current Phase</p>
+                      <p className="font-bold text-brand-900 text-xs sm:text-sm">Hypertrophy (Wk 4/8)</p>
                     </div>
-                    <div className="bg-neutral-50 p-3 rounded-lg border border-neutral-100">
-                      <p className="text-xs text-neutral-500 mb-1">Check-in Day</p>
-                      <p className="font-bold text-brand-900 text-sm">Friday</p>
+                    <div className="bg-neutral-50 p-2.5 sm:p-3 rounded-lg border border-neutral-100">
+                      <p className="text-[11px] sm:text-xs text-neutral-500 mb-0.5">Check-in Day</p>
+                      <p className="font-bold text-brand-900 text-xs sm:text-sm">Friday</p>
                     </div>
                  </div>
-                 <div className="mt-4 p-3 bg-brand-50 border border-brand-100 rounded-lg">
-                    <p className="text-xs text-brand-800 font-medium">Coach Notes:</p>
-                    <p className="text-sm text-brand-900 mt-1">Crushing the macro targets. Ready to increase calories next week.</p>
+                 <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-brand-50 border border-brand-100 rounded-lg">
+                    <p className="text-[11px] sm:text-xs text-brand-800 font-medium">Coach Notes:</p>
+                    <p className="text-xs sm:text-sm text-brand-900 mt-0.5 leading-snug">Crushing the macro targets. Ready to increase calories next week.</p>
                  </div>
               </div>
             )}
             {activeTab === 3 && (
               <div className="flex justify-center">
-                 <div className="w-full max-w-sm bg-brand-950 text-white rounded-[2.5rem] overflow-hidden shadow-2xl relative border-8 border-brand-900 h-[380px] flex flex-col">
+                 <div className="w-full max-w-sm bg-brand-950 text-white rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl relative border-4 sm:border-8 border-brand-900 h-[360px] sm:h-[380px] flex flex-col">
                     <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
-                    <div className="p-5 flex-1 flex flex-col justify-center relative z-10">
-                       <div className="flex justify-between items-center mb-8">
-                         <Logo className="h-6 text-white" inverted />
-                         <div className="w-8 h-8 rounded-full bg-brand-800 border-2 border-brand-700 flex items-center justify-center text-xs font-bold text-white shadow-sm">M</div>
+                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-center relative z-10">
+                       <div className="flex justify-between items-center mb-6 sm:mb-8">
+                         <Logo className="h-5 sm:h-6 text-white" inverted />
+                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-800 border-2 border-brand-700 flex items-center justify-center text-xs font-bold text-white shadow-sm">M</div>
                        </div>
-                       <h3 className="text-2xl font-bold mb-1">Hi, Marcus!</h3>
-                       <p className="text-brand-200 text-sm mb-8">Here is your plan for today.</p>
+                       <h3 className="text-xl sm:text-2xl font-bold mb-1">Hi, Marcus!</h3>
+                       <p className="text-brand-200 text-xs sm:text-sm mb-6 sm:mb-8">Here is your plan for today.</p>
                        
-                       <div className="bg-white text-brand-950 rounded-xl p-4 mb-4 shadow-xl">
-                         <div className="flex justify-between items-center mb-3">
-                            <span className="font-bold">Workout</span>
-                            <span className="text-xs font-bold bg-brand-100 text-brand-800 px-2 py-1 rounded">Push Day</span>
+                       <div className="bg-white text-brand-950 rounded-xl p-3.5 sm:p-4 mb-2 shadow-xl">
+                         <div className="flex justify-between items-center mb-2.5">
+                            <span className="font-bold text-xs sm:text-sm">Workout</span>
+                            <span className="text-[10px] sm:text-xs font-bold bg-brand-100 text-brand-800 px-2 py-0.5 rounded">Push Day</span>
                          </div>
-                         <div className="space-y-2">
-                            <div className="flex justify-between text-sm border-b border-neutral-100 pb-2">
+                         <div className="space-y-1.5 sm:space-y-2">
+                            <div className="flex justify-between text-xs sm:text-sm border-b border-neutral-100 pb-1.5">
                               <span className="text-neutral-600">Incline DB Press</span>
                               <span className="font-bold">4 x 8-10</span>
                             </div>
-                            <div className="flex justify-between text-sm">
+                            <div className="flex justify-between text-xs sm:text-sm">
                               <span className="text-neutral-600">Overhead Press</span>
                               <span className="font-bold">3 x 10-12</span>
                             </div>
@@ -2048,13 +2193,13 @@ export function WaitlistForm() {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-brand-50 border border-brand-200 rounded-3xl p-10 text-center max-w-md mx-auto shadow-xl"
+        className="bg-brand-50 border border-brand-200 rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-center max-w-md mx-auto shadow-xl"
       >
-        <div className="w-20 h-20 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-brand-200/50">
-          <CheckCircle2 className="w-10 h-10" />
+        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-sm border border-brand-200/50">
+          <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10" />
         </div>
-        <h3 className="text-3xl font-extrabold tracking-tight text-brand-950 mb-3">Application Saved.</h3>
-        <p className="text-brand-800 text-lg">We'll review it in the standard order for {formData.name || 'you'}.</p>
+        <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950 mb-2 sm:mb-3">Application Saved.</h3>
+        <p className="text-brand-800 text-sm sm:text-lg">We'll review it in the standard order for {formData.name || 'you'}.</p>
       </motion.div>
     );
   }
@@ -2094,7 +2239,7 @@ export function WaitlistForm() {
     <div className="max-w-2xl mx-auto w-full text-left">
       {renderProgress()}
 
-      <div className="bg-white/90 backdrop-blur-xl border border-neutral-200/60 p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(19,78,42,0.08)] relative overflow-hidden min-h-[400px]">
+      <div className="bg-white/90 backdrop-blur-xl border border-neutral-200/60 p-4 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(19,78,42,0.08)] relative overflow-hidden min-h-[380px] sm:min-h-[400px]">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
         
         <AnimatePresence mode="wait">
@@ -2108,12 +2253,12 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950 mb-2">Let's get you on the list.</h3>
-              <p className="text-neutral-500 mb-8 text-lg">First, where should we send your invite?</p>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950 mb-1.5 sm:mb-2">Let's get you on the list.</h3>
+              <p className="text-neutral-500 mb-6 sm:mb-8 text-sm sm:text-base lg:text-lg leading-relaxed">First, where should we send your invite?</p>
               
-              <form onSubmit={handleNext} className="space-y-5">
+              <form onSubmit={handleNext} className="space-y-4 sm:space-y-5">
                 <div>
-                  <label className="block text-sm font-bold text-brand-900 mb-2 uppercase tracking-wide">Your Name</label>
+                  <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-1.5 sm:mb-2 uppercase tracking-wide">Your Name</label>
                   <input 
                     type="text" 
                     value={formData.name}
@@ -2121,7 +2266,7 @@ export function WaitlistForm() {
                     onBlur={() => setTouched({...touched, name: true})}
                     placeholder="Coach Marcus"
                     required
-                    className={`w-full px-5 py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-sm transition-all ${getInputStyle('name', formData.name.trim().length >= 2)}`}
+                    className={`w-full px-4 sm:px-5 py-3.5 sm:py-4 text-base rounded-xl border focus:outline-none focus:ring-2 shadow-sm transition-all ${getInputStyle('name', formData.name.trim().length >= 2)}`}
                   />
                   {touched.name && formData.name.trim().length < 2 ? (
                     <p className="text-red-500 text-[11px] font-bold mt-1.5 flex items-center gap-1 uppercase tracking-wider"><X className="w-3 h-3" /> Name is too short</p>
@@ -2130,7 +2275,7 @@ export function WaitlistForm() {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-brand-900 mb-2 uppercase tracking-wide">Email Address</label>
+                  <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-1.5 sm:mb-2 uppercase tracking-wide">Email Address</label>
                   <input 
                     type="email" 
                     value={formData.email}
@@ -2138,7 +2283,7 @@ export function WaitlistForm() {
                     onBlur={() => setTouched({...touched, email: true})}
                     placeholder="marcus@example.com"
                     required
-                    className={`w-full px-5 py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-sm transition-all ${getInputStyle('email', validateEmail(formData.email))}`}
+                    className={`w-full px-4 sm:px-5 py-3.5 sm:py-4 text-base rounded-xl border focus:outline-none focus:ring-2 shadow-sm transition-all ${getInputStyle('email', validateEmail(formData.email))}`}
                   />
                   {touched.email && !validateEmail(formData.email) ? (
                     <p className="text-red-500 text-[11px] font-bold mt-1.5 flex items-center gap-1 uppercase tracking-wider"><X className="w-3 h-3" /> Please enter a valid email address</p>
@@ -2148,7 +2293,7 @@ export function WaitlistForm() {
                 </div>
                 <button 
                   type="submit" 
-                  className="w-full mt-4 bg-brand-900 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl hover:shadow-brand-900/20 active:scale-[0.98] group"
+                  className="w-full mt-4 bg-brand-900 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base sm:text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl hover:shadow-brand-900/20 active:scale-[0.98] group min-h-[48px]"
                 >
                   Continue
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -2170,24 +2315,24 @@ export function WaitlistForm() {
               <button 
                 type="button"
                 onClick={() => setStep(1)}
-                className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group"
+                className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> 
                 Back
               </button>
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950 mb-2">Tell us about your business.</h3>
-              <p className="text-neutral-500 mb-8 text-lg">This helps us tailor CoachOS for you.</p>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950 mb-1.5 sm:mb-2">Tell us about your business.</h3>
+              <p className="text-neutral-500 mb-6 sm:mb-8 text-sm sm:text-base lg:text-lg leading-relaxed">This helps us tailor CoachOS for you.</p>
 
-              <form onSubmit={handleNext} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-left">
+              <form onSubmit={handleNext} className="space-y-4 sm:space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 text-left">
                   <div>
-                    <label className="block text-sm font-bold text-brand-900 mb-2 uppercase tracking-wide">Coaching Niche</label>
+                    <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-1.5 sm:mb-2 uppercase tracking-wide">Coaching Niche</label>
                     <div className="relative">
                       <select 
                         required 
                         value={formData.niche}
                         onChange={(e) => { setFormData({...formData, niche: e.target.value}); setTouched({...touched, niche: true}); }}
-                        className="w-full px-5 py-3.5 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer"
+                        className="w-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer min-h-[44px]"
                       >
                         <option value="" disabled>Select your niche...</option>
                         <option value="Fitness & Health">Fitness & Health</option>
@@ -2202,13 +2347,13 @@ export function WaitlistForm() {
                     <p className="text-neutral-400 text-xs mt-1.5 font-medium">Configures your default pipeline templates & check-in forms.</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-brand-900 mb-2 uppercase tracking-wide">Active Clients</label>
+                    <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-1.5 sm:mb-2 uppercase tracking-wide">Active Clients</label>
                     <div className="relative">
                       <select 
                         required 
                         value={formData.clientCount}
                         onChange={(e) => { setFormData({...formData, clientCount: e.target.value}); setTouched({...touched, clientCount: true}); }}
-                        className="w-full px-5 py-3.5 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer"
+                        className="w-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer min-h-[44px]"
                       >
                         <option value="" disabled>Select count...</option>
                         <option value="0 - 10 clients">0 - 10 clients</option>
@@ -2221,13 +2366,13 @@ export function WaitlistForm() {
                     <p className="text-neutral-400 text-xs mt-1.5 font-medium">Sets the right database capacity & automation limits for your roster.</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-brand-900 mb-2 uppercase tracking-wide">Avg Price / Month</label>
+                    <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-1.5 sm:mb-2 uppercase tracking-wide">Avg Price / Month</label>
                     <div className="relative">
                       <select 
                         required 
                         value={formData.price}
                         onChange={(e) => { setFormData({...formData, price: e.target.value}); setTouched({...touched, price: true}); }}
-                        className="w-full px-5 py-3.5 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer"
+                        className="w-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer min-h-[44px]"
                       >
                         <option value="" disabled>Select pricing...</option>
                         <option value="Under $500">Under $500</option>
@@ -2240,13 +2385,13 @@ export function WaitlistForm() {
                     <p className="text-neutral-400 text-xs mt-1.5 font-medium">Calibrates your revenue analytics & payment link presets.</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-brand-900 mb-2 uppercase tracking-wide">Coaching Experience</label>
+                    <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-1.5 sm:mb-2 uppercase tracking-wide">Coaching Experience</label>
                     <div className="relative">
                       <select 
                         required 
                         value={formData.experience}
                         onChange={(e) => { setFormData({...formData, experience: e.target.value}); setTouched({...touched, experience: true}); }}
-                        className="w-full px-5 py-3.5 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer"
+                        className="w-full px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-base rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 shadow-sm transition-all bg-white text-brand-950 appearance-none cursor-pointer min-h-[44px]"
                       >
                         <option value="" disabled>Select experience...</option>
                         <option value="Just starting">Just starting</option>
@@ -2262,7 +2407,7 @@ export function WaitlistForm() {
 
                 <button 
                   type="submit" 
-                  className="w-full mt-6 bg-brand-900 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl hover:shadow-brand-900/20 active:scale-[0.98] group relative overflow-hidden"
+                  className="w-full mt-6 bg-brand-900 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base sm:text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl hover:shadow-brand-900/20 active:scale-[0.98] group relative overflow-hidden min-h-[48px]"
                 >
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                   <span className="relative flex items-center justify-center gap-2">
@@ -2284,14 +2429,14 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <button onClick={() => setStep(2)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group">
+              <button onClick={() => setStep(2)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
               </button>
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950 mb-2">See whether CoachOS is a fit for your business.</h3>
-              <p className="text-neutral-500 mb-8 text-lg">Answer a few more questions so we can understand your workflow, identify where CoachOS can create the most leverage, and review whether a founding build slot makes sense.</p>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950 mb-1.5 sm:mb-2">See whether CoachOS is a fit for your business.</h3>
+              <p className="text-neutral-500 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">Answer a few more questions so we can understand your workflow, identify where CoachOS can create the most leverage, and review whether a founding build slot makes sense.</p>
               
-              <label className="block text-sm font-bold text-brand-900 mb-4 uppercase tracking-wide">What currently creates the most admin work in your business? (Select all that apply)</label>
-              <div className="space-y-3 mb-6">
+              <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-3 sm:mb-4 uppercase tracking-wide">What currently creates the most admin work in your business? (Select all that apply)</label>
+              <div className="space-y-2.5 sm:space-y-3 mb-6">
                 {['lead follow-up', 'client check-ins', 'scheduling', 'payments', 'program delivery', 'reporting', 'other'].map(opt => {
                   const isSelected = formData.adminWork.includes(opt);
                   return (
@@ -2303,9 +2448,9 @@ export function WaitlistForm() {
                           : [...formData.adminWork, opt];
                         setFormData({...formData, adminWork: newAdminWork});
                       }}
-                      className={`w-full text-left px-5 py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-sm transition-all ${isSelected ? 'border-brand-500 bg-brand-50/50 text-brand-900 ring-2 ring-brand-500 font-bold' : 'border-neutral-200 bg-white hover:border-brand-300 text-brand-950 font-medium'}`}
+                      className={`w-full text-left px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-xs transition-all min-h-[48px] ${isSelected ? 'border-brand-500 bg-brand-50/50 text-brand-900 ring-2 ring-brand-500 font-bold' : 'border-neutral-200 bg-white hover:border-brand-300 text-brand-950 font-medium'}`}
                     >
-                      <span className="capitalize text-base">{opt.replace('-', ' ')}</span>
+                      <span className="capitalize text-sm sm:text-base">{opt.replace('-', ' ')}</span>
                     </button>
                   );
                 })}
@@ -2313,7 +2458,7 @@ export function WaitlistForm() {
               <button 
                 onClick={() => setStep(4)}
                 disabled={formData.adminWork.length === 0}
-                className="w-full bg-brand-900 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] disabled:opacity-50 group"
+                className="w-full bg-brand-900 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base sm:text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] disabled:opacity-50 group min-h-[48px]"
               >
                 Continue
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -2331,12 +2476,12 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <button onClick={() => setStep(3)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group">
+              <button onClick={() => setStep(3)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
               </button>
-              <label className="block text-sm font-bold text-brand-900 mb-4 uppercase tracking-wide">Which tools do you currently use? (Select all that apply)</label>
+              <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-3 sm:mb-4 uppercase tracking-wide">Which tools do you currently use? (Select all that apply)</label>
               
-              <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3 mb-6">
                 {['Instagram DMs', 'WhatsApp', 'Google Sheets', 'Notion', 'Calendly', 'Stripe', 'Trainerize', 'TrueCoach', 'Zoom', 'Typeform', 'Other'].map(opt => {
                   const isSelected = formData.tools.includes(opt);
                   return (
@@ -2346,7 +2491,7 @@ export function WaitlistForm() {
                         const newTools = isSelected ? formData.tools.filter((t: string) => t !== opt) : [...formData.tools, opt];
                         setFormData({...formData, tools: newTools});
                       }}
-                      className={`text-left px-4 py-3 rounded-xl border transition-all ${isSelected ? 'border-brand-500 bg-brand-50 text-brand-900 font-bold shadow-sm' : 'border-neutral-200 bg-white hover:border-brand-200 font-medium text-neutral-700'}`}
+                      className={`text-left px-3.5 sm:px-4 py-3 rounded-xl border transition-all min-h-[46px] ${isSelected ? 'border-brand-500 bg-brand-50 text-brand-900 font-bold shadow-xs' : 'border-neutral-200 bg-white hover:border-brand-200 font-medium text-neutral-700 text-xs sm:text-sm'}`}
                     >
                       {opt}
                     </button>
@@ -2356,7 +2501,7 @@ export function WaitlistForm() {
               <button 
                 onClick={() => setStep(5)}
                 disabled={formData.tools.length === 0}
-                className="w-full bg-brand-900 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] disabled:opacity-50 group"
+                className="w-full bg-brand-900 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base sm:text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] disabled:opacity-50 group min-h-[48px]"
               >
                 Continue
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -2374,21 +2519,21 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <button onClick={() => setStep(4)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group">
+              <button onClick={() => setStep(4)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
               </button>
-              <label className="block text-sm font-bold text-brand-900 mb-4 uppercase tracking-wide">What would make CoachOS valuable enough to implement this quarter?</label>
+              <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-3 sm:mb-4 uppercase tracking-wide">What would make CoachOS valuable enough to implement this quarter?</label>
               
               <textarea
                 value={formData.valuableImplementation}
                 onChange={(e) => setFormData({...formData, valuableImplementation: e.target.value})}
                 placeholder="e.g. Having all my client check-ins and payments in one dashboard without hopping between apps..."
-                className="w-full h-40 px-5 py-4 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white text-brand-950 resize-none shadow-sm mb-6"
+                className="w-full h-36 sm:h-40 px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white text-brand-950 resize-none shadow-sm mb-6 text-sm sm:text-base"
               />
               <button 
                 onClick={() => setStep(6)}
                 disabled={formData.valuableImplementation.trim().length < 5}
-                className="w-full bg-brand-900 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] disabled:opacity-50 group"
+                className="w-full bg-brand-900 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base sm:text-lg font-medium hover:bg-brand-800 transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.98] disabled:opacity-50 group min-h-[48px]"
               >
                 Continue
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -2406,19 +2551,19 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <button onClick={() => setStep(5)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group">
+              <button onClick={() => setStep(5)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
               </button>
-              <label className="block text-sm font-bold text-brand-900 mb-4 uppercase tracking-wide">Are you actively investing in systems to grow your coaching business?</label>
+              <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-3 sm:mb-4 uppercase tracking-wide">Are you actively investing in systems to grow your coaching business?</label>
               
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 {['Yes, ready to improve operations', 'Exploring options', 'Not right now'].map(opt => (
                   <button
                     key={opt}
                     onClick={() => { setFormData({...formData, investingInSystems: opt}); setStep(7); }}
-                    className={`w-full text-left px-5 py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-sm transition-all ${formData.investingInSystems === opt ? 'border-brand-500 bg-brand-50/50 text-brand-900 ring-2 ring-brand-500' : 'border-neutral-200 bg-white hover:border-brand-300 text-brand-950'}`}
+                    className={`w-full text-left px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-xs transition-all min-h-[48px] ${formData.investingInSystems === opt ? 'border-brand-500 bg-brand-50/50 text-brand-900 ring-2 ring-brand-500' : 'border-neutral-200 bg-white hover:border-brand-300 text-brand-950'}`}
                   >
-                    <span className="text-base font-medium">{opt}</span>
+                    <span className="text-sm sm:text-base font-medium">{opt}</span>
                   </button>
                 ))}
               </div>
@@ -2435,19 +2580,19 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <button onClick={() => setStep(6)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group">
+              <button onClick={() => setStep(6)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
               </button>
-              <label className="block text-sm font-bold text-brand-900 mb-4 uppercase tracking-wide">If selected, when would you want to begin?</label>
+              <label className="block text-xs sm:text-sm font-bold text-brand-900 mb-3 sm:mb-4 uppercase tracking-wide">If selected, when would you want to begin?</label>
               
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 {['This month', 'Next 30–60 days', 'Later this year'].map(opt => (
                   <button
                     key={opt}
                     onClick={() => { setFormData({...formData, startTimeline: opt}); setStep(8); }}
-                    className={`w-full text-left px-5 py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-sm transition-all ${formData.startTimeline === opt ? 'border-brand-500 bg-brand-50/50 text-brand-900 ring-2 ring-brand-500' : 'border-neutral-200 bg-white hover:border-brand-300 text-brand-950'}`}
+                    className={`w-full text-left px-4 sm:px-5 py-3.5 sm:py-4 rounded-xl border focus:outline-none focus:ring-2 shadow-xs transition-all min-h-[48px] ${formData.startTimeline === opt ? 'border-brand-500 bg-brand-50/50 text-brand-900 ring-2 ring-brand-500' : 'border-neutral-200 bg-white hover:border-brand-300 text-brand-950'}`}
                   >
-                    <span className="text-base font-medium">{opt}</span>
+                    <span className="text-sm sm:text-base font-medium">{opt}</span>
                   </button>
                 ))}
               </div>
@@ -2464,16 +2609,16 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <button onClick={() => setStep(7)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group">
+              <button onClick={() => setStep(7)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
               </button>
               
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950 mb-3">Review your application.</h3>
-              <p className="text-neutral-500 mb-6 text-sm sm:text-base leading-relaxed">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950 mb-2">Review your application.</h3>
+              <p className="text-neutral-500 mb-5 sm:mb-6 text-sm sm:text-base leading-relaxed">
                 Please double-check your responses before proceeding to the founding reservation.
               </p>
 
-              <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-5 sm:p-6 mb-6 space-y-4">
+              <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-4 sm:p-6 mb-6 space-y-3 sm:space-y-4">
                 {[
                   { label: 'Name', value: formData.name },
                   { label: 'Email', value: formData.email },
@@ -2485,9 +2630,9 @@ export function WaitlistForm() {
                   { label: 'Tools Used', value: formData.tools.join(', ') || 'None selected' },
                   { label: 'Start Timeline', value: formData.startTimeline },
                 ].map((item, i) => (
-                  <div key={i} className={`flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-4 ${i !== 0 ? 'pt-4 border-t border-neutral-100' : ''}`}>
-                    <span className="text-sm font-bold text-neutral-400 uppercase tracking-wide shrink-0">{item.label}</span>
-                    <span className="text-sm sm:text-base font-medium text-brand-950 text-left sm:text-right">{item.value}</span>
+                  <div key={i} className={`flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-4 ${i !== 0 ? 'pt-3 sm:pt-4 border-t border-neutral-100' : ''}`}>
+                    <span className="text-xs sm:text-sm font-bold text-neutral-400 uppercase tracking-wide shrink-0">{item.label}</span>
+                    <span className="text-xs sm:text-base font-medium text-brand-950 text-left sm:text-right">{item.value}</span>
                   </div>
                 ))}
               </div>
@@ -2495,7 +2640,7 @@ export function WaitlistForm() {
               <GlowingBorderButton 
                 onClick={() => setStep(9)}
                 rounded="xl"
-                className="w-full px-8 py-4 text-lg font-semibold flex items-center justify-center gap-2 active:scale-[0.98]"
+                className="w-full px-5 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold flex items-center justify-center gap-2 active:scale-[0.98] min-h-[48px]"
                 glowSpeed={3.2}
               >
                 <span className="relative flex items-center justify-center gap-2">
@@ -2514,16 +2659,16 @@ export function WaitlistForm() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4 }}
-              className="relative z-10 flex flex-col items-center justify-center text-center py-12"
+              className="relative z-10 flex flex-col items-center justify-center text-center py-8 sm:py-12"
             >
-              <div className="relative mb-8">
+              <div className="relative mb-6 sm:mb-8">
                 <div className="absolute inset-0 bg-brand-200 rounded-full animate-ping opacity-20"></div>
-                <div className="w-20 h-20 bg-brand-50 rounded-full flex items-center justify-center border border-brand-200 relative z-10 shadow-lg">
-                  <Loader2 className="w-10 h-10 text-brand-900 animate-spin" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-50 rounded-full flex items-center justify-center border border-brand-200 relative z-10 shadow-lg">
+                  <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 text-brand-900 animate-spin" />
                 </div>
               </div>
-              <h3 className="text-2xl font-extrabold tracking-tight text-brand-950 mb-3">{analyzingStatus}</h3>
-              <p className="text-neutral-500 text-sm max-w-[250px] mx-auto">Please wait while we review your profile against our current cohort requirements.</p>
+              <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-950 mb-2 sm:mb-3">{analyzingStatus}</h3>
+              <p className="text-neutral-500 text-xs sm:text-sm max-w-[280px] mx-auto leading-relaxed">Please wait while we review your profile against our current cohort requirements.</p>
             </motion.div>
           )}
 
@@ -2537,89 +2682,89 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10"
             >
-              <button onClick={() => setStep(8)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-5 flex items-center gap-1 transition-colors group">
+              <button onClick={() => setStep(8)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
               </button>
               
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 sm:p-5 mb-8 relative overflow-hidden">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 sm:p-5 mb-6 sm:mb-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-200/50 rounded-full mix-blend-multiply blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                <div className="flex items-center gap-2 mb-2 relative z-10">
+                <div className="flex items-center gap-2 mb-1.5 relative z-10">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span className="text-xs font-bold text-emerald-900 uppercase tracking-widest">Founding Fit Approved</span>
+                  <span className="text-[11px] sm:text-xs font-bold text-emerald-900 uppercase tracking-widest">Founding Fit Approved</span>
                 </div>
-                <p className="text-sm font-medium text-emerald-900 leading-relaxed relative z-10">
+                <p className="text-xs sm:text-sm font-medium text-emerald-900 leading-relaxed relative z-10">
                   Based on your use of {formData.tools.slice(0, 2).join(' & ')} and your focus on {formData.adminWork.slice(0, 2).join(' & ').replace(/-/g, ' ')}, CoachOS will significantly streamline your operations.
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 mb-3">
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950">Secure your position.</h3>
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
+              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-2.5 sm:mb-3">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950">Secure your position.</h3>
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>
                   Capacity Limited
                 </span>
               </div>
               
-              <p className="text-neutral-500 mb-6 text-sm sm:text-base leading-relaxed">
+              <p className="text-neutral-500 mb-5 sm:mb-6 text-xs sm:text-sm lg:text-base leading-relaxed">
                 Due to the hands-on nature of our founding builds, capacity is strictly capped. We are currently reviewing a high volume of applications. Reserving your spot now is the only way to guarantee placement in the current cohort and lock in the 40% lifetime discount.
               </p>
 
-              <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6 mb-6">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-12 h-12 rounded-full bg-brand-50 flex items-center justify-center text-brand-900 shrink-0">
-                    <Lock className="w-6 h-6" />
+              <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-4 sm:p-6 mb-5 sm:mb-6">
+                <div className="flex items-center gap-3 mb-4 sm:mb-5">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-brand-50 flex items-center justify-center text-brand-900 shrink-0">
+                    <Lock className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-brand-950 text-lg leading-tight mb-0.5">Founding Reservation</h4>
-                    <p className="text-sm text-neutral-500">Secure your position in the build queue</p>
+                    <h4 className="font-bold text-brand-950 text-base sm:text-lg leading-tight mb-0.5">Founding Reservation</h4>
+                    <p className="text-xs sm:text-sm text-neutral-500">Secure your position in the build queue</p>
                   </div>
                 </div>
                 
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4 flex items-center justify-between mb-5">
-                  <span className="text-sm font-semibold text-neutral-700">Reservation Deposit</span>
-                  <span className="text-xl font-black text-brand-900">${FOUNDING_DEPOSIT_AMOUNT} {FOUNDING_DEPOSIT_CURRENCY}</span>
+                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3.5 sm:p-4 flex items-center justify-between mb-4 sm:mb-5">
+                  <span className="text-xs sm:text-sm font-semibold text-neutral-700">Reservation Deposit</span>
+                  <span className="text-lg sm:text-xl font-black text-brand-900">${FOUNDING_DEPOSIT_AMOUNT} {FOUNDING_DEPOSIT_CURRENCY}</span>
                 </div>
                 
-                <ul className="space-y-3 px-1 text-sm text-neutral-600 mb-2">
-                  <li className="flex items-start gap-3">
+                <ul className="space-y-2.5 sm:space-y-3 px-0.5 text-xs sm:text-sm text-neutral-600 mb-2">
+                  <li className="flex items-start gap-2.5 sm:gap-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
                     <span className="leading-snug font-medium text-neutral-700">Fully credited toward your final CoachOS build</span>
                   </li>
-                  <li className="flex items-start gap-3">
+                  <li className="flex items-start gap-2.5 sm:gap-3">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
                     <span className="leading-snug text-neutral-600">Final scope and timeline agreed after review call</span>
                   </li>
-                  <li className="flex items-start gap-3">
+                  <li className="flex items-start gap-2.5 sm:gap-3">
                     <CheckCircle2 className="w-4 h-4 text-neutral-400 mt-0.5 shrink-0" />
                     <span className="leading-snug text-neutral-500">No obligation to proceed if not a suitable fit</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="mb-6 flex items-start gap-3 p-4 bg-brand-50/50 rounded-xl border border-brand-100 transition-colors hover:bg-brand-50">
+              <div className="mb-5 sm:mb-6 flex items-start gap-3 p-3.5 sm:p-4 bg-brand-50/50 rounded-xl border border-brand-100 transition-colors hover:bg-brand-50">
                 <input
                   type="checkbox"
                   id="terms"
                   checked={termsAccepted}
                   onChange={(e) => setTermsAccepted(e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-brand-300 text-brand-900 focus:ring-brand-500 cursor-pointer shrink-0"
+                  className="mt-0.5 w-5 h-5 rounded border-brand-300 text-brand-900 focus:ring-brand-500 cursor-pointer shrink-0"
                 />
-                <label htmlFor="terms" className="text-sm text-brand-900 leading-snug cursor-pointer select-none">
+                <label htmlFor="terms" className="text-xs sm:text-sm text-brand-900 leading-snug cursor-pointer select-none">
                   I agree to the <a href="#privacy" className="font-bold underline hover:text-brand-700 transition-colors" onClick={(e) => e.stopPropagation()}>Privacy Policy</a> and <a href="#terms" className="font-bold underline hover:text-brand-700 transition-colors" onClick={(e) => e.stopPropagation()}>Terms of Service</a>, and understand the ${FOUNDING_DEPOSIT_AMOUNT} reservation deposit is <strong className="font-extrabold">non-refundable</strong>.
                 </label>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <GlowingBorderButton
                   onClick={(e) => handleSubmit(e, true)}
                   disabled={loading || !termsAccepted}
                   rounded="xl"
-                  className="w-full px-8 py-4 text-lg font-bold flex items-center justify-center gap-2 active:scale-[0.98] overflow-hidden"
+                  className="w-full px-5 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-bold flex items-center justify-center gap-2 active:scale-[0.98] overflow-hidden min-h-[48px]"
                   glowSpeed={2.8}
                 >
                   <span className="relative flex items-center justify-center gap-2">
                     {loading ? (
-                      <Loader2 className="w-6 h-6 animate-spin text-white/80" />
+                      <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin text-white/80" />
                     ) : (
                       <>
                         Continue to Checkout
@@ -2631,10 +2776,10 @@ export function WaitlistForm() {
                 <button 
                   onClick={(e) => handleSubmit(e, false)}
                   disabled={loading}
-                  className="w-full bg-white text-neutral-600 px-8 py-4 rounded-xl text-sm font-medium hover:bg-neutral-50 transition-all border border-neutral-200 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full bg-white text-neutral-600 px-5 sm:px-8 py-3.5 sm:py-4 rounded-xl text-xs sm:text-sm font-medium hover:bg-neutral-50 transition-all border border-neutral-200 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
                 >
                   {loading ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-neutral-400" />
+                    <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-neutral-400" />
                   ) : (
                     "Submit application without reserving"
                   )}
@@ -2657,49 +2802,49 @@ export function WaitlistForm() {
               transition={{ duration: 0.3 }}
               className="relative z-10 w-full"
             >
-              <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center justify-between mb-4 sm:mb-5 gap-2">
                 <button 
                   onClick={() => setStep(10)} 
-                  className="text-sm font-semibold text-neutral-400 hover:text-brand-900 flex items-center gap-1 transition-colors group"
+                  className="text-xs sm:text-sm font-semibold text-neutral-400 hover:text-brand-900 flex items-center gap-1 transition-colors group min-h-[36px]"
                 >
-                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to reservation details
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> <span className="hidden xs:inline">Back to reservation</span><span className="xs:hidden">Back</span>
                 </button>
                 <button
                   onClick={() => setStep(8)}
-                  className="text-xs font-semibold text-brand-700 hover:text-brand-900 transition-colors flex items-center gap-1"
+                  className="text-xs font-semibold text-brand-700 hover:text-brand-900 transition-colors flex items-center gap-1 min-h-[36px]"
                 >
                   <Edit3 className="w-3.5 h-3.5" /> Edit application
                 </button>
               </div>
 
-              <h3 className="text-2xl font-extrabold tracking-tight text-brand-950 mb-2 text-center">Complete your reservation</h3>
-              <p className="text-neutral-500 text-sm mb-5 text-center">Secure your founding cohort build slot (${FOUNDING_DEPOSIT_AMOUNT} deposit applied to your build).</p>
+              <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-950 mb-1.5 sm:mb-2 text-center">Complete your reservation</h3>
+              <p className="text-neutral-500 text-xs sm:text-sm mb-4 sm:mb-5 text-center leading-relaxed">Secure your founding cohort build slot (${FOUNDING_DEPOSIT_AMOUNT} deposit applied to your build).</p>
 
               {/* Review what they did / application summary accordion */}
-              <div className="mb-6 rounded-2xl border border-neutral-200/80 bg-neutral-50/80 overflow-hidden shadow-xs">
+              <div className="mb-5 sm:mb-6 rounded-xl sm:rounded-2xl border border-neutral-200/80 bg-neutral-50/80 overflow-hidden shadow-xs">
                 <button
                   type="button"
                   onClick={() => setShowSummaryInCheckout(!showSummaryInCheckout)}
-                  className="w-full px-4 py-3.5 flex items-center justify-between text-left hover:bg-neutral-100/70 transition-colors"
+                  className="w-full px-3.5 sm:px-4 py-3 sm:py-3.5 flex items-center justify-between text-left hover:bg-neutral-100/70 transition-colors"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-brand-100/70 text-brand-800 flex items-center justify-center">
-                      <FileText className="w-4 h-4" />
+                  <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 pr-2">
+                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-brand-100/70 text-brand-800 flex items-center justify-center shrink-0">
+                      <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </div>
-                    <div>
-                      <div className="text-sm font-bold text-brand-950">Review your application details</div>
-                      <div className="text-xs text-neutral-500">{formData.name ? `${formData.name} • ` : ''}{formData.niche || 'Coaching Profile'}</div>
+                    <div className="truncate">
+                      <div className="text-xs sm:text-sm font-bold text-brand-950 truncate">Review your application details</div>
+                      <div className="text-[11px] sm:text-xs text-neutral-500 truncate">{formData.name ? `${formData.name} • ` : ''}{formData.niche || 'Coaching Profile'}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-900 bg-white px-2.5 py-1 rounded-md border border-neutral-200">
-                    <span>{showSummaryInCheckout ? "Hide" : "View answers"}</span>
+                  <div className="flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-brand-900 bg-white px-2 sm:px-2.5 py-1 rounded-md border border-neutral-200 shrink-0">
+                    <span>{showSummaryInCheckout ? "Hide" : "View"}</span>
                     {showSummaryInCheckout ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </div>
                 </button>
 
                 {showSummaryInCheckout && (
-                  <div className="p-4 sm:p-5 border-t border-neutral-200/70 bg-white">
-                    <div className="space-y-2.5 text-xs sm:text-sm">
+                  <div className="p-3.5 sm:p-5 border-t border-neutral-200/70 bg-white">
+                    <div className="space-y-2 text-xs sm:text-sm">
                       {[
                         { label: 'Name', value: formData.name },
                         { label: 'Email', value: formData.email },
@@ -2711,14 +2856,14 @@ export function WaitlistForm() {
                         { label: 'Tools Used', value: formData.tools.join(', ') || 'None selected' },
                         { label: 'Start Timeline', value: formData.startTimeline },
                       ].map((item, i) => (
-                        <div key={i} className="flex justify-between items-start gap-4 py-1.5 border-b border-neutral-100 last:border-0">
-                          <span className="font-bold text-neutral-400 uppercase text-[11px] tracking-wide shrink-0">{item.label}</span>
-                          <span className="font-medium text-brand-950 text-right">{item.value || '—'}</span>
+                        <div key={i} className="flex justify-between items-start gap-3 py-1.5 border-b border-neutral-100 last:border-0">
+                          <span className="font-bold text-neutral-400 uppercase text-[10px] sm:text-[11px] tracking-wide shrink-0">{item.label}</span>
+                          <span className="font-medium text-brand-950 text-right text-xs sm:text-sm">{item.value || '—'}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between">
-                      <span className="text-xs text-neutral-500">Need to update any answers?</span>
+                    <div className="mt-3.5 pt-3 border-t border-neutral-100 flex items-center justify-between">
+                      <span className="text-xs text-neutral-500">Need to update answers?</span>
                       <button
                         type="button"
                         onClick={() => setStep(8)}
@@ -2731,7 +2876,7 @@ export function WaitlistForm() {
                 )}
               </div>
 
-              <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-2 sm:p-6 mb-6">
+              <div className="bg-white rounded-xl sm:rounded-2xl border border-neutral-200 shadow-sm p-2 sm:p-6 mb-5 sm:mb-6 overflow-hidden">
                 <WhopElements elements={whopElements}>
                   <Checkout plan="plan_6zWK3keLNhOWg">
                     <CheckoutElement />
@@ -2742,10 +2887,10 @@ export function WaitlistForm() {
               <button 
                 onClick={(e) => handleSubmit(e, false)}
                 disabled={loading}
-                className="w-full bg-transparent text-neutral-500 px-8 py-4 rounded-xl text-sm font-medium hover:bg-neutral-100 hover:text-neutral-700 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-transparent text-neutral-500 px-5 sm:px-8 py-3.5 sm:py-4 rounded-xl text-xs sm:text-sm font-medium hover:bg-neutral-100 hover:text-neutral-700 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 min-h-[44px]"
               >
                 {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin text-neutral-400" />
+                  <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-neutral-400" />
                 ) : (
                   "Cancel payment and submit standard application"
                 )}
@@ -2849,16 +2994,16 @@ function CustomBuiltVisual() {
             <div className="absolute inset-0 bg-brand-400/20 rounded-full animate-[pulse-ring_3s_cubic-bezier(0.4,0,0.6,1)_infinite]"></div>
 
             {/* Core Box */}
-            <div className="bg-white p-2.5 rounded-[2rem] shadow-[0_0_40px_rgba(19,78,42,0.2)] border border-brand-100 relative z-10 transition-transform duration-500 group-hover:scale-105">
-              <div className="bg-gradient-to-b from-brand-900 to-brand-950 p-6 rounded-[1.5rem] flex flex-col items-center justify-center gap-3 w-40 h-40 relative overflow-hidden border border-brand-800 shadow-inner">
+            <div className="bg-white p-2 sm:p-2.5 rounded-[1.5rem] sm:rounded-[2rem] shadow-[0_0_40px_rgba(19,78,42,0.2)] border border-brand-100 relative z-10 transition-transform duration-500 group-hover:scale-105">
+              <div className="bg-gradient-to-b from-brand-900 to-brand-950 p-4 sm:p-6 rounded-[1.2rem] sm:rounded-[1.5rem] flex flex-col items-center justify-center gap-2 sm:gap-3 w-32 h-32 sm:w-40 sm:h-40 relative overflow-hidden border border-brand-800 shadow-inner">
                 {/* Glass reflection */}
                 <div className="absolute top-0 left-0 w-full h-[45%] bg-gradient-to-b from-white/10 to-transparent rounded-b-full opacity-50"></div>
                 
-                <Settings className="w-8 h-8 text-brand-300 mb-1 animate-[spin_8s_linear_infinite] drop-shadow-md" />
-                <Logo className="h-7 text-white z-10 drop-shadow-md" inverted />
+                <Settings className="w-6 h-6 sm:w-8 sm:h-8 text-brand-300 mb-0.5 sm:mb-1 animate-[spin_8s_linear_infinite] drop-shadow-md" />
+                <Logo className="h-5 sm:h-7 text-white z-10 drop-shadow-md" inverted />
                 
-                <div className="mt-2 bg-brand-950/80 border border-brand-700/50 rounded-full px-3 py-1 shadow-inner backdrop-blur-sm z-10">
-                  <span className="text-brand-200 text-[10px] font-bold uppercase tracking-wider">Your OS</span>
+                <div className="mt-1 sm:mt-2 bg-brand-950/80 border border-brand-700/50 rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 shadow-inner backdrop-blur-sm z-10">
+                  <span className="text-brand-200 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Your OS</span>
                 </div>
               </div>
             </div>
@@ -2898,56 +3043,56 @@ function CustomBuiltVisual() {
 }
 function ProblemVisuals() {
   return (
-    <div className="relative h-[400px] w-full rounded-3xl overflow-hidden bg-neutral-50 border border-neutral-200/60 flex items-center justify-center">
+    <div className="relative h-[360px] sm:h-[400px] w-full rounded-3xl overflow-hidden bg-neutral-50 border border-neutral-200/60 flex items-center justify-center p-4">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(19,78,42,0.05)_0%,transparent_70%)]"></div>
       
       {/* Animated Elements */}
       <motion.div
-        animate={{ y: [0, -10, 0], rotate: [0, -2, 0] }}
+        animate={{ y: [0, -8, 0], rotate: [0, -1.5, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-10 left-10 glass p-4 rounded-xl shadow-xl w-64 z-20"
+        className="absolute top-4 sm:top-8 left-3 sm:left-8 glass p-3.5 sm:p-4 rounded-xl shadow-xl w-56 sm:w-64 max-w-[85vw] z-20"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-6 h-6 bg-pink-100 text-pink-600 rounded flex items-center justify-center">
+        <div className="flex items-center gap-2.5 mb-2">
+          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-pink-100 text-pink-600 rounded flex items-center justify-center">
             <MessageCircle className="w-3 h-3" />
           </div>
-          <span className="text-xs font-bold text-neutral-400">Instagram DM</span>
+          <span className="text-[11px] sm:text-xs font-bold text-neutral-400">Instagram DM</span>
         </div>
-        <p className="text-sm font-medium text-neutral-900">"Hey! Do you have any spots left for 1:1 coaching?"</p>
+        <p className="text-xs sm:text-sm font-medium text-neutral-900">"Hey! Do you have any spots left for 1:1 coaching?"</p>
       </motion.div>
 
       <motion.div
-        animate={{ y: [0, 15, 0], rotate: [0, 2, 0] }}
+        animate={{ y: [0, 10, 0], rotate: [0, 1.5, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-12 right-6 glass p-4 rounded-xl shadow-xl w-64 z-30"
+        className="absolute bottom-4 sm:bottom-10 right-3 sm:right-6 glass p-3.5 sm:p-4 rounded-xl shadow-xl w-56 sm:w-64 max-w-[85vw] z-30"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-6 h-6 bg-emerald-100 text-emerald-600 rounded flex items-center justify-center">
+        <div className="flex items-center gap-2.5 mb-2">
+          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-emerald-100 text-emerald-600 rounded flex items-center justify-center">
             <CheckSquare className="w-3 h-3" />
           </div>
-          <span className="text-xs font-bold text-neutral-400">WhatsApp</span>
+          <span className="text-[11px] sm:text-xs font-bold text-neutral-400">WhatsApp</span>
         </div>
-        <p className="text-sm font-medium text-neutral-900">"Did you see my form video? Is my back rounding?"</p>
+        <p className="text-xs sm:text-sm font-medium text-neutral-900">"Did you see my form video? Is my back rounding?"</p>
       </motion.div>
 
       <motion.div
         animate={{ scale: [1, 1.02, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-50 border border-red-200 p-5 rounded-2xl shadow-2xl w-72 z-10"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-50 border border-red-200 p-4 sm:p-5 rounded-2xl shadow-2xl w-60 sm:w-72 max-w-[90vw] z-10"
       >
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center">
-            <Calendar className="w-4 h-4" />
+        <div className="flex items-center gap-2.5 mb-2.5">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center shrink-0">
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
           <div>
-            <p className="font-bold text-red-900">Double Booked!</p>
-            <p className="text-xs text-red-600">Calendly conflict detected</p>
+            <p className="font-bold text-xs sm:text-sm text-red-900">Double Booked!</p>
+            <p className="text-[10px] sm:text-xs text-red-600">Calendly conflict detected</p>
           </div>
         </div>
         <div className="flex -space-x-2">
-           <div className="w-6 h-6 rounded-full border-2 border-white bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-700">JS</div>
-           <div className="w-6 h-6 rounded-full border-2 border-white bg-amber-100 flex items-center justify-center text-[10px] font-bold text-amber-700">AK</div>
+           <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white bg-blue-100 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-blue-700">JS</div>
+           <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white bg-amber-100 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-amber-700">AK</div>
         </div>
       </motion.div>
     </div>
@@ -2991,7 +3136,7 @@ function ComparisonTable() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-      className="py-24 bg-neutral-50 border-t border-neutral-200 scroll-mt-16"
+      className="py-16 sm:py-24 bg-neutral-50 border-t border-neutral-200 scroll-mt-16"
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
@@ -2999,22 +3144,71 @@ function ComparisonTable() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
-          <h2 id="comparison-heading" className="text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-4">
+          <h2 id="comparison-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-brand-900 mb-3 sm:mb-4">
             Why 6-Figure Coaches Are Replacing Disconnected SaaS with CoachOS
           </h2>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-neutral-600 max-w-2xl mx-auto">
             Stop paying for disconnected tools that create friction for your clients and more admin work for you.
           </p>
         </motion.div>
 
+        {/* Mobile View (Cards) */}
+        <div className="block md:hidden space-y-4">
+          {comparisons.map((row, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-4 overflow-hidden"
+            >
+              <div className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-3">
+                {row.feature}
+              </div>
+
+              <div className="space-y-2.5">
+                {/* CoachOS Solution (Top) */}
+                <div className="bg-brand-50/80 border border-brand-200/80 rounded-xl p-3 flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-[11px] font-black uppercase tracking-wider text-brand-900">CoachOS</span>
+                      <span className="text-[9px] font-bold text-brand-600 uppercase tracking-widest">(Your System)</span>
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-brand-950 leading-snug">
+                      {row.coachos}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Standard Old Way (Bottom) */}
+                <div className="bg-neutral-50 border border-neutral-200/60 rounded-xl p-3 flex items-start gap-2.5">
+                  <X className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-[11px] font-bold text-neutral-600">Standard Apps</span>
+                      <span className="text-[9px] font-medium text-neutral-400 uppercase tracking-widest">(Old Way)</span>
+                    </div>
+                    <p className="text-xs text-neutral-500 leading-snug">
+                      {row.standard}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Desktop / Tablet View (Table) */}
         <motion.div 
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.65, delay: 0.15 }}
-          className="relative pt-4"
+          className="hidden md:block relative pt-4"
         >
           {/* Main Table Card */}
           <div className="relative rounded-3xl border border-neutral-200 bg-white shadow-[0_8px_40px_-12px_rgba(0,0,0,0.08)] group/table">
@@ -3027,8 +3221,7 @@ function ComparisonTable() {
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap bg-brand-900 text-neutral-200 shadow-sm group-hover/table:bg-brand-950 group-hover/table:text-amber-300 group-hover/table:shadow-lg group-hover/table:scale-105 group-hover/table:ring-2 group-hover/table:ring-amber-400/40">
                 <span className="flex items-center gap-1.5">
                   <Sparkles className="w-3 h-3 text-brand-400 transition-colors group-hover/table:text-amber-400" />
-                  <span className="hidden sm:inline">Your Custom OS</span>
-                  <span className="sm:hidden">Custom OS</span>
+                  <span>Your Custom OS</span>
                 </span>
               </div>
             </div>
