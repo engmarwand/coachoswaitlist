@@ -133,7 +133,7 @@ export default function App() {
                 className="px-5 py-2.5 font-medium flex items-center gap-2 hover:scale-105 active:scale-95"
                 glowSpeed={2.8}
               >
-                Join the waitlist
+                Join Free Waitlist
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-emerald-300" />
               </GlowingBorderButton>
             </div>
@@ -143,7 +143,7 @@ export default function App() {
                 onClick={scrollToWaitlist}
                 className="px-3 py-1.5 rounded-full bg-brand-900 text-white text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95"
               >
-                <span>Waitlist</span>
+                <span>Free Waitlist</span>
                 <ArrowRight className="w-3 h-3 text-emerald-400" />
               </button>
 
@@ -220,11 +220,11 @@ export default function App() {
                     className="w-full px-5 py-3.5 font-bold flex justify-center items-center gap-2 shadow-md text-base"
                     glowSpeed={2.8}
                   >
-                    Apply for Founding Access
+                    Join Free Waitlist
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-emerald-300" />
                   </GlowingBorderButton>
-                  <p className="text-center text-[11px] text-neutral-400 font-medium mt-2">
-                    Early access & 40% lifetime founding discount
+                  <p className="text-center text-[11px] text-neutral-500 font-medium mt-2">
+                    100% Free to apply • Optional founding cohort fast-track
                   </p>
                 </div>
               </div>
@@ -246,17 +246,17 @@ export default function App() {
             <div className="bg-brand-950/95 backdrop-blur-lg border border-brand-800 text-white p-2.5 rounded-2xl shadow-2xl flex items-center justify-between gap-3">
               <div className="min-w-0 pl-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                  <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">Founding Cohort</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">Free Waitlist Open</span>
                 </div>
-                <p className="text-xs font-bold text-neutral-200 truncate">40% Off Lifetime Rate</p>
+                <p className="text-xs font-bold text-neutral-200 truncate">Early Access & 40% Off</p>
               </div>
 
               <button
                 onClick={scrollToWaitlist}
                 className="bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-brand-950 px-4 py-2 rounded-xl text-xs font-black shrink-0 flex items-center gap-1.5 shadow-md transition-transform"
               >
-                <span>Apply Now</span>
+                <span>Join Free</span>
                 <ArrowRight className="w-3.5 h-3.5 font-bold" />
               </button>
             </div>
@@ -283,12 +283,12 @@ export default function App() {
               transition={{ duration: 0.5 }}
               className="max-w-3xl mx-auto"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-brand-200/50 text-brand-800 text-xs sm:text-sm font-medium mb-6 sm:mb-8 shadow-sm backdrop-blur-md hover:bg-white/90 transition-colors cursor-default max-w-full">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass border border-brand-200/50 text-brand-800 text-xs sm:text-sm font-medium mb-6 sm:mb-8 shadow-sm backdrop-blur-md hover:bg-white/90 transition-colors cursor-default max-w-full">
                 <span className="relative flex h-2 w-2 shrink-0">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span className="truncate">Founding waitlist open — early access & pricing</span>
+                <span className="truncate">100% Free Waitlist Open • Optional Founding Fast-Track</span>
               </div>
               
               <h1 id="hero-heading" className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-brand-900 leading-[1.15] mb-4 sm:mb-6">
@@ -306,14 +306,16 @@ export default function App() {
                   glowSpeed={3.2}
                 >
                   <span className="relative flex items-center justify-center gap-2.5">
-                    Apply for founding access
+                    Join Free Waitlist
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
                   </span>
                 </GlowingBorderButton>
                 
-                <p className="text-xs sm:text-sm text-neutral-500 font-medium">
-                  Limited first cohort • Built for independent coaches
-                </p>
+                <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs sm:text-sm text-neutral-500 font-medium">
+                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> 100% Free to apply</span>
+                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> No credit card required</span>
+                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> 40% Lifetime founding discount</span>
+                </div>
               </div>
             </motion.div>
 
@@ -656,19 +658,19 @@ export default function App() {
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-emerald-600/10 blur-[100px] rounded-full pointer-events-none"></div>
 
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            {/* Urgency Badge */}
+            {/* Urgency & Clarity Badges */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-[11px] sm:text-xs font-bold mb-4 sm:mb-6 tracking-widest uppercase shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 text-[11px] sm:text-xs font-bold mb-4 sm:mb-6 tracking-widest uppercase shadow-sm"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
-              FOUNDING COHORT OPEN
+              100% FREE APPLICATION & WAITLIST
             </motion.div>
 
             {/* Clear Primary Headline */}
@@ -688,10 +690,32 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: 0.1 }}
-              className="text-sm sm:text-lg lg:text-xl text-neutral-300 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-normal"
+              className="text-sm sm:text-lg lg:text-xl text-neutral-300 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-normal"
             >
-              The first group of coaches will get early access and 40% off for life. Once founding access closes, that rate is gone.
+              Join the waitlist for free to get early access and platform updates. Or, choose to fast-track your setup and guarantee your build slot in our founding cohort with 40% off for life.
             </motion.p>
+
+            {/* Reassurance Feature Strip */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-10 text-xs sm:text-sm font-semibold text-neutral-300"
+            >
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-sm text-emerald-300">
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                100% Free Waitlist ($0)
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-sm text-neutral-200">
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                No Credit Card Needed to Apply
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-sm text-amber-300">
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                Optional Founding Fast-Track
+              </span>
+            </motion.div>
 
             {/* Waitlist Multi-step Form */}
             <motion.div 
@@ -707,7 +731,7 @@ export default function App() {
             {/* Sub-text note */}
             <div className="mt-6 sm:mt-8 text-center">
               <p className="text-xs sm:text-sm text-neutral-400 font-medium">
-                Limited first cohort — Built for independent coaches
+                Standard free waitlist & optional founding cohort reservation • Built for independent coaches
               </p>
             </div>
           </div>
@@ -749,12 +773,16 @@ export default function App() {
               className="space-y-3 sm:space-y-4"
             >
               <FAQItem 
+                question="Is it completely free to join the waitlist?" 
+                answer="Yes! Submitting your application and joining the waitlist is 100% free with zero payment or credit card required. You'll be placed in line for general release updates and standard rolling invites. If you'd like to fast-track your setup and guarantee a slot in our hands-on founding cohort (with a 40% lifetime discount), you have the optional choice to place a $100 reservation deposit that is fully credited toward your final build."
+              />
+              <FAQItem 
                 question="Is CoachOS a marketplace?" 
                 answer="No. CoachOS is your private operating system. You bring your clients; we give you the system to manage them. We don't take a cut of your clients or list you on a directory."
               />
               <FAQItem 
                 question="What does the founding reservation deposit do?" 
-                answer="It reserves your place in the founding review queue and is credited toward your CoachOS build if we agree to move forward after the review call. The reservation deposit is non-refundable."
+                answer="It guarantees your priority position in the founding review queue and is credited toward your CoachOS build if we agree to move forward after the review call. The reservation deposit is non-refundable."
               />
               <FAQItem 
                 question="Do I need to migrate all my data at once?" 
@@ -809,11 +837,15 @@ export default function App() {
                 glowSpeed={3}
               >
                 <span className="relative flex items-center justify-center gap-2.5">
-                  Apply for founding access
+                  Join Free Waitlist
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
                 </span>
               </GlowingBorderButton>
-              <p className="text-xs sm:text-sm text-neutral-500 font-medium">Limited first cohort • Built for independent coaches</p>
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs sm:text-sm text-neutral-500 font-medium">
+                <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> 100% Free application</span>
+                <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> No payment info required</span>
+                <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> Built for independent coaches</span>
+              </div>
             </motion.div>
           </div>
         </motion.section>
@@ -1866,8 +1898,9 @@ function InteractiveSolution() {
     {
       id: "portal",
       title: "Client Experience",
-      desc: "A branded portal for your clients to log in.",
-      icon: LayoutDashboard
+      badge: "100% Whitelabeled",
+      desc: "A custom-branded web app your clients actually love using.",
+      icon: Smartphone
     }
   ];
 
@@ -1885,15 +1918,22 @@ function InteractiveSolution() {
               <div className={`mt-0.5 p-2 rounded-lg transition-colors shrink-0 ${activeTab === idx ? 'bg-brand-800 text-white' : 'bg-brand-100 text-brand-900 group-hover:bg-brand-200'}`}>
                 <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div>
-                <h4 className={`font-bold text-sm sm:text-base mb-0.5 ${activeTab === idx ? 'text-white' : 'text-brand-950'}`}>{tab.title}</h4>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                  <h4 className={`font-bold text-sm sm:text-base ${activeTab === idx ? 'text-white' : 'text-brand-950'}`}>{tab.title}</h4>
+                  {tab.badge && (
+                    <span className={`text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider ${activeTab === idx ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30' : 'bg-brand-100 text-brand-800 border border-brand-200'}`}>
+                      {tab.badge}
+                    </span>
+                  )}
+                </div>
                 <p className={`text-xs sm:text-sm leading-snug ${activeTab === idx ? 'text-brand-100' : 'text-neutral-500'}`}>{tab.desc}</p>
               </div>
             </div>
           </button>
         ))}
       </div>
-      <div className="lg:w-2/3 bg-neutral-50 rounded-xl sm:rounded-2xl border border-neutral-200/60 overflow-hidden flex items-center justify-center p-3.5 sm:p-6 lg:p-12 relative min-h-[340px] sm:min-h-[400px]">
+      <div className="lg:w-2/3 bg-neutral-50 rounded-xl sm:rounded-2xl border border-neutral-200/60 overflow-hidden flex items-center justify-center p-3.5 sm:p-6 lg:p-10 relative min-h-[360px] sm:min-h-[420px]">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:16px_16px]"></div>
         <AnimatePresence mode="wait">
           <motion.div
@@ -1981,33 +2021,115 @@ function InteractiveSolution() {
               </div>
             )}
             {activeTab === 3 && (
-              <div className="flex justify-center">
-                 <div className="w-full max-w-sm bg-brand-950 text-white rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl relative border-4 sm:border-8 border-brand-900 h-[360px] sm:h-[380px] flex flex-col">
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
-                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-center relative z-10">
-                       <div className="flex justify-between items-center mb-6 sm:mb-8">
-                         <Logo className="h-5 sm:h-6 text-white" inverted />
-                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-800 border-2 border-brand-700 flex items-center justify-center text-xs font-bold text-white shadow-sm">M</div>
-                       </div>
-                       <h3 className="text-xl sm:text-2xl font-bold mb-1">Hi, Marcus!</h3>
-                       <p className="text-brand-200 text-xs sm:text-sm mb-6 sm:mb-8">Here is your plan for today.</p>
-                       
-                       <div className="bg-white text-brand-950 rounded-xl p-3.5 sm:p-4 mb-2 shadow-xl">
-                         <div className="flex justify-between items-center mb-2.5">
-                            <span className="font-bold text-xs sm:text-sm">Workout</span>
-                            <span className="text-[10px] sm:text-xs font-bold bg-brand-100 text-brand-800 px-2 py-0.5 rounded">Push Day</span>
+              <div className="flex justify-center w-full py-1">
+                 <div className="w-full max-w-sm bg-neutral-950 text-white rounded-[2rem] sm:rounded-[2.4rem] overflow-hidden shadow-2xl relative border-4 sm:border-[6px] border-neutral-800 flex flex-col">
+                    {/* Subtle gloss gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/30 pointer-events-none"></div>
+
+                    {/* Phone Dynamic Island & Status Bar */}
+                    <div className="px-4 pt-2.5 pb-1.5 flex items-center justify-between text-neutral-400 text-[10px] border-b border-white/5 relative z-10">
+                      <span className="font-semibold text-neutral-300">9:41</span>
+                      <div className="w-16 h-3.5 bg-black rounded-full border border-white/10 flex items-center justify-center">
+                        <span className="w-1.5 h-1.5 rounded-full bg-neutral-800 mr-1.5"></span>
+                        <span className="w-1 h-1 rounded-full bg-emerald-400"></span>
+                      </div>
+                      <div className="flex items-center gap-1 text-neutral-300">
+                        <span className="text-[8px] font-mono">5G</span>
+                        <div className="w-3.5 h-2 rounded-xs border border-neutral-400 p-0.5 flex items-center">
+                          <div className="w-full h-full bg-emerald-400 rounded-2xs"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Whitelabel Custom Domain header */}
+                    <div className="bg-brand-900/90 border-b border-brand-700/60 px-3.5 py-1.5 flex items-center justify-between text-[11px] relative z-10">
+                      <div className="flex items-center gap-1.5 text-brand-200 min-w-0">
+                        <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span className="font-mono text-[10px] truncate text-neutral-200">portal.yourbrand.com</span>
+                      </div>
+                      <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 shrink-0">
+                        Whitelabeled
+                      </span>
+                    </div>
+
+                    {/* Main Client Experience Content */}
+                    <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between relative z-10 text-left space-y-3">
+                       {/* Client Greeting & Brand Header */}
+                       <div className="flex items-center justify-between">
+                         <div className="flex items-center gap-2.5 min-w-0">
+                           <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center font-black text-xs shadow-md border border-white/20 shrink-0">
+                             M
+                           </div>
+                           <div className="truncate">
+                             <div className="flex items-center gap-1">
+                               <p className="font-bold text-xs text-white leading-tight truncate">Hi, Marcus!</p>
+                               <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
+                             </div>
+                             <p className="text-[10px] text-neutral-400 truncate">1:1 Performance Plan</p>
+                           </div>
                          </div>
-                         <div className="space-y-1.5 sm:space-y-2">
-                            <div className="flex justify-between text-xs sm:text-sm border-b border-neutral-100 pb-1.5">
-                              <span className="text-neutral-600">Incline DB Press</span>
-                              <span className="font-bold">4 x 8-10</span>
+                         <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold shrink-0">
+                           <Flame className="w-3 h-3 text-amber-400 fill-amber-400" />
+                           <span>14d Streak</span>
+                         </div>
+                       </div>
+
+                       {/* Daily Workout Plan Card */}
+                       <div className="bg-white text-brand-950 rounded-xl p-3 shadow-lg border border-neutral-100">
+                         <div className="flex justify-between items-center mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <Dumbbell className="w-3.5 h-3.5 text-brand-700" />
+                              <span className="font-bold text-xs text-brand-950">Today's Workout</span>
                             </div>
-                            <div className="flex justify-between text-xs sm:text-sm">
-                              <span className="text-neutral-600">Overhead Press</span>
-                              <span className="font-bold">3 x 10-12</span>
+                            <span className="text-[10px] font-bold bg-brand-100 text-brand-800 px-2 py-0.5 rounded">
+                              Push Hypertrophy
+                            </span>
+                         </div>
+                         <div className="space-y-1.5 text-xs">
+                            <div className="flex justify-between items-center border-b border-neutral-100 pb-1.5">
+                              <span className="text-neutral-600 font-medium truncate pr-2">Incline DB Press</span>
+                              <span className="font-bold text-brand-900 bg-neutral-100 px-1.5 py-0.5 rounded text-[11px] shrink-0">4 × 8-10</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-neutral-600 font-medium truncate pr-2">Overhead Press & Flyes</span>
+                              <span className="font-bold text-brand-900 bg-neutral-100 px-1.5 py-0.5 rounded text-[11px] shrink-0">3 × 12</span>
                             </div>
                          </div>
                        </div>
+
+                       {/* Nutrition & Check-in Micro Stats */}
+                       <div className="grid grid-cols-2 gap-2">
+                         <div className="bg-neutral-900/90 border border-white/10 rounded-xl p-2.5">
+                           <div className="flex items-center justify-between mb-1">
+                             <span className="text-[10px] text-neutral-400 font-semibold">Nutrition</span>
+                             <span className="text-[10px] text-emerald-400 font-bold">92%</span>
+                           </div>
+                           <p className="text-xs font-bold text-white">2,150 / 2,400 kcal</p>
+                           <div className="w-full bg-white/10 rounded-full h-1 mt-1.5 overflow-hidden">
+                             <div className="bg-emerald-400 h-full rounded-full w-[92%]"></div>
+                           </div>
+                         </div>
+                         <div className="bg-neutral-900/90 border border-white/10 rounded-xl p-2.5">
+                           <div className="flex items-center justify-between mb-1">
+                             <span className="text-[10px] text-neutral-400 font-semibold">Check-in</span>
+                             <span className="text-[9px] bg-brand-800 text-brand-200 px-1.5 py-0.2 rounded font-bold">Fri</span>
+                           </div>
+                           <p className="text-xs font-bold text-white">Due in 2 days</p>
+                           <p className="text-[10px] text-neutral-400 mt-0.5">Form ready</p>
+                         </div>
+                       </div>
+
+                       {/* Direct Coach Messaging Bar */}
+                       <div className="bg-brand-900/40 border border-brand-500/20 rounded-xl px-2.5 py-2 flex items-center justify-between">
+                         <div className="flex items-center gap-1.5">
+                           <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                           <p className="text-[10px] text-neutral-300 font-medium">Coach online • Fast response</p>
+                         </div>
+                         <span className="text-[10px] font-bold text-brand-300">
+                           Open Chat →
+                         </span>
+                       </div>
+
                     </div>
                  </div>
               </div>
@@ -2193,13 +2315,27 @@ export function WaitlistForm() {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-brand-50 border border-brand-200 rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-center max-w-md mx-auto shadow-xl"
+        className="bg-white border border-brand-200 rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-center max-w-lg mx-auto shadow-2xl relative overflow-hidden"
       >
-        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-sm border border-brand-200/50">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-sm border border-emerald-200/60">
           <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10" />
         </div>
-        <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950 mb-2 sm:mb-3">Application Saved.</h3>
-        <p className="text-brand-800 text-sm sm:text-lg">We'll review it in the standard order for {formData.name || 'you'}.</p>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3 border border-emerald-200/50">
+          Free Waitlist Confirmed
+        </div>
+        <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-950 mb-2 sm:mb-3">You're on the list!</h3>
+        <p className="text-neutral-600 text-sm sm:text-base leading-relaxed mb-6">
+          Thank you, <strong className="text-brand-950">{formData.name || 'Coach'}</strong>. We've saved your profile and will send early access invitations and platform updates directly to <strong className="text-brand-950">{formData.email}</strong>.
+        </p>
+        
+        <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 text-xs text-neutral-600 font-medium space-y-1 text-left">
+          <div className="flex items-center gap-2 text-emerald-700 font-bold">
+            <Check className="w-4 h-4" /> 100% Free Standard Queue Position
+          </div>
+          <p className="text-neutral-500 pl-6">
+            No payment or card was charged. We'll notify you as soon as your batch opens!
+          </p>
+        </div>
       </motion.div>
     );
   }
@@ -2210,17 +2346,19 @@ export function WaitlistForm() {
     const progress = Math.min(((step - 1) / (totalSteps - 1)) * 100, 100);
     
     return (
-      <div className="mb-8 max-w-sm mx-auto">
+      <div className="mb-6 sm:mb-8 max-w-md mx-auto">
         <div className="flex justify-between items-center text-xs font-bold text-neutral-400 uppercase tracking-wider mb-2">
           {step <= 2 ? (
             <>
               <span className={step === 1 ? "text-brand-900 font-extrabold" : "text-neutral-500"}>1. Contact Info</span>
               <span className={step === 2 ? "text-brand-900 font-extrabold" : "text-neutral-400"}>2. Business Profile</span>
             </>
+          ) : step === 10 ? (
+            <span className="text-brand-900 font-extrabold mx-auto">Choose Your Access Option</span>
           ) : step === 11 ? (
             <span className="text-brand-900 font-extrabold mx-auto">Complete Reservation</span>
           ) : (
-             <span className="text-brand-900 font-extrabold mx-auto">Founding Fit Review</span>
+             <span className="text-brand-900 font-extrabold mx-auto">Application Questions</span>
           )}
         </div>
         <div className="w-full bg-neutral-200/80 rounded-full h-2 p-0.5 overflow-hidden">
@@ -2236,12 +2374,20 @@ export function WaitlistForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto w-full text-left">
+    <div className="max-w-3xl mx-auto w-full text-left">
       {renderProgress()}
 
-      <div className="bg-white/90 backdrop-blur-xl border border-neutral-200/60 p-4 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(19,78,42,0.08)] relative overflow-hidden min-h-[380px] sm:min-h-[400px]">
+      <div className="bg-white/95 backdrop-blur-xl border border-neutral-200/80 p-4 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(19,78,42,0.08)] relative overflow-hidden min-h-[380px] sm:min-h-[400px]">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
         
+        {/* Top Reassurance Chip */}
+        <div className="flex items-center justify-between pb-3.5 mb-5 border-b border-neutral-100 text-[11px] sm:text-xs text-neutral-500 font-medium">
+          <span className="flex items-center gap-1 text-emerald-700 font-bold">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Free Application
+          </span>
+          <span className="text-neutral-400">Takes ~2 minutes • No card required</span>
+        </div>
+
         <AnimatePresence mode="wait">
           {/* STEP 1: Contact Details */}
           {step === 1 && (
@@ -2254,7 +2400,9 @@ export function WaitlistForm() {
               className="relative z-10"
             >
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950 mb-1.5 sm:mb-2">Let's get you on the list.</h3>
-              <p className="text-neutral-500 mb-6 sm:mb-8 text-sm sm:text-base lg:text-lg leading-relaxed">First, where should we send your invite?</p>
+              <p className="text-neutral-500 mb-6 sm:mb-8 text-sm sm:text-base lg:text-lg leading-relaxed">
+                Join the CoachOS waitlist completely free. Tell us where to send your early access invitation.
+              </p>
               
               <form onSubmit={handleNext} className="space-y-4 sm:space-y-5">
                 <div>
@@ -2615,7 +2763,7 @@ export function WaitlistForm() {
               
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950 mb-2">Review your application.</h3>
               <p className="text-neutral-500 mb-5 sm:mb-6 text-sm sm:text-base leading-relaxed">
-                Please double-check your responses before proceeding to the founding reservation.
+                Please double-check your responses before choosing your access path (100% Free Waitlist vs. Optional Fast-Track).
               </p>
 
               <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-4 sm:p-6 mb-6 space-y-3 sm:space-y-4">
@@ -2644,7 +2792,7 @@ export function WaitlistForm() {
                 glowSpeed={3.2}
               >
                 <span className="relative flex items-center justify-center gap-2">
-                  Submit Application for Founding Review
+                  Continue to Choose Options
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
                 </span>
               </GlowingBorderButton>
@@ -2672,7 +2820,7 @@ export function WaitlistForm() {
             </motion.div>
           )}
 
-          {/* STEP 10: Reservation */}
+          {/* STEP 10: Access Option Selection (Free vs Fast-Track) */}
           {step === 10 && (
             <motion.div
               key="step10"
@@ -2683,111 +2831,152 @@ export function WaitlistForm() {
               className="relative z-10"
             >
               <button onClick={() => setStep(8)} className="text-sm font-semibold text-neutral-400 hover:text-brand-900 mb-4 sm:mb-5 flex items-center gap-1 transition-colors group min-h-[36px]">
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to application
               </button>
               
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 sm:p-5 mb-6 sm:mb-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-200/50 rounded-full mix-blend-multiply blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                <div className="flex items-center gap-2 mb-1.5 relative z-10">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span className="text-[11px] sm:text-xs font-bold text-emerald-900 uppercase tracking-widest">Founding Fit Approved</span>
+              <div className="bg-emerald-50 border border-emerald-200/80 rounded-xl p-3.5 sm:p-4 mb-5 sm:mb-6 relative overflow-hidden">
+                <div className="flex items-center gap-2 mb-1">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span className="text-[11px] sm:text-xs font-bold text-emerald-900 uppercase tracking-widest">Application Approved</span>
                 </div>
-                <p className="text-xs sm:text-sm font-medium text-emerald-900 leading-relaxed relative z-10">
-                  Based on your use of {formData.tools.slice(0, 2).join(' & ')} and your focus on {formData.adminWork.slice(0, 2).join(' & ').replace(/-/g, ' ')}, CoachOS will significantly streamline your operations.
+                <p className="text-xs sm:text-sm font-medium text-emerald-950 leading-relaxed">
+                  Based on your profile, CoachOS is an ideal fit. Choose how you'd like to join below:
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-2.5 sm:mb-3">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950">Secure your position.</h3>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>
-                  Capacity Limited
-                </span>
+              <div className="mb-6 text-center sm:text-left">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-brand-950 mb-2">
+                  Select your waitlist path
+                </h3>
+                <p className="text-neutral-500 text-xs sm:text-sm lg:text-base leading-relaxed">
+                  Joining the waitlist is <strong className="text-brand-950 font-bold">100% free</strong>. You can also optionally choose to fast-track your setup and secure guaranteed founding placement.
+                </p>
               </div>
-              
-              <p className="text-neutral-500 mb-5 sm:mb-6 text-xs sm:text-sm lg:text-base leading-relaxed">
-                Due to the hands-on nature of our founding builds, capacity is strictly capped. We are currently reviewing a high volume of applications. Reserving your spot now is the only way to guarantee placement in the current cohort and lock in the 40% lifetime discount.
-              </p>
 
-              <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-4 sm:p-6 mb-5 sm:mb-6">
-                <div className="flex items-center gap-3 mb-4 sm:mb-5">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-brand-50 flex items-center justify-center text-brand-900 shrink-0">
-                    <Lock className="w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
+              {/* Two Prominent, Balanced Options */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-6">
+                
+                {/* OPTION 1: Standard Free Waitlist */}
+                <div className="bg-white border-2 border-emerald-200/80 rounded-2xl p-4 sm:p-6 flex flex-col justify-between shadow-sm hover:border-emerald-400 hover:shadow-md transition-all relative">
                   <div>
-                    <h4 className="font-bold text-brand-950 text-base sm:text-lg leading-tight mb-0.5">Founding Reservation</h4>
-                    <p className="text-xs sm:text-sm text-neutral-500">Secure your position in the build queue</p>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] sm:text-xs font-extrabold uppercase tracking-wide mb-3">
+                      <Check className="w-3 h-3 text-emerald-600" />
+                      100% Free Option
+                    </div>
+                    
+                    <h4 className="text-lg sm:text-xl font-bold text-brand-950 mb-1">Standard Waitlist</h4>
+                    <div className="flex items-baseline gap-1 mb-4">
+                      <span className="text-2xl sm:text-3xl font-black text-brand-900">$0</span>
+                      <span className="text-xs text-neutral-500 font-semibold uppercase">/ Free Forever</span>
+                    </div>
+
+                    <ul className="space-y-2.5 text-xs sm:text-sm text-neutral-600 mb-6">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>Placed in standard queue for rolling invites</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>Product updates, launch demos, & walkthroughs</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span><strong>Zero payment or credit card needed</strong></span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <button 
+                      onClick={(e) => handleSubmit(e, false)}
+                      disabled={loading}
+                      className="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white px-4 py-3 sm:py-3.5 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[46px] disabled:opacity-50"
+                    >
+                      {loading ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      ) : (
+                        <>
+                          <span>Join Free Waitlist</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+                    <p className="text-center text-[11px] text-neutral-400 mt-2 font-medium">Instant submit • No charge</p>
                   </div>
                 </div>
-                
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3.5 sm:p-4 flex items-center justify-between mb-4 sm:mb-5">
-                  <span className="text-xs sm:text-sm font-semibold text-neutral-700">Reservation Deposit</span>
-                  <span className="text-lg sm:text-xl font-black text-brand-900">${FOUNDING_DEPOSIT_AMOUNT} {FOUNDING_DEPOSIT_CURRENCY}</span>
+
+                {/* OPTION 2: Founding Cohort Fast-Track */}
+                <div className="bg-gradient-to-br from-brand-950 via-brand-900 to-brand-950 text-white rounded-2xl p-4 sm:p-6 flex flex-col justify-between shadow-xl border border-brand-700/60 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-36 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                  <div className="relative z-10">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-400/20 border border-amber-400/30 text-amber-300 text-[10px] sm:text-xs font-black uppercase tracking-wide mb-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                      Fast-Track Cohort
+                    </div>
+                    
+                    <h4 className="text-lg sm:text-xl font-bold text-white mb-1">Founding Reservation</h4>
+                    <div className="flex items-baseline gap-1.5 mb-4">
+                      <span className="text-2xl sm:text-3xl font-black text-amber-300">${FOUNDING_DEPOSIT_AMOUNT}</span>
+                      <span className="text-[11px] text-neutral-300 font-medium">credited to your build</span>
+                    </div>
+
+                    <ul className="space-y-2.5 text-xs sm:text-sm text-neutral-200 mb-5">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span><strong>Guaranteed build slot</strong> in initial rollout</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span>1-on-1 private architecture & onboarding call</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <span><strong>Locked-in 40% lifetime discount</strong></span>
+                      </li>
+                    </ul>
+
+                    <div className="mb-4 flex items-start gap-2.5 p-2.5 bg-white/10 rounded-xl border border-white/10">
+                      <input
+                        type="checkbox"
+                        id="terms"
+                        checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                        className="mt-0.5 w-4 h-4 rounded border-brand-300 text-brand-900 focus:ring-brand-400 cursor-pointer shrink-0"
+                      />
+                      <label htmlFor="terms" className="text-[11px] sm:text-xs text-neutral-200 leading-snug cursor-pointer select-none">
+                        I agree to terms and understand the ${FOUNDING_DEPOSIT_AMOUNT} deposit is non-refundable (credited toward build).
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="relative z-10">
+                    <GlowingBorderButton
+                      onClick={(e) => handleSubmit(e, true)}
+                      disabled={loading || !termsAccepted}
+                      rounded="xl"
+                      className="w-full px-4 py-3 sm:py-3.5 text-sm font-bold flex items-center justify-center gap-2 active:scale-[0.98] overflow-hidden min-h-[46px]"
+                      glowSpeed={2.8}
+                    >
+                      <span className="relative flex items-center justify-center gap-1.5">
+                        {loading ? (
+                          <Loader2 className="w-4 h-4 animate-spin text-white/80" />
+                        ) : (
+                          <>
+                            <span>Reserve & Fast-Track (${FOUNDING_DEPOSIT_AMOUNT})</span>
+                            <ArrowRight className="w-4 h-4 text-emerald-300" />
+                          </>
+                        )}
+                      </span>
+                    </GlowingBorderButton>
+                    <p className="text-center text-[11px] text-neutral-400 mt-2 font-medium">Secure checkout via Whop</p>
+                  </div>
                 </div>
-                
-                <ul className="space-y-2.5 sm:space-y-3 px-0.5 text-xs sm:text-sm text-neutral-600 mb-2">
-                  <li className="flex items-start gap-2.5 sm:gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <span className="leading-snug font-medium text-neutral-700">Fully credited toward your final CoachOS build</span>
-                  </li>
-                  <li className="flex items-start gap-2.5 sm:gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <span className="leading-snug text-neutral-600">Final scope and timeline agreed after review call</span>
-                  </li>
-                  <li className="flex items-start gap-2.5 sm:gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-neutral-400 mt-0.5 shrink-0" />
-                    <span className="leading-snug text-neutral-500">No obligation to proceed if not a suitable fit</span>
-                  </li>
-                </ul>
-              </div>
 
-              <div className="mb-5 sm:mb-6 flex items-start gap-3 p-3.5 sm:p-4 bg-brand-50/50 rounded-xl border border-brand-100 transition-colors hover:bg-brand-50">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                  className="mt-0.5 w-5 h-5 rounded border-brand-300 text-brand-900 focus:ring-brand-500 cursor-pointer shrink-0"
-                />
-                <label htmlFor="terms" className="text-xs sm:text-sm text-brand-900 leading-snug cursor-pointer select-none">
-                  I agree to the <a href="#privacy" className="font-bold underline hover:text-brand-700 transition-colors" onClick={(e) => e.stopPropagation()}>Privacy Policy</a> and <a href="#terms" className="font-bold underline hover:text-brand-700 transition-colors" onClick={(e) => e.stopPropagation()}>Terms of Service</a>, and understand the ${FOUNDING_DEPOSIT_AMOUNT} reservation deposit is <strong className="font-extrabold">non-refundable</strong>.
-                </label>
-              </div>
-
-              <div className="space-y-3 sm:space-y-4">
-                <GlowingBorderButton
-                  onClick={(e) => handleSubmit(e, true)}
-                  disabled={loading || !termsAccepted}
-                  rounded="xl"
-                  className="w-full px-5 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-bold flex items-center justify-center gap-2 active:scale-[0.98] overflow-hidden min-h-[48px]"
-                  glowSpeed={2.8}
-                >
-                  <span className="relative flex items-center justify-center gap-2">
-                    {loading ? (
-                      <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin text-white/80" />
-                    ) : (
-                      <>
-                        Continue to Checkout
-                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform text-emerald-300" />
-                      </>
-                    )}
-                  </span>
-                </GlowingBorderButton>
-                <button 
-                  onClick={(e) => handleSubmit(e, false)}
-                  disabled={loading}
-                  className="w-full bg-white text-neutral-600 px-5 sm:px-8 py-3.5 sm:py-4 rounded-xl text-xs sm:text-sm font-medium hover:bg-neutral-50 transition-all border border-neutral-200 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
-                >
-                  {loading ? (
-                    <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-neutral-400" />
-                  ) : (
-                    "Submit application without reserving"
-                  )}
-                </button>
               </div>
 
               {submitError && (
-                <p className="text-red-500 text-sm font-medium mt-4 text-center">{submitError}</p>
+                <p className="text-red-500 text-sm font-medium mt-3 text-center">{submitError}</p>
               )}
             </motion.div>
           )}
