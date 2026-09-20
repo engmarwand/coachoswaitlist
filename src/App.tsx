@@ -52,7 +52,9 @@ import {
   BarChart3,
   Command,
   CornerDownLeft,
-  RefreshCw
+  RefreshCw,
+  HelpCircle,
+  Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import confetti from 'canvas-confetti';
@@ -60,6 +62,8 @@ import { loadWhop } from "@whop/elements";
 import { Checkout, CheckoutElement, WhopElements } from "@whop/elements-react";
 import { LoadingIntro } from './components/LoadingIntro';
 import { GlowingBorderButton } from './components/GlowingBorderButton';
+import { HeroDashboard } from './components/HeroDashboard';
+import { PricingSection } from './components/PricingSection';
 
 const whopElements = loadWhop();
 
@@ -125,6 +129,7 @@ export default function App() {
               <button onClick={() => scrollToSection('solution')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Features</button>
               <button onClick={() => scrollToSection('integrations')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Integrations</button>
               <button onClick={() => scrollToSection('workflow')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">How It Works</button>
+              <button onClick={() => scrollToSection('pricing')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Pricing</button>
               <button onClick={() => scrollToSection('comparison')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">Comparison</button>
               <button onClick={() => scrollToSection('faq')} className="text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-colors">FAQ</button>
 
@@ -167,53 +172,144 @@ export default function App() {
               transition={{ duration: 0.25, ease: "easeInOut" }}
               className="md:hidden bg-white border-b border-neutral-200 shadow-xl overflow-hidden"
             >
-              <div className="px-4 py-4 space-y-1">
-                <div className="grid grid-cols-2 gap-1 pb-3 border-b border-neutral-100">
-                  <button 
-                    onClick={() => scrollToSection('problem')}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
-                  >
-                    The Problem
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('solution')}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
-                  >
-                    Custom OS
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('integrations')}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
-                  >
-                    Integrations
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('workflow')}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
-                  >
-                    How It Works
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('use-cases')}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
-                  >
-                    For Coaches
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('comparison')}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors"
-                  >
-                    Comparison
-                  </button>
-                  <button 
-                    onClick={() => scrollToSection('faq')}
-                    className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors col-span-2"
-                  >
-                    Frequently Asked Questions
-                  </button>
+              <div className="px-4 py-4 space-y-4 max-h-[82vh] overflow-y-auto">
+                {/* Quick Links Section */}
+                <div>
+                  <div className="flex items-center justify-between mb-2.5 px-1">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-950 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      Quick Links
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full">
+                      Direct Access
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {/* Waitlist Quick Jump Card */}
+                    <button
+                      onClick={scrollToWaitlist}
+                      className="p-3 rounded-xl bg-gradient-to-br from-brand-950 via-brand-900 to-brand-950 text-white text-left shadow-sm hover:shadow-md transition-all active:scale-[0.98] flex flex-col justify-between min-h-[82px] border border-brand-800 relative overflow-hidden group cursor-pointer"
+                    >
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-400/15 rounded-full blur-xl pointer-events-none"></div>
+                      <div className="flex items-center justify-between w-full relative z-10">
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
+                          100% Free
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                      <div className="mt-2 relative z-10">
+                        <p className="text-xs font-bold text-white leading-tight">Join Waitlist</p>
+                        <p className="text-[10px] text-neutral-300 font-normal">Fast application</p>
+                      </div>
+                    </button>
+
+                    {/* How It Works Quick Card */}
+                    <button
+                      onClick={() => scrollToSection('workflow')}
+                      className="p-3 rounded-xl bg-brand-50/70 hover:bg-brand-50 border border-brand-200/80 text-left transition-all active:scale-[0.98] flex flex-col justify-between min-h-[82px] group cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="w-6 h-6 rounded-lg bg-brand-100 text-brand-900 flex items-center justify-center">
+                          <Zap className="w-3.5 h-3.5 text-brand-700" />
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-brand-600 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                      <div className="mt-2">
+                        <p className="text-xs font-bold text-brand-950 leading-tight">How It Works</p>
+                        <p className="text-[10px] text-neutral-500 font-normal">4-step system build</p>
+                      </div>
+                    </button>
+
+                    {/* Features / Custom OS Card */}
+                    <button
+                      onClick={() => scrollToSection('solution')}
+                      className="p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/90 border border-neutral-200 text-left transition-all active:scale-[0.98] flex flex-col justify-between min-h-[82px] group cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="w-6 h-6 rounded-lg bg-neutral-200 text-neutral-800 flex items-center justify-center">
+                          <Layers className="w-3.5 h-3.5 text-neutral-700" />
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                      <div className="mt-2">
+                        <p className="text-xs font-bold text-neutral-900 leading-tight">Custom OS</p>
+                        <p className="text-[10px] text-neutral-500 font-normal">Interactive preview</p>
+                      </div>
+                    </button>
+
+                    {/* FAQ Card */}
+                    <button
+                      onClick={() => scrollToSection('faq')}
+                      className="p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/90 border border-neutral-200 text-left transition-all active:scale-[0.98] flex flex-col justify-between min-h-[82px] group cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="w-6 h-6 rounded-lg bg-neutral-200 text-neutral-800 flex items-center justify-center">
+                          <HelpCircle className="w-3.5 h-3.5 text-neutral-700" />
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                      <div className="mt-2">
+                        <p className="text-xs font-bold text-neutral-900 leading-tight">FAQ</p>
+                        <p className="text-[10px] text-neutral-500 font-normal">Pricing & details</p>
+                      </div>
+                    </button>
+                  </div>
                 </div>
 
-                <div className="pt-3">
+                {/* All Sections Links */}
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5 px-1">
+                    Explore Sections
+                  </div>
+                  <div className="grid grid-cols-2 gap-1.5 py-1 border-t border-neutral-100">
+                    <button 
+                      onClick={() => scrollToSection('problem')}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors min-h-[44px]"
+                    >
+                      The Problem
+                    </button>
+                    <button 
+                      onClick={() => scrollToSection('solution')}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors min-h-[44px]"
+                    >
+                      Features
+                    </button>
+                    <button 
+                      onClick={() => scrollToSection('integrations')}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors min-h-[44px]"
+                    >
+                      Integrations
+                    </button>
+                    <button 
+                      onClick={() => scrollToSection('workflow')}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors min-h-[44px]"
+                    >
+                      How It Works
+                    </button>
+                    <button 
+                      onClick={() => scrollToSection('pricing')}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors min-h-[44px]"
+                    >
+                      Pricing & Calculator
+                    </button>
+                    <button 
+                      onClick={() => scrollToSection('use-cases')}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors min-h-[44px]"
+                    >
+                      For Coaches
+                    </button>
+                    <button 
+                      onClick={() => scrollToSection('comparison')}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-brand-50 hover:text-brand-900 text-left transition-colors min-h-[44px]"
+                    >
+                      Comparison
+                    </button>
+                  </div>
+                </div>
+
+                {/* Primary Action Button */}
+                <div className="pt-2 border-t border-neutral-100">
                   <GlowingBorderButton 
                     onClick={scrollToWaitlist}
                     rounded="xl"
@@ -302,7 +398,7 @@ export default function App() {
               <div className="flex flex-col items-center gap-3 sm:gap-4">
                 <GlowingBorderButton 
                   onClick={scrollToWaitlist}
-                  className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95"
+                  className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-semibold flex items-center justify-center gap-2"
                   glowSpeed={3.2}
                 >
                   <span className="relative flex items-center justify-center gap-2.5">
@@ -314,7 +410,7 @@ export default function App() {
                 <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs sm:text-sm text-neutral-500 font-medium">
                   <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> 100% Free to apply</span>
                   <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> No credit card required</span>
-                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> 40% Lifetime founding discount</span>
+                  <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-600" /> 40% Founding discount on implementation</span>
                 </div>
               </div>
             </motion.div>
@@ -644,6 +740,9 @@ export default function App() {
           </div>
         </motion.section>
 
+        {/* 6. Transparent Pricing & Estimator */}
+        <PricingSection onScrollToWaitlist={scrollToWaitlist} />
+
         {/* 6. Founding Cohort & Waitlist Section */}
         <motion.section 
           id="waitlist" 
@@ -692,7 +791,7 @@ export default function App() {
               transition={{ duration: 0.55, delay: 0.1 }}
               className="text-sm sm:text-lg lg:text-xl text-neutral-300 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed font-normal"
             >
-              Join the waitlist for free to get early access and platform updates. Or, choose to fast-track your setup and guarantee your build slot in our founding cohort with 40% off for life.
+              Join the waitlist for free to get early access and platform updates. Or, choose to fast-track your setup and guarantee your implementation slot in our founding cohort with 40% off your Private CoachOS operating-system implementation.
             </motion.p>
 
             {/* Reassurance Feature Strip */}
@@ -773,8 +872,12 @@ export default function App() {
               className="space-y-3 sm:space-y-4"
             >
               <FAQItem 
+                question="How does CoachOS pricing work?" 
+                answer="CoachOS is a premium custom operating-system implementation tailored to your exact coaching operations: Core OS ($1,500), Growth OS ($2,500), Scale OS ($4,000), or Custom OS (from $5,000). One-time implementation fee. For ongoing operations, choose between Self-Managed ($0/mo to keep access to your workspace), Care Plan ($149/mo for hosting, monitoring, backups, fixes, support, and small configuration changes), or Growth Partner ($349/mo for continuous optimization and monthly improvements). Founding cohort members receive 40% off their selected build, and their $250 reservation deposit is 100% credited toward their discounted total."
+              />
+              <FAQItem 
                 question="Is it completely free to join the waitlist?" 
-                answer="Yes! Submitting your application and joining the waitlist is 100% free with zero payment or credit card required. You'll be placed in line for general release updates and standard rolling invites. If you'd like to fast-track your setup and guarantee a slot in our hands-on founding cohort (with a 40% lifetime discount), you have the optional choice to place a $100 reservation deposit that is fully credited toward your final build."
+                answer="Yes! Submitting your application and joining the waitlist is 100% free with zero payment or credit card required. You'll be placed in line for general release updates and standard rolling invites. If you'd like to fast-track your setup and guarantee a slot in our hands-on founding cohort (with 40% off your Private CoachOS operating-system implementation), you have the optional choice to place a $250 reservation deposit that is 100% credited toward your final build."
               />
               <FAQItem 
                 question="Is CoachOS a marketplace?" 
@@ -879,943 +982,6 @@ export default function App() {
 
 // Subcomponents
 
-
-const revenueData = [
-  { name: 'Apr', value: 4200 },
-  { name: 'May', value: 5100 },
-  { name: 'Jun', value: 4800 },
-  { name: 'Jul', value: 6200 },
-  { name: 'Aug', value: 7500 },
-  { name: 'Sep', value: 8450 },
-];
-
-const executiveRevenueData = [
-  { name: 'Q1', value: 11200 },
-  { name: 'Q2', value: 14400 },
-  { name: 'Q3', value: 16800 },
-  { name: 'Q4', value: 18500 },
-];
-
-const wellnessMoodData = [
-  { name: 'Mon', value: 7.8 },
-  { name: 'Tue', value: 8.2 },
-  { name: 'Wed', value: 8.0 },
-  { name: 'Thu', value: 8.7 },
-  { name: 'Fri', value: 8.9 },
-  { name: 'Sat', value: 9.2 },
-];
-
-const sportsLoadData = [
-  { name: 'W1', value: 78 },
-  { name: 'W2', value: 85 },
-  { name: 'W3', value: 91 },
-  { name: 'W4', value: 88 },
-  { name: 'W5', value: 94 },
-];
-
-const DASHBOARD_VARIANTS = [
-  {
-    id: 'fitness',
-    name: 'Fitness & Health OS',
-    shortName: 'Fitness & Health',
-    tabIcon: Dumbbell,
-    tagline: 'Athlete Periodization, Macro Compliance & Form Check Video Queue',
-    provesTitle: 'Replaces WhatsApp, TrueCoach, and Spreadsheets',
-    provesOutcome: 'Automates athlete form check video reviews, macro compliance tracking, and 0% fee Stripe billing in one branded athlete portal.',
-    provesProofBadges: [
-      '0% Platform Payment Fees',
-      '4 Pending Video Form Checks',
-      '88% Daily Athlete Check-In Rate'
-    ],
-    theme: {
-      sidebar: 'bg-[#042116] border-r border-emerald-900/40 text-emerald-100',
-      activeMenu: 'bg-emerald-600 text-white shadow-md shadow-emerald-950/40',
-      primary: 'text-emerald-600',
-      accentBg: 'bg-emerald-500/10 text-emerald-700 border-emerald-200/60',
-      badgeBg: 'bg-emerald-100 text-emerald-800',
-      topbarBg: 'bg-white/90 border-emerald-900/10',
-      cardBg: 'bg-white border-neutral-200/70',
-      chartColor: '#10b981',
-      glow: 'shadow-emerald-500/10'
-    },
-    headerStatus: '⚡ Morning Roster Readiness: 94%',
-    menu: [
-      { icon: LayoutDashboard, label: 'Performance Hub', active: true },
-      { icon: Users, label: 'Athletes (32)' },
-      { icon: Target, label: 'Workouts & Blocks' },
-      { icon: Database, label: 'Nutrition & Macros' },
-      { icon: Video, label: 'Form Video Queue', badge: '4' },
-      { icon: MessageCircle, label: 'Athlete Comms', badge: '2' },
-    ],
-    topCards: [
-      {
-        title: 'Athlete Check-In Rate',
-        value: '28 / 32',
-        sub: '88% completed today',
-        badge: '+6% vs last week',
-        badgeType: 'positive',
-        type: 'progress',
-        progress: 88
-      },
-      {
-        title: 'Video Form Queue',
-        value: '4 Pending',
-        sub: 'Avg review time: 14 mins',
-        badge: 'Priority reviews',
-        badgeType: 'neutral',
-        type: 'metric'
-      },
-      {
-        title: 'Macro Adherence',
-        value: '96.2%',
-        sub: 'Protein targets hit',
-        badge: 'Top compliance',
-        badgeType: 'positive',
-        type: 'metric'
-      }
-    ],
-    tools: [
-      { name: 'Stripe', color: '#635BFF', icon: CreditCard },
-      { name: 'MyFitnessPal', color: '#0066EE', icon: Database },
-      { name: 'TrueCoach', color: '#10B981', icon: Activity },
-      { name: 'Trainerize', color: '#FF4500', icon: Dumbbell },
-      { name: 'WHOOP', color: '#000000', icon: Heart },
-    ],
-    leftSectionTitle: 'Active Athlete Training Blocks',
-    leftSectionIcon: Dumbbell,
-    leftItems: [
-      {
-        title: "Alex M. — Hypertrophy Phase 2 (Week 4)",
-        meta: "Target: Upper Body Hypertrophy • RPE 8.5",
-        status: "Active Block",
-        statusColor: "bg-emerald-100 text-emerald-800"
-      },
-      {
-        title: "Sarah K. — Deload & Mobility Protocol",
-        meta: "Target: Hip capsule recovery & central fatigue",
-        status: "In Progress",
-        statusColor: "bg-blue-100 text-blue-800"
-      },
-      {
-        title: "Marcus T. — Max Strength Peaking (Squat 425lb)",
-        meta: "Target: 1RM Prep & Velocity Tracking",
-        status: "Peak Phase",
-        statusColor: "bg-purple-100 text-purple-800"
-      }
-    ],
-    rightSectionTitle: 'Form Check & Video Queue',
-    rightSectionIcon: Video,
-    rightItems: [
-      {
-        author: 'Alex Morgan',
-        time: '6m ago',
-        action: 'Uploaded 3 Form Check Videos',
-        detail: 'Back Squat (315x5) • "Felt slight knee valgus on rep 4"',
-        icon: Play,
-        iconBg: 'bg-emerald-100 text-emerald-700'
-      },
-      {
-        author: 'Jessica Lee',
-        time: '34m ago',
-        action: 'Logged Daily Check-in & Weight',
-        detail: '138.4 lbs (-0.6 lbs) • Macros 100% compliant today',
-        icon: CheckCircle2,
-        iconBg: 'bg-blue-100 text-blue-700'
-      }
-    ]
-  },
-  {
-    id: 'business',
-    name: 'Business & Executive OS',
-    shortName: 'Business & Exec',
-    tabIcon: Briefcase,
-    tagline: 'High-Ticket Retainers, Advisory Milestones & ARR Pipeline',
-    provesTitle: 'Replaces Scattered DMs, Calendly, and Invoicing Tools',
-    provesOutcome: 'Consolidates high-ticket retainer contracts, advisory deliverables, and $18,500/mo ARR tracking with zero manual spreadsheet copying.',
-    provesProofBadges: [
-      '100% Retainer Retention',
-      '$18,500/mo Predictable ARR',
-      'DocuSign Contracts Auto-Executed'
-    ],
-    theme: {
-      sidebar: 'bg-[#0b1120] border-r border-slate-800 text-slate-200',
-      activeMenu: 'bg-blue-600 text-white shadow-md shadow-blue-950/40',
-      primary: 'text-blue-600',
-      accentBg: 'bg-blue-500/10 text-blue-700 border-blue-200/60',
-      badgeBg: 'bg-blue-100 text-blue-800',
-      topbarBg: 'bg-white/90 border-slate-900/10',
-      cardBg: 'bg-white border-neutral-200/70',
-      chartColor: '#2563eb',
-      glow: 'shadow-blue-500/10'
-    },
-    headerStatus: '💼 Q3 Retainer Retentions: 100% LTV',
-    menu: [
-      { icon: LayoutDashboard, label: 'Command Center', active: true },
-      { icon: Users, label: 'Retainers (14)' },
-      { icon: FileText, label: 'Strategy Vault' },
-      { icon: Calendar, label: 'Advisory Calls' },
-      { icon: CreditCard, label: 'Billing & Contracts', badge: '$18.5k' },
-      { icon: MessageCircle, label: 'Slack Connect', badge: '3' },
-    ],
-    topCards: [
-      {
-        title: 'Monthly Retainer ARR',
-        value: '$18,500/mo',
-        sub: '+$3,200 vs last quarter',
-        badge: '+18.4% YoY',
-        badgeType: 'positive',
-        type: 'chart',
-        chartData: executiveRevenueData
-      },
-      {
-        title: 'Active Retainers',
-        value: '14 Founders',
-        sub: '8 Advisory / 6 Mastermind',
-        badge: 'Zero churn',
-        badgeType: 'positive',
-        type: 'metric'
-      },
-      {
-        title: 'Open Proposals',
-        value: '$45,000',
-        sub: '3 contracts in final review',
-        badge: '85% win rate',
-        badgeType: 'neutral',
-        type: 'metric'
-      }
-    ],
-    tools: [
-      { name: 'Stripe', color: '#635BFF', icon: CreditCard },
-      { name: 'Zoom VIP', color: '#2D8CFF', icon: Video },
-      { name: 'Slack Connect', color: '#E01E5A', icon: MessageCircle },
-      { name: 'DocuSign', color: '#002B49', icon: FileCheck },
-      { name: 'Notion', color: '#000000', icon: FileText },
-    ],
-    leftSectionTitle: 'Executive Advisory Milestones',
-    leftSectionIcon: Target,
-    leftItems: [
-      {
-        title: "TechFlow Inc. — Series B Board Pitch Review",
-        meta: "Advisory Deliverable: Financial model audit & GTM slides",
-        status: "Due Friday",
-        statusColor: "bg-blue-100 text-blue-800"
-      },
-      {
-        title: "Apex Logistics — Fractional COO Strategy Sprint",
-        meta: "Advisory Deliverable: Executive hiring framework",
-        status: "In Progress",
-        statusColor: "bg-amber-100 text-amber-800"
-      },
-      {
-        title: "VentureScale — $50k Retainer Renewal",
-        meta: "Contract signed for Q4 advisory expansion",
-        status: "Completed",
-        statusColor: "bg-emerald-100 text-emerald-800"
-      }
-    ],
-    rightSectionTitle: 'Advisory Deliverables & Signatures',
-    rightSectionIcon: FileCheck,
-    rightItems: [
-      {
-        author: 'David Reynolds (CEO, TechFlow)',
-        time: '12m ago',
-        action: 'Signed Master Coaching Agreement',
-        detail: '$3,500/mo 6-Month Retainer executed via DocuSign',
-        icon: FileCheck,
-        iconBg: 'bg-emerald-100 text-emerald-700'
-      },
-      {
-        author: 'Sarah Jenkins (Founder)',
-        time: '1h ago',
-        action: 'Scheduled Quarterly Strategy Review',
-        detail: 'Tuesday at 2:00 PM EST • Zoom link auto-generated',
-        icon: Calendar,
-        iconBg: 'bg-blue-100 text-blue-700'
-      }
-    ]
-  },
-  {
-    id: 'life',
-    name: 'Life & Mindset OS',
-    shortName: 'Life & Mindset',
-    tabIcon: Heart,
-    tagline: 'Daily Reflection Journals, Habit Streaks & Breakthrough Sessions',
-    provesTitle: 'Replaces Voice Memos, Notion, and Email Threads',
-    provesOutcome: 'Delivers a private client sanctuary with weekly guided reflection audio prompts, 14-day habit streaks, and confidential session logs.',
-    provesProofBadges: [
-      '90% Prompt Compliance',
-      '14 Active Habit Streaks',
-      'Confidential Voice Vault'
-    ],
-    theme: {
-      sidebar: 'bg-[#180a29] border-r border-purple-950 text-purple-100',
-      activeMenu: 'bg-purple-600 text-white shadow-md shadow-purple-950/40',
-      primary: 'text-purple-600',
-      accentBg: 'bg-purple-500/10 text-purple-700 border-purple-200/60',
-      badgeBg: 'bg-purple-100 text-purple-800',
-      topbarBg: 'bg-white/90 border-purple-900/10',
-      cardBg: 'bg-white border-neutral-200/70',
-      chartColor: '#9333ea',
-      glow: 'shadow-purple-500/10'
-    },
-    headerStatus: '🌿 Cohort State: Grounded & Inspired',
-    menu: [
-      { icon: LayoutDashboard, label: 'Sanctuary Overview', active: true },
-      { icon: Users, label: 'Client Journeys (21)' },
-      { icon: Heart, label: 'Habit Streaks' },
-      { icon: Calendar, label: 'Breakthrough Sessions' },
-      { icon: MessageSquare, label: 'Reflection Prompts', badge: '5' },
-      { icon: Sparkles, label: 'Transformation Wins' },
-    ],
-    topCards: [
-      {
-        title: 'Cohort Wellness Index',
-        value: '8.9 / 10',
-        sub: '+0.6 avg boost this week',
-        badge: 'High energy',
-        badgeType: 'positive',
-        type: 'chart',
-        chartData: wellnessMoodData
-      },
-      {
-        title: 'Journals Submitted',
-        value: '19 / 21',
-        sub: '90% completed reflection prompt',
-        badge: 'Engaged',
-        badgeType: 'positive',
-        type: 'progress',
-        progress: 90
-      },
-      {
-        title: '7+ Day Habit Streaks',
-        value: '14 Clients',
-        sub: 'Daily meditation & journaling',
-        badge: 'Streak record',
-        badgeType: 'positive',
-        type: 'metric'
-      }
-    ],
-    tools: [
-      { name: 'Stripe', color: '#635BFF', icon: CreditCard },
-      { name: 'Calendly', color: '#006BFF', icon: Calendar },
-      { name: 'Notion Sanctuary', color: '#000000', icon: FileText },
-      { name: 'Typeform', color: '#262627', icon: MessageSquare },
-      { name: 'Loom', color: '#625DF5', icon: Video },
-    ],
-    leftSectionTitle: 'Weekly Transformation Prompts',
-    leftSectionIcon: Sparkles,
-    leftItems: [
-      {
-        title: "Week 4 Prompt: 'Overcoming Imposter Mindset in High-Stakes Situations'",
-        meta: "Delivered to 21 clients • 19 audio reflection submissions",
-        status: "Live Prompt",
-        statusColor: "bg-purple-100 text-purple-800"
-      },
-      {
-        title: "Anna's Breakthrough Journal: Boundary Setting with Work",
-        meta: "Coach review note sent via personalized voice message",
-        status: "Reviewed",
-        statusColor: "bg-emerald-100 text-emerald-800"
-      },
-      {
-        title: "Group Meditation & Intention Circle",
-        meta: "Thursday at 7:00 PM • 16 RSVPs confirmed",
-        status: "Upcoming",
-        statusColor: "bg-amber-100 text-amber-800"
-      }
-    ],
-    rightSectionTitle: 'Live Reflection Stream',
-    rightSectionIcon: Heart,
-    rightItems: [
-      {
-        author: 'Emma Watson',
-        time: '8m ago',
-        action: 'Submitted Weekly Voice Journal',
-        detail: '"Today’s breakthrough session gave me so much peace around my career pivot."',
-        icon: Smile,
-        iconBg: 'bg-purple-100 text-purple-700'
-      },
-      {
-        author: 'Michael Torres',
-        time: '45m ago',
-        action: 'Completed 14-Day Mindfulness Streak',
-        detail: 'Logged daily morning gratitude & breathwork habit',
-        icon: Trophy,
-        iconBg: 'bg-amber-100 text-amber-700'
-      }
-    ]
-  },
-  {
-    id: 'sports',
-    name: 'Sports Performance OS',
-    shortName: 'Sports Performance',
-    tabIcon: Trophy,
-    tagline: 'Biomechanical Film Room, PR Telemetry & Load Readiness',
-    provesTitle: 'Replaces Loose Spreadsheets, Clipboards, and Hudl Emails',
-    provesOutcome: 'Unifies biomechanical game film review, combine velocity PR telemetry, and roster readiness for 45 collegiate & pro athletes.',
-    provesProofBadges: [
-      '7 Academy PRs Broken',
-      '34.2" Vertical Telemetry',
-      '94% Squad Load Readiness'
-    ],
-    theme: {
-      sidebar: 'bg-[#12100e] border-r border-orange-950 text-orange-100',
-      activeMenu: 'bg-orange-600 text-white shadow-md shadow-orange-950/40',
-      primary: 'text-orange-600',
-      accentBg: 'bg-orange-500/10 text-orange-700 border-orange-200/60',
-      badgeBg: 'bg-orange-100 text-orange-800',
-      topbarBg: 'bg-white/90 border-orange-900/10',
-      cardBg: 'bg-white border-neutral-200/70',
-      chartColor: '#ea580c',
-      glow: 'shadow-orange-500/10'
-    },
-    headerStatus: '⚡ Game Week 6 • Squad Load: Peak Output',
-    menu: [
-      { icon: LayoutDashboard, label: 'Locker Room Command', active: true },
-      { icon: Users, label: 'Roster (45)' },
-      { icon: Video, label: 'Hudl Film Room', badge: '3' },
-      { icon: Activity, label: 'Velocity & Telemetry' },
-      { icon: Trophy, label: 'PR Leaderboard', badge: '7' },
-      { icon: MessageCircle, label: 'Squad Comms' },
-    ],
-    topCards: [
-      {
-        title: 'Squad Load Readiness',
-        value: '94% Optimal',
-        sub: 'Across 45 active athletes',
-        badge: 'Game ready',
-        badgeType: 'positive',
-        type: 'chart',
-        chartData: sportsLoadData
-      },
-      {
-        title: 'Weekly PRs Broken',
-        value: '7 New PRs',
-        sub: 'Squat, Vert, 40-yd dash',
-        badge: '+3 vs last week',
-        badgeType: 'positive',
-        type: 'metric'
-      },
-      {
-        title: 'Hudl Film Queue',
-        value: '3 Clips Pending',
-        sub: 'Biomechanical markup needed',
-        badge: 'Priority',
-        badgeType: 'neutral',
-        type: 'metric'
-      }
-    ],
-    tools: [
-      { name: 'Stripe', color: '#635BFF', icon: CreditCard },
-      { name: 'Hudl', color: '#FF5A00', icon: Video },
-      { name: 'TrainHeroic', color: '#2563eb', icon: Target },
-      { name: 'Catapult GPS', color: '#000000', icon: Activity },
-      { name: 'Vald ForceDecks', color: '#10B981', icon: Layers },
-    ],
-    leftSectionTitle: 'Tactical Film Room & Combine Telemetry',
-    leftSectionIcon: Video,
-    leftItems: [
-      {
-        title: "John Davis — 40-Yard Dash Sprint Mechanics Analysis",
-        meta: "Hudl Breakdown: Stride frequency + ground contact angle",
-        status: "Clip Ready",
-        statusColor: "bg-orange-100 text-orange-800"
-      },
-      {
-        title: "Tyler Bennett — 405 lb Back Squat PR (New Academy Record)",
-        meta: "Velocity telemetry verified: 0.42 m/s concentric speed",
-        status: "Record Broken",
-        statusColor: "bg-emerald-100 text-emerald-800"
-      },
-      {
-        title: "Varsity Travel Squad — Pre-Game Hydration & Nutrition",
-        meta: "Collegiate protocol delivered to 24 travel athletes",
-        status: "Protocol Active",
-        statusColor: "bg-blue-100 text-blue-800"
-      }
-    ],
-    rightSectionTitle: 'Recent Academy Activity',
-    rightSectionIcon: Trophy,
-    rightItems: [
-      {
-        author: 'Coach Marcus Smith',
-        time: 'Just now',
-        action: 'Added Tactical Game Film',
-        detail: 'Uploaded 4th Quarter defensive film to locker room',
-        icon: Video,
-        iconBg: 'bg-orange-100 text-orange-700'
-      },
-      {
-        author: 'Tyler Bennett (Safety)',
-        time: '18m ago',
-        action: 'Logged ForceDeck Jump Telemetry',
-        detail: '34.2 inch Vertical Leap (+1.4 in this training cycle)',
-        icon: Trophy,
-        iconBg: 'bg-emerald-100 text-emerald-700'
-      }
-    ]
-  }
-];
-
-function Sparkline({ data, color }: { data: { value: number }[]; color: string }) {
-  if (!data || data.length < 2) return null;
-  const values = data.map((d) => d.value);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-  const w = 220;
-  const h = 40;
-  const pad = 4;
-  
-  const points = values.map((v, i) => {
-    const x = (i / (values.length - 1)) * (w - pad * 2) + pad;
-    const y = h - ((v - min) / range) * (h - pad * 2) - pad;
-    return { x, y, v };
-  });
-
-  const polylineStr = points.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
-  const areaStr = `${points[0].x},${h} ${polylineStr} ${points[points.length - 1].x},${h}`;
-  const lastPoint = points[points.length - 1];
-  const gradId = `spark-grad-${color.replace(/[^a-zA-Z0-9]/g, '')}`;
-
-  return (
-    <div className="relative w-full h-10 overflow-hidden">
-      <svg 
-        viewBox={`0 0 ${w} ${h}`} 
-        className="w-full h-full overflow-visible" 
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.28" />
-            <stop offset="100%" stopColor={color} stopOpacity="0.0" />
-          </linearGradient>
-        </defs>
-        <polygon 
-          fill={`url(#${gradId})`} 
-          points={areaStr} 
-        />
-        <polyline
-          fill="none"
-          stroke={color}
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          points={polylineStr}
-        />
-        <circle 
-          cx={lastPoint.x} 
-          cy={lastPoint.y} 
-          r="3.5" 
-          fill="#ffffff" 
-          stroke={color} 
-          strokeWidth="2.5" 
-        />
-      </svg>
-    </div>
-  );
-}
-
-function HeroDashboard() {
-  const [variantIndex, setVariantIndex] = useState(0);
-  const [isAutoCycling, setIsAutoCycling] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Auto-cycle between dashboard variants every 5.5 seconds unless paused or hovered
-  useEffect(() => {
-    if (!isAutoCycling || isHovered) return;
-    const timer = setInterval(() => {
-      setVariantIndex((prev) => (prev + 1) % DASHBOARD_VARIANTS.length);
-    }, 5500);
-    return () => clearInterval(timer);
-  }, [isAutoCycling, isHovered]);
-
-  const handleSelectVariant = (index: number) => {
-    setVariantIndex(index);
-  };
-
-  const variant = DASHBOARD_VARIANTS[variantIndex];
-
-  return (
-    <div 
-      className="flex flex-col gap-4 relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Category Tabs & Auto-Cycle Controller */}
-      <div className="flex flex-col items-center gap-3 z-20 w-full max-w-full">
-        <div className="w-full sm:w-auto flex items-center gap-1.5 p-1.5 bg-white rounded-2xl border border-neutral-200 shadow-xs overflow-x-auto scrollbar-none snap-x snap-mandatory">
-          {DASHBOARD_VARIANTS.map((v, idx) => {
-            const Icon = v.tabIcon;
-            const isActive = idx === variantIndex;
-            return (
-              <button
-                key={v.id}
-                type="button"
-                onClick={() => handleSelectVariant(idx)}
-                className={`relative px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap cursor-pointer shrink-0 snap-center overflow-hidden ${
-                  isActive ? 'text-brand-950 font-bold bg-neutral-100/90 shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${isActive ? v.theme.primary : 'text-neutral-400'}`} />
-                <span>{v.shortName}</span>
-
-                {/* Smooth Animated Auto-Cycle Progress Indicator on Active Tab */}
-                {isActive && isAutoCycling && !isHovered && (
-                  <motion.div
-                    key={`progress-${variantIndex}`}
-                    initial={{ width: "0%" }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 5.5, ease: "linear" }}
-                    className="absolute bottom-0 left-0 h-0.5 bg-brand-600 rounded-full"
-                  />
-                )}
-              </button>
-            );
-          })}
-
-          {/* Auto-Cycle Pause / Play Toggle Control */}
-          <div className="h-6 w-px bg-neutral-200 mx-1 shrink-0"></div>
-          <button
-            type="button"
-            onClick={() => setIsAutoCycling(prev => !prev)}
-            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer shrink-0 snap-center ${
-              isAutoCycling 
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80 hover:bg-emerald-100/70' 
-                : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200/70'
-            }`}
-            title={isAutoCycling ? "Auto-cycle is active. Click to pause." : "Auto-cycle is paused. Click to resume."}
-          >
-            {isAutoCycling ? (
-              <>
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="text-[11px] font-bold hidden sm:inline">Auto-Cycle: On</span>
-                <span className="text-[11px] font-bold sm:hidden">Auto</span>
-                <Pause className="w-3 h-3 text-emerald-700 ml-0.5" />
-              </>
-            ) : (
-              <>
-                <span className="w-2 h-2 rounded-full bg-neutral-400"></span>
-                <span className="text-[11px] font-bold hidden sm:inline">Paused</span>
-                <span className="text-[11px] font-bold sm:hidden">Play</span>
-                <Play className="w-3 h-3 text-neutral-700 ml-0.5 fill-neutral-700" />
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* Prominent "What This Proves & Solves" Clarity Banner */}
-        <div className="w-full bg-white rounded-2xl border border-neutral-200/90 p-3.5 sm:p-5 shadow-xs text-left transition-all duration-300">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-3.5">
-            <div className="space-y-1.5 flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-brand-950 text-amber-300">
-                  <Sparkles className="w-3 h-3 text-amber-400" />
-                  What CoachOS Proves
-                </span>
-                <span className="text-xs font-bold text-neutral-400">
-                  • {variant.name}
-                </span>
-              </div>
-              <h3 className="text-base sm:text-lg font-black text-brand-950 tracking-tight">
-                {variant.provesTitle}
-              </h3>
-              <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                {variant.provesOutcome}
-              </p>
-            </div>
-
-            {/* 3 Concrete Proof Badges */}
-            <div className="flex flex-wrap lg:flex-col gap-1.5 shrink-0 border-t lg:border-t-0 lg:border-l border-neutral-100 pt-2.5 lg:pt-0 lg:pl-5">
-              {variant.provesProofBadges.map((badge, bIdx) => (
-                <div key={bIdx} className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-neutral-800 bg-neutral-50 px-2.5 py-1 rounded-lg border border-neutral-200/60">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>{badge}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main OS Mockup Window */}
-      <div className="relative">
-        <div className="bg-neutral-900 rounded-2xl sm:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-neutral-300/80 overflow-hidden flex flex-col relative text-left">
-          
-          {/* macOS Top Window Bar */}
-          <div className="h-10 bg-neutral-950 border-b border-white/10 px-3 sm:px-4 flex items-center justify-between text-neutral-400 select-none z-30 shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] inline-block opacity-90" />
-                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] inline-block opacity-90" />
-                <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] inline-block opacity-90" />
-              </div>
-              <span className="inline-flex items-center gap-1.5 ml-2 sm:ml-3 text-[10px] sm:text-[11px] font-mono text-neutral-300 bg-white/5 px-2 sm:px-2.5 py-0.5 rounded-full border border-white/10 truncate max-w-[170px] sm:max-w-none">
-                <Lock className="w-2.5 h-2.5 text-emerald-400 shrink-0" />
-                app.coachos.io/{variant.id}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
-                <RefreshCw className={`w-3 h-3 ${isAutoCycling && !isHovered ? 'animate-spin text-emerald-400' : 'text-neutral-500'}`} style={{ animationDuration: '6s' }} />
-                <span>Auto-Cycling OS</span>
-              </span>
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span>0% Fees • Live Sync</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Inner Workspace: Sidebar (Desktop) / Subnav (Mobile) + Viewport */}
-          <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative min-h-[520px]">
-            
-            {/* Desktop Left Sidebar (Non-interactive display) */}
-            <div className={`hidden md:flex w-56 flex-col p-4 shadow-xl z-10 relative shrink-0 ${variant.theme.sidebar}`}>
-              <div className="flex items-center mb-6 mt-1 px-2 relative z-10">
-                <Logo className="h-6 text-white" inverted />
-              </div>
-
-              <div className="space-y-1 flex-1 relative z-10">
-                {variant.menu.map((item, i) => {
-                  const isSelected = i === 0;
-                  return (
-                    <div 
-                      key={i}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left ${
-                        isSelected 
-                          ? `${variant.theme.activeMenu} ring-1 ring-white/25 shadow-xs font-semibold` 
-                          : 'text-neutral-300 opacity-80'
-                      }`}
-                    >
-                      <item.icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'opacity-80'}`} />
-                      <span className="text-xs tracking-tight truncate">{item.label}</span>
-                      {item.badge && (
-                        <span className="ml-auto bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.2 rounded">
-                          {item.badge}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="pt-3 border-t border-white/10 flex items-center gap-2.5 px-2">
-                <div className="w-6 h-6 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-[10px] font-bold text-white">
-                  ME
-                </div>
-                <div className="text-left">
-                  <p className="text-xs font-bold text-white leading-none">Your Coaching OS</p>
-                  <p className="text-[10px] text-neutral-400 mt-0.5">100% Whitelabeled</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Sub-Navigation Bar */}
-            <div className={`flex md:hidden items-center gap-1 p-2 border-b overflow-x-auto scrollbar-none z-10 ${variant.theme.sidebar}`}>
-              {variant.menu.map((item, i) => {
-                const isSelected = i === 0;
-                return (
-                  <div
-                    key={i}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs whitespace-nowrap shrink-0 ${
-                      isSelected 
-                        ? `${variant.theme.activeMenu} font-bold text-white shadow-xs` 
-                        : 'text-neutral-300 opacity-80'
-                    }`}
-                  >
-                    <item.icon className="w-3.5 h-3.5" />
-                    <span>{item.label.split(' ')[0]}</span>
-                    {item.badge && (
-                      <span className="bg-white/25 text-white text-[9px] px-1 py-0.2 rounded font-bold">
-                        {item.badge}
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Main OS View Area with Butter-Smooth Variant Transition */}
-            <div className="flex-1 flex flex-col bg-white overflow-hidden text-left relative z-0">
-              
-              {/* Topbar inside OS View */}
-              <div className={`h-12 sm:h-13 border-b flex items-center justify-between px-3.5 sm:px-5 sticky top-0 z-20 shrink-0 ${variant.theme.topbarBg}`}>
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-neutral-700 bg-neutral-100 px-2.5 py-0.8 rounded-full border border-neutral-200/60 truncate">
-                    {variant.headerStatus}
-                  </span>
-                </div>
-                
-                <div className="flex items-center gap-2 ml-auto shrink-0">
-                  <div className="hidden sm:flex items-center gap-2 text-neutral-400 bg-neutral-100/90 px-2.5 py-1.5 rounded-lg w-52 border border-neutral-200/60 text-xs">
-                    <Search className="w-3 h-3 text-neutral-400 shrink-0" />
-                    <span className="truncate">Search client telemetry...</span>
-                    <kbd className="ml-auto text-[9px] font-mono bg-white px-1.5 py-0.2 rounded border border-neutral-300 text-neutral-500">⌘K</kbd>
-                  </div>
-                  <div className="relative p-1.5 text-neutral-500">
-                    <Bell className="w-4 h-4" />
-                    <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 border border-white"></span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dashboard Content Body with Silky Fade Animation on Auto-Cycle */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={variant.id}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.22, ease: "easeOut" }}
-                  className="p-3.5 sm:p-5 overflow-y-auto bg-neutral-50/60 h-full flex-1 space-y-4"
-                >
-                  
-                  {/* 3 Metric Cards with Pure CSS Hover */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5">
-                    {variant.topCards.map((card, i) => (
-                      <div 
-                        key={i}
-                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all duration-150 flex flex-col justify-between bg-white hover:border-neutral-300 hover:shadow-xs ${variant.theme.cardBg}`}
-                      >
-                        <div className="flex items-start justify-between mb-1.5">
-                          <p className="text-neutral-500 text-[11px] font-bold uppercase tracking-wider">{card.title}</p>
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${variant.theme.badgeBg}`}>
-                            {card.badge}
-                          </span>
-                        </div>
-
-                        <div className="flex items-baseline gap-2 mb-0.5">
-                          <span className="text-xl sm:text-2xl font-extrabold text-brand-950 tracking-tight">{card.value}</span>
-                        </div>
-                        <p className="text-xs text-neutral-500 font-medium">{card.sub}</p>
-
-                        {/* Progress bar type */}
-                        {card.type === 'progress' && card.progress && (
-                          <div className="w-full bg-neutral-100 rounded-full h-1.5 mt-2.5 p-0.2 border border-neutral-200/50">
-                            <div 
-                              style={{ width: `${card.progress}%` }}
-                              className="h-full rounded-full bg-emerald-500 transition-all duration-500"
-                            />
-                          </div>
-                        )}
-
-                        {/* Chart preview type with vector Sparkline */}
-                        {card.type === 'chart' && card.chartData && (
-                          <div className="h-9 w-full mt-1.5 -ml-1">
-                            <Sparkline data={card.chartData} color={variant.theme.chartColor} />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Connected Tools Bar */}
-                  <div className="bg-white rounded-xl sm:rounded-2xl border border-neutral-200/80 p-3 sm:p-3.5 shadow-2xs">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-xs font-bold text-brand-950 uppercase tracking-wider flex items-center gap-1.5">
-                        <Link2 className={`w-3.5 h-3.5 ${variant.theme.primary}`} />
-                        Integrated Client Ecosystem
-                      </h4>
-                      <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live Webhooks
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {variant.tools.map((tool, i) => (
-                        <div 
-                          key={i} 
-                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200/70 bg-neutral-50 text-xs"
-                        >
-                          <div className="w-4 h-4 rounded flex items-center justify-center text-white shrink-0" style={{ backgroundColor: tool.color }}>
-                            <tool.icon className="w-2.5 h-2.5" />
-                          </div>
-                          <span className="font-semibold text-neutral-700">{tool.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Split Main Content Area */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
-                    
-                    {/* Left Section: Core Deliverables */}
-                    <div className="lg:col-span-7 bg-white rounded-xl sm:rounded-2xl border border-neutral-200/80 p-3.5 sm:p-4 shadow-2xs">
-                      <div className="flex items-center justify-between mb-2.5">
-                        <h4 className="text-xs font-bold text-brand-950 uppercase tracking-wider flex items-center gap-1.5">
-                          <variant.leftSectionIcon className={`w-3.5 h-3.5 ${variant.theme.primary}`} />
-                          {variant.leftSectionTitle}
-                        </h4>
-                        <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200/60">
-                          Active Sync
-                        </span>
-                      </div>
-
-                      <div className="space-y-2">
-                        {variant.leftItems.map((item, i) => (
-                          <div key={i} className="p-2.5 sm:p-3 rounded-xl bg-neutral-50/80 border border-neutral-100 hover:border-neutral-200 transition-colors text-left flex items-start justify-between gap-2">
-                            <div className="min-w-0 flex-1">
-                              <p className="text-xs font-bold text-brand-950">
-                                {item.title}
-                              </p>
-                              <p className="text-[11px] text-neutral-500 mt-0.5 truncate">{item.meta}</p>
-                            </div>
-                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md shrink-0 ${item.statusColor}`}>
-                              {item.status}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Right Section: Real-time Activity Feed */}
-                    <div className="lg:col-span-5 bg-white rounded-xl sm:rounded-2xl border border-neutral-200/80 p-3.5 sm:p-4 shadow-2xs">
-                      <div className="flex items-center justify-between mb-2.5">
-                        <h4 className="text-xs font-bold text-brand-950 uppercase tracking-wider flex items-center gap-1.5">
-                          <variant.rightSectionIcon className={`w-3.5 h-3.5 ${variant.theme.primary}`} />
-                          {variant.rightSectionTitle}
-                        </h4>
-                        <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live Telemetry
-                        </span>
-                      </div>
-
-                      <div className="space-y-2">
-                        {variant.rightItems.map((act, i) => (
-                          <div key={i} className="p-2.5 sm:p-3 rounded-xl border border-neutral-100 bg-neutral-50/70 flex items-start gap-2.5">
-                            <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${act.iconBg}`}>
-                              <act.icon className="w-3 h-3" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between gap-1">
-                                <p className="text-xs font-bold text-brand-950 truncate">{act.author}</p>
-                                <span className="text-[10px] text-neutral-400 font-medium shrink-0">{act.time}</span>
-                              </div>
-                              <p className="text-[11px] font-semibold text-neutral-700 truncate">{act.action}</p>
-                              <p className="text-[10px] text-neutral-500 truncate mt-0.5">{act.detail}</p>
-                            </div>
-                            <span className="text-[10px] font-bold px-2 py-1 rounded-md bg-neutral-100 text-neutral-600 shrink-0 border border-neutral-200/60">
-                              Synced
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function FAQItem({ question, answer }: { question: string, answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -2932,7 +2098,7 @@ export function WaitlistForm() {
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                        <span><strong>Locked-in 40% lifetime discount</strong></span>
+                        <span><strong>Locked-in 40% discount on your Private CoachOS operating-system implementation</strong></span>
                       </li>
                     </ul>
 

@@ -63,12 +63,20 @@ export const LANDING_PAGE_SECTIONS: SitemapSection[] = [
     description: 'Specialized dashboard architectures configured for 1:1, cohort, and high-ticket retainer coaching models.'
   },
   {
+    id: 'pricing',
+    name: 'Private CoachOS Operating-System Implementation Pricing',
+    url: '/#pricing',
+    priority: '0.9',
+    changefreq: 'weekly',
+    description: 'Transparent implementation tiers: Core OS ($1,500), Growth OS ($2,500), Scale OS ($4,000), and Custom OS (from $5,000) with 40% founding discount.'
+  },
+  {
     id: 'waitlist',
-    name: 'Founding Cohort Application & Pricing',
+    name: 'Founding Cohort Application & Reservation',
     url: '/#waitlist',
     priority: '0.95',
     changefreq: 'daily',
-    description: 'Apply for the exclusive founding cohort with lifetime 40% discount and custom dashboard build.'
+    description: 'Apply for the exclusive founding cohort with 40% off your Private CoachOS operating-system implementation and $250 credit applied.'
   },
   {
     id: 'faq',
